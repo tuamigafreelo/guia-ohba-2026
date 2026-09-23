@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Guía no oficial de Open House Buenos Aires 2026: 174 edificios, mapa, filtros, recorridos listos y armador de recorrido. Por @tuamigafreelo.">
+<meta property="og:title" content="Guía no oficial · Open House BA 2026">
+<meta property="og:description" content="174 edificios abiertos el 3 y 4 de octubre. Mapa, boletos listos y tu propio recorrido. Por @tuamigafreelo.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#2E0001">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='7' y='1' width='2' height='12' fill='%232E0001'/%3E%3Crect x='5' y='12' width='6' height='3' fill='%235F8CAD'/%3E%3C/svg%3E">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style>
+<title>Guía Pixel Open House</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Galería + lámina de arquitectura: papel con grilla, líneas finas, cotas y rótulo. Archivo + IBM Plex Mono. Paleta edición 2026. Un solo look a propósito. */
+:root{
+  --ink:#2E0001;--ink-2:#5A2325;--mute:#8A7373;--rule:#2E0001;--hair:#E3D9D9;
+  --paper:#FFFFFF;--grid:#EDF2F6;--grid-2:#DCE6EE;
+  --cel:#97B9D4;--cel-d:#5F8CAD;--cel-l:#EAF1F7;--coral:#F26760;--coral-l:#FDECEA;
+  --f-ui:"Archivo","Helvetica Neue",Arial,system-ui,sans-serif;
+  --f-read:"Archivo","Helvetica Neue",Arial,system-ui,sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --grel:#3DE0D0;--grel-d:#1E9182;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--paper)}
+body{background-color:var(--paper);background-image:linear-gradient(var(--grid-2) 1px,transparent 1px),linear-gradient(90deg,var(--grid-2) 1px,transparent 1px),linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:120px 120px,120px 120px,24px 24px,24px 24px;color:var(--ink);font-family:var(--f-read);font-size:16px;line-height:1.55}
+.desk{max-width:1280px;margin:0 auto;padding-inline:24px;padding-block:28px 48px;display:flex;flex-direction:column;gap:28px}
+@media (max-width:600px){.desk{padding-inline:14px;padding-block:18px 36px;gap:20px}}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--cel);text-underline-offset:3px;text-decoration-thickness:2px;font-weight:700}
+a:hover{text-decoration-color:var(--coral)}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px}
+
+/* paneles: lámina con línea gruesa arriba y fina alrededor */
+.panel{background:var(--paper);border:1px solid var(--rule);border-top-width:4px;padding:18px 20px 20px;min-width:0}
+@media (max-width:600px){.panel{padding:14px 12px 16px}}
+.ph{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 14px;padding-bottom:10px;border-bottom:1px solid var(--hair)}
+.ph canvas{width:24px;height:24px;image-rendering:pixelated;flex:none}
+.ph h2{flex:1 1 0;min-width:0;font:700 22px/1.15 var(--f-ui);font-stretch:108%;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.ph .tabs{margin-left:auto}
+@media (max-width:600px){.ph .tabs{flex-basis:100%;width:100%;margin-left:0}.ph .tabs .tab{flex:1;justify-content:center}}
+.ph .note{font:13px/1 var(--f-num);color:var(--cel-d);white-space:nowrap}
+.sub{font-size:15px;margin:0 0 14px;max-width:64ch;color:var(--ink-2)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px 32px;align-items:end;padding:8px 0 4px}
+@media (max-width:760px){.hero{grid-template-columns:minmax(0,1fr)}}
+.kick{font:500 11px var(--f-num);letter-spacing:.2em;text-transform:uppercase;color:var(--cel-d);display:flex;align-items:center;gap:10px}
+.kick canvas{width:32px;height:32px;image-rendering:pixelated}
+.hero h1{font:700 clamp(34px,6.2vw,72px)/.98 var(--f-ui);font-stretch:112%;margin:12px 0 0;letter-spacing:-.025em;text-wrap:balance}
+.hero h1 em{font-style:normal;color:var(--coral)}
+.hero p.lede{margin:14px 0 0;font-size:18px;max-width:52ch;color:var(--ink-2)}
+/* cota de arquitecto con las fechas */
+.cota{margin-top:18px;max-width:520px;position:relative;height:30px}
+.cota::before{content:"";position:absolute;left:0;right:0;top:14px;border-top:1px solid var(--ink)}
+.cota i{position:absolute;top:6px;width:1px;height:17px;background:var(--ink)}
+.cota i:first-child{left:0}.cota i:last-child{right:0}
+.cota i::after{content:"";position:absolute;top:4px;left:-4px;width:9px;height:1px;background:var(--ink);transform:rotate(-45deg)}
+.cota span{position:absolute;left:50%;top:0;transform:translateX(-50%);background:var(--paper);padding:0 8px;font:15px/22px var(--f-num);color:var(--ink);white-space:nowrap}
+@media (max-width:420px){.cota span{font-size:18px;padding:0 6px}}
+.aside{display:flex;flex-direction:column;gap:10px;min-width:0;max-width:360px}
+.meta{border:1px solid var(--ink);display:grid;grid-template-columns:auto 1fr;font-size:14px;background:var(--paper)}
+.meta dt,.meta dd{margin:0;padding:6px 10px;border-bottom:1px solid var(--hair)}
+.meta dt{font:500 11px var(--f-num);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);border-right:1px solid var(--hair)}
+.meta dd{font:13px/1.1 var(--f-num)}
+.meta dt:nth-last-of-type(1),.meta dd:last-child{border-bottom:0}
+.notice{margin:0;background:var(--coral-l);border-left:4px solid var(--coral);padding:10px 12px;font-size:14px;color:var(--ink)}
+.notice b{font:600 14px var(--f-ui);letter-spacing:.08em}
+
+/* botones */
+.btn{font:600 15px var(--f-ui);color:#fff;background:var(--ink);border:1px solid var(--ink);padding:6px 14px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;min-height:38px}
+.btn:hover{background:var(--ink-2);color:#fff}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:var(--paper);color:var(--ink)}
+.btn.ghost:hover{background:var(--cel-l)}
+.btn.coral{background:var(--coral);color:var(--ink);border-color:var(--coral)}
+.btn.coral:hover{background:#F48A84}
+.btn.sm{font-size:14px;padding:3px 10px;min-height:32px}
+.btn[aria-disabled="true"]{opacity:.4;pointer-events:none}
+.linkbtn{all:unset;cursor:pointer;font:700 14px var(--f-read);color:var(--ink);text-decoration:underline;text-decoration-color:var(--cel);text-underline-offset:3px;text-decoration-thickness:2px}
+.linkbtn:hover{text-decoration-color:var(--coral)}
+.linkbtn:focus-visible{outline:2px solid var(--coral)}
+
+/* filtros */
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:12px 24px}
+.fgrp{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fgrp.wide{grid-column:1/-1}
+.flabel{font:500 11px var(--f-num);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.frow{display:flex;flex-wrap:wrap;gap:6px}
+.chip{all:unset;box-sizing:border-box;cursor:pointer;font:500 15px var(--f-ui);padding:4px 12px;min-height:36px;display:inline-flex;align-items:center;gap:6px;background:var(--paper);border:1px solid var(--ink);color:var(--ink)}
+.chip:hover{background:var(--cel-l)}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff}
+.chip:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
+.chip .n{font:12px var(--f-num);color:var(--cel-d)}
+.chip[aria-pressed="true"] .n{color:var(--cel)}
+.fin{font:16px var(--f-read);color:var(--ink);background:var(--paper);border:1px solid var(--ink);border-radius:0;padding:6px 10px;min-height:38px;width:100%}
+#barrio{appearance:none;-webkit-appearance:none;padding-right:34px;background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' shape-rendering='crispEdges'%3E%3Cpath d='M0 0h12v2H10v2H8v2H6v2H6V6H4V4H2V2H0z' fill='%232E0001'/%3E%3C/svg%3E") no-repeat right 10px center/12px 8px}
+.fsum{grid-column:1/-1;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--hair);padding-top:10px}
+.count{font:16px/1 var(--f-num);color:var(--ink)}
+
+/* boletos */
+.tabs{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--ink);width:max-content;max-width:100%}
+.tab{all:unset;box-sizing:border-box;cursor:pointer;font:500 15px var(--f-ui);padding:5px 14px;min-height:36px;background:var(--paper);color:var(--ink);display:inline-flex;align-items:center;gap:6px}
+.tab+.tab{border-left:1px solid var(--ink)}
+.tab b{font:400 13px var(--f-num);color:var(--cel-d)}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff}
+.tab[aria-selected="true"] b{color:var(--cel)}
+.tab:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
+.tickets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:860px){.tickets{grid-template-columns:minmax(0,1fr)}}
+.ticket{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:56px minmax(0,1fr);background:var(--paper);border:1px solid var(--ink);min-width:0;transition:background .15s}
+.ticket:hover{background:var(--cel-l)}
+.ticket .stub{display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:8px;padding:14px 4px;border-right:1px dashed var(--ink)}
+.ticket .stub canvas{width:32px;height:32px;image-rendering:pixelated}
+.ticket .serial{font:12px/1 var(--f-num);color:var(--mute);writing-mode:vertical-rl;transform:rotate(180deg)}
+.ticket .body{padding:14px 14px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.ticket .by{font:500 11px var(--f-num);letter-spacing:.16em;text-transform:uppercase;color:var(--coral)}
+.ticket .tn{font:700 22px/1.1 var(--f-ui);font-stretch:108%;letter-spacing:-.01em}
+.ticket .tp{font-size:15px;color:var(--ink-2)}
+.ticket .tm{font:13px/1.1 var(--f-num);color:var(--cel-d);margin-top:auto;padding-top:8px;border-top:1px solid var(--hair)}
+.ticket[aria-selected="true"]{background:var(--ink);color:#fff}
+.ticket[aria-selected="true"] .stub{border-right-color:var(--cel)}
+.ticket[aria-selected="true"] .tp{color:#EFE3E3}
+.ticket[aria-selected="true"] .tm{color:var(--cel);border-top-color:#5A2325}
+.ticket[aria-selected="true"] .serial{color:var(--cel)}
+.ticket:focus-visible{outline:2px solid var(--coral);outline-offset:3px}
+.tdetail{margin-top:16px;border-top:1px solid var(--ink);padding-top:14px}
+.tcols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 28px}
+@media (max-width:700px){.tcols{grid-template-columns:minmax(0,1fr)}}
+.seg{font:500 11px var(--f-num);letter-spacing:.16em;text-transform:uppercase;color:var(--ink);border-bottom:2px solid var(--ink);padding:4px 0;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.seg span{font:400 12px var(--f-num);letter-spacing:0;color:var(--cel-d)}
+ol.tl{list-style:none;margin:0;padding:0}
+ol.tl li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;padding:9px 0;border-bottom:1px solid var(--hair)}
+.num{width:26px;height:26px;display:grid;place-items:center;border:1px solid var(--ink);font:500 14px var(--f-ui);background:var(--paper)}
+.tl .nm{font:600 17px/1.2 var(--f-ui);background:none;border:0;padding:0;color:var(--ink);cursor:pointer;text-align:left;text-decoration:underline;text-decoration-color:var(--cel);text-decoration-thickness:2px;text-underline-offset:3px}
+.tl .meta2{font:12px/1.15 var(--f-num);color:var(--mute)}
+.tl .meta2 b{font-weight:400;color:var(--cel-d)}
+.lead-b{font:600 clamp(19px,2.4vw,24px)/1.25 var(--f-ui);font-stretch:106%;letter-spacing:-.01em;margin:0 0 6px;max-width:40ch;text-wrap:balance}
+.lead-b em{font-style:normal;color:var(--coral)}
+.extra{margin-top:18px}
+.gracias{border-top-color:var(--coral)}
+.gracias p{margin:0 0 10px;max-width:68ch}
+.gracias .g1{font:600 clamp(18px,2.2vw,22px)/1.35 var(--f-ui);text-wrap:balance}
+.gracias .g2{font-size:17px;color:var(--ink-2)}
+.gracias .g3{font:600 18px/1.3 var(--f-ui);color:var(--coral);margin-top:14px}
+.gracias .sig2{font:500 14px var(--f-num);color:var(--mute);margin:6px 0 0}
+.gracias .sig2 a{color:var(--coral);text-decoration-color:var(--coral)}
+ul.xl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:8px 18px}
+ul.xl li{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--hair)}
+ul.xl .frame .ph-img{padding:2px}
+ul.xl .frame canvas{width:24px;height:24px}
+ul.xl .x1{font:700 15px/1.2 var(--f-ui)}
+ul.xl .x2{font:12px/1.3 var(--f-num);color:var(--mute);margin-top:2px}
+ul.xl .x2 b{font-weight:500;color:var(--cel-d)}
+ul.xl .x2 i{font-style:normal;color:var(--coral)}
+.tacts{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px}
+.stat{font-size:15px;font-weight:700;color:var(--cel-d)}
+
+/* mapa + catálogo */
+.grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}
+.mapwin{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+@media (max-width:900px){.mapwin{position:relative;top:0}}
+.mapframe{position:relative;border:1px solid var(--ink);background:var(--paper);touch-action:none}
+#map{display:block;width:100%;aspect-ratio:1/1;image-rendering:pixelated;cursor:grab}
+@media (min-width:901px){#map{aspect-ratio:auto;height:calc(100vh - 290px);min-height:520px;max-height:860px}}
+.zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;border:1px solid var(--ink);background:var(--paper)}
+.zoom button{all:unset;box-sizing:border-box;cursor:pointer;min-width:36px;height:36px;padding:0 6px;display:grid;place-items:center;font:500 20px var(--f-ui);color:var(--ink)}
+.zoom button+button{border-top:1px solid var(--ink)}
+.zoom button.fit{font-size:11px;letter-spacing:.06em}
+.zoom button:hover{background:var(--cel-l)}
+.zoom button:focus-visible{outline:2px solid var(--coral)}
+.mode{position:absolute;left:10px;top:10px;right:64px;display:flex}
+.mode span{background:var(--ink);color:#fff;font:500 13px var(--f-ui);padding:4px 8px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin-top:10px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend .star{color:var(--grel);font-size:16px;line-height:1;-webkit-text-stroke:.6px var(--grel-d)}
+.saved{font-size:13px;color:var(--mute);margin:10px 0 0;display:flex;gap:6px;align-items:baseline}
+.saved b{color:var(--grel)}
+.sw{width:12px;height:12px;border:1px solid var(--ink);display:inline-block}
+.peek{margin-top:10px;border:1px solid var(--hair);background:var(--paper);padding:10px 12px;min-height:66px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start}
+.peek .hint{grid-column:1/-1;margin:0;font-size:15px;color:var(--mute)}
+.peek .pn{font:600 19px/1.2 var(--f-ui)}
+.peek .pa{font:13px/1.1 var(--f-num);color:var(--mute)}
+.peek .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.peek .frame{width:72px}
+
+.scroller{position:relative;max-height:74vh;overflow-y:auto;overscroll-behavior:contain;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);scrollbar-color:var(--ink) var(--cel-l)}
+.scroller::-webkit-scrollbar{width:8px}
+.scroller::-webkit-scrollbar-track{background:var(--cel-l)}
+.scroller::-webkit-scrollbar-thumb{background:var(--ink)}
+ol.cards{list-style:none;margin:0;padding:0}
+.card{display:grid;grid-template-columns:112px minmax(0,1fr);gap:16px;padding:16px 8px 16px 2px;border-top:1px solid var(--hair);scroll-margin-top:8px}
+.card:first-child{border-top:0}
+@media (max-width:460px){.card{grid-template-columns:88px minmax(0,1fr);gap:12px}}
+.card.is-active{background:var(--cel-l);box-shadow:inset 3px 0 0 var(--coral)}
+/* marco cuadrado de foto con crédito */
+.frame{margin:0;min-width:0}
+.frame .ph-img{position:relative;aspect-ratio:1/1;width:100%;max-width:100%;border:1px solid var(--ink);padding:4px;background:var(--paper)}
+.frame .ph-img>div{position:relative;width:100%;height:100%;overflow:hidden;background:var(--cel-l)}
+.frame img{position:absolute;inset:0;z-index:1;display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.92)}
+.frame canvas{position:absolute;inset:0;margin:auto;width:40px;height:40px;image-rendering:pixelated;opacity:.8}
+.frame figcaption{font-size:11px;line-height:1.3;color:var(--mute);margin-top:4px;overflow-wrap:anywhere}
+.ch>div{min-width:0}
+.cn{overflow-wrap:anywhere}
+.ch{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.cb{font:500 11px var(--f-num);color:var(--cel-d);text-transform:uppercase;letter-spacing:.16em}
+.cn{font:700 19px/1.2 var(--f-ui);letter-spacing:-.005em;margin:2px 0 0}
+.addr{font:14px/1.1 var(--f-num);color:var(--ink-2);margin-top:4px}
+.au{font-size:13px;color:var(--mute);margin:4px 0 0;max-width:60ch}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{display:inline-block;font:700 11px var(--f-read);letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border:1px solid var(--ink)}
+.t-ins{background:var(--coral-l);border-color:var(--coral);color:var(--ink)} .t-pick{background:var(--grel);border-color:var(--grel-d);color:var(--ink)} .t-acc{background:var(--cel-l)} .t-circ{background:var(--paper)} .t-esp{background:var(--ink);color:#fff}
+.sched{display:grid;grid-template-columns:auto 1fr 1fr;margin-top:10px;border:1px solid var(--ink);max-width:340px;font-variant-numeric:tabular-nums}
+.sched>div{padding:2px 8px;border-top:1px solid var(--hair);border-left:1px solid var(--hair);font:13px/1.15 var(--f-num)}
+.sched .hd{font:500 11px var(--f-num);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);padding:4px 8px;border-top:0}
+.sched .dl{font:500 14px var(--f-ui);border-left:0}
+.sched .off{color:#C9B9B9}
+.sched .on{color:var(--cel-d)}
+.rec{font-size:14px;margin:6px 0 0}
+.rec b{font-family:var(--f-ui);font-weight:500}
+.links{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:10px;font-size:14px}
+.fav{all:unset;box-sizing:border-box;cursor:pointer;flex:none;display:inline-flex;align-items:center;gap:6px;font:500 14px var(--f-ui);padding:3px 10px;min-height:34px;background:var(--paper);border:1px solid var(--ink);color:var(--ink)}
+.fav .st{font-size:16px;line-height:1;color:var(--mute)}
+.fav:hover{background:var(--cel-l)}
+.fav[aria-pressed="true"]{background:var(--cel);border-color:var(--cel)}
+.fav[aria-pressed="true"] .st{color:var(--ink)}
+.fav:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
+.empty{margin:18px 4px;font:500 17px var(--f-ui);color:var(--mute);text-align:center}
+.more{margin:8px 0 0;font:500 14px var(--f-ui);color:var(--mute);text-align:center}
+
+/* recorrido */
+.rgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px 32px}
+@media (max-width:860px){.rgrid{grid-template-columns:minmax(0,1fr)}}
+.rgrid>div{min-width:0}
+h3.h{font:600 19px var(--f-ui);margin:0 0 6px}
+.prog{font:15px/1.1 var(--f-num);margin:14px 0 6px;color:var(--ink)}
+.bar{height:6px;background:var(--cel-l);margin-bottom:14px}
+.bar i{display:block;height:100%;width:0;background:var(--coral)}
+.ltabs{margin-bottom:-1px}
+ol.stops{list-style:none;margin:0;padding:0}
+ol.stops .seg{margin:12px 0 0}
+.stop{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;padding:12px 2px;border-bottom:1px solid var(--hair)}
+.stop.ins .num{background:var(--coral);border-color:var(--coral)}
+.stop .head{display:flex;gap:8px;align-items:flex-start}
+.stop .head label{cursor:pointer;font:600 18px/1.2 var(--f-ui)}
+.stop .hrs{font:13px/1.1 var(--f-num);color:var(--cel-d);margin-top:2px}
+.warn{margin:6px 0 0;font-size:14px;font-weight:700;background:var(--coral-l);display:inline-block;padding:2px 8px;border-left:3px solid var(--coral)}
+.stop.done .head label{text-decoration:line-through;text-decoration-thickness:2px;color:var(--mute)}
+.stop.done .num{color:var(--mute);border-color:var(--hair)}
+.leaving{opacity:.35;transition:opacity .3s}
+.closed{list-style:none;padding:0;margin:0;font-size:15px}
+.closed li{padding:6px 0;border-top:1px solid var(--hair)}
+.closed li:first-child{border-top:0}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px}
+.copystat{font-size:15px;color:var(--cel-d);font-weight:700}
+.preview{font:13px/1.2 var(--f-num);background:var(--cel-l);color:var(--ink);border:1px solid var(--ink);padding:10px 12px;white-space:pre-wrap;margin:0;max-height:280px;overflow:auto}
+input[type=checkbox]{appearance:none;-webkit-appearance:none;width:20px;height:20px;margin:2px 0 0;flex:none;background:var(--paper);border:1px solid var(--ink);cursor:pointer}
+input[type=checkbox]:checked{background:var(--cel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' shape-rendering='crispEdges'%3E%3Cpath d='M2 7h2v2h2v2h2V9h2V7h2V5h2V3h2v2h-2v2h-2v2h-2v2h-2v2H6v-2H4V9H2z' fill='%232E0001'/%3E%3C/svg%3E") no-repeat center/14px 14px}
+
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px}
+ul.tips{list-style:none;margin:0;padding:0;counter-reset:t}
+ul.tips li{padding:9px 0 9px 22px;border-top:1px solid var(--hair);position:relative;font-size:16px}
+ul.tips li:first-child{border-top:0}
+ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:7px;height:7px;background:var(--coral)}
+
+/* rótulo de plano */
+.rotulo{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;border:1px solid var(--ink);border-top-width:4px;background:var(--paper);font-size:14px}
+@media (max-width:760px){.rotulo{grid-template-columns:1fr 1fr}}
+.rotulo>div{padding:10px 12px;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);min-width:0}
+.rotulo small{display:block;font:500 11px var(--f-num);letter-spacing:.16em;text-transform:uppercase;color:var(--mute);margin-bottom:2px}
+.rotulo .big{font:600 18px/1.2 var(--f-ui)}
+.rotulo .sig{font:600 18px var(--f-ui);color:var(--coral);text-decoration-color:var(--coral)}
+.rotulo .full{grid-column:1/-1;border-bottom:0;color:var(--ink-2)}
+/* mapa real (Leaflet + CARTO) cuando el sitio puede cargar mapas */
+#lmap{position:absolute;inset:0;z-index:1;background:#F2F0EB;font-family:var(--f-read)}
+.leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}
+.leaflet-container{overflow:hidden;-webkit-tap-highlight-color:transparent;outline-offset:1px}
+.leaflet-tile,.leaflet-marker-icon{-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
+.leaflet-container img.leaflet-tile{max-width:none!important;max-height:none!important;width:256px;height:256px;mix-blend-mode:normal}
+.leaflet-container .leaflet-overlay-pane svg{max-width:none!important;max-height:none!important}
+.leaflet-tile{filter:inherit;visibility:hidden}.leaflet-tile-loaded{visibility:inherit}
+.leaflet-zoom-animated{transform-origin:0 0}
+.leaflet-zoom-anim .leaflet-zoom-animated{transition:transform .25s cubic-bezier(0,0,.25,1)}
+.leaflet-zoom-anim .leaflet-tile,.leaflet-pan-anim .leaflet-tile{transition:none}
+.leaflet-pane{z-index:400}.leaflet-tile-pane{z-index:200}.leaflet-overlay-pane{z-index:400}.leaflet-shadow-pane{z-index:500}.leaflet-marker-pane{z-index:600}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}
+.leaflet-map-pane canvas{z-index:100}.leaflet-map-pane svg{z-index:200}
+.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto;float:left;clear:both}
+.leaflet-top,.leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}
+.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}
+.leaflet-right .leaflet-control{float:right}.leaflet-top .leaflet-control{margin-top:10px}.leaflet-bottom .leaflet-control{margin-bottom:0}.leaflet-left .leaflet-control{margin-left:10px}.leaflet-right .leaflet-control{margin-right:10px}
+.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:grab}.leaflet-dragging .leaflet-grab{cursor:grabbing}
+.leaflet-control-zoom{border:1px solid var(--ink);background:#fff}
+.leaflet-control-zoom a{display:block;width:36px;height:36px;line-height:34px;text-align:center;text-decoration:none;color:var(--ink);font:500 20px var(--f-ui);background:#fff}
+.leaflet-control-zoom a+a{border-top:1px solid var(--ink)}
+.leaflet-control-zoom a:hover{background:var(--cel-l)}
+.leaflet-control-zoom a.leaflet-disabled{color:#C9B9B9;cursor:default}
+.leaflet-control-attribution{background:rgba(255,255,255,.85);padding:1px 6px;font-size:10px;color:var(--mute);margin:0}
+.leaflet-control-attribution a{font-weight:400;text-decoration:none;color:var(--cel-d)}
+.lm{background:none;border:0}
+.mk{display:grid;place-items:center;box-sizing:border-box;width:100%;height:100%;font:600 11px/1 var(--f-num);border:2px solid #fff;box-shadow:0 1px 4px rgba(46,0,1,.45);transition:transform .12s}
+.mk:hover{transform:scale(1.2)}
+.mk.lib{background:#97B9D4;border-color:#FFFFFF;outline:1px solid #5F8CAD}
+.mk.ago{background:#FDECEA;border-color:#F26760}
+.mk.fav{background:var(--ink);color:#fff;border-color:#fff}
+.mk.pick{background:var(--ink);color:var(--grel);font-size:14px;border-radius:50%;border-color:#fff}
+.mk.tk{background:var(--grel);color:var(--ink);border-color:var(--ink);font-size:12px;font-weight:700}
+.mk.sel{outline:3px solid var(--coral);outline-offset:2px;transform:scale(1.25)}
+.mapframe.real .zoom{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+
+<div class="desk">
+
+  <header class="hero">
+    <div>
+      <div class="kick"><canvas id="ico-obelisco" width="16" height="16" aria-hidden="true"></canvas>Guía no oficial · Open House Buenos Aires 2026</div>
+      <h1>Toda la ciudad abierta, <em>en un solo mapa</em></h1>
+      <p class="lede"><span id="total">174</span> edificios abren sus puertas gratis el fin de semana. Elegí un boleto listo o filtrá el catálogo, marcá favoritos y armá tu propio recorrido.</p>
+      <div class="cota" aria-label="Del sábado 3 al domingo 4 de octubre"><i></i><span>SÁB 3 — DOM 4 OCT · 10 A 19 H</span><i></i></div>
+    </div>
+    <div class="aside">
+      <dl class="meta">
+        <dt>Edificios</dt><dd id="m-total">174</dd>
+        <dt>Barrios</dt><dd id="m-barrios">33</dd>
+        <dt>Entrada</dt><dd>Gratis</dd>
+        <dt>Curaduría</dt><dd><a href="https://www.instagram.com/tuamigafreelo" target="_blank" rel="noopener">@tuamigafreelo</a></dd>
+      </dl>
+      <p class="notice"><b>GUÍA NO OFICIAL.</b> No está hecha ni avalada por Open House Buenos Aires. Inscripciones solo en <a href="https://openhousebsas.org/inscripciones" target="_blank" rel="noopener">openhousebsas.org/inscripciones</a>. Confirmá horarios en la ficha oficial.</p>
+    </div>
+  </header>
+
+  <section class="panel" aria-labelledby="t-filtros">
+    <div class="ph"><canvas id="ico-lupa" width="16" height="16" aria-hidden="true"></canvas><h2 id="t-filtros">Filtrá el catálogo</h2><span class="note" id="count" aria-live="polite"></span></div>
+    <div class="filters">
+      <div class="fgrp wide"><label for="q" class="flabel">Buscar</label><input id="q" class="fin" type="search" placeholder="Edificio, estudio o calle" autocomplete="off"></div>
+      <div class="fgrp" role="group" aria-labelledby="l-dia"><span class="flabel" id="l-dia">Día</span><div class="frow">
+        <button type="button" class="chip" data-g="day" data-v="0">Sábado 3</button>
+        <button type="button" class="chip" data-g="day" data-v="1">Domingo 4</button></div></div>
+      <div class="fgrp" role="group" aria-labelledby="l-turno"><span class="flabel" id="l-turno">Turno</span><div class="frow">
+        <button type="button" class="chip" data-g="turn" data-v="0">Mañana <span class="n">10–14</span></button>
+        <button type="button" class="chip" data-g="turn" data-v="1">Tarde <span class="n">15–19</span></button></div></div>
+      <div class="fgrp" role="group" aria-labelledby="l-ins"><span class="flabel" id="l-ins">Entrada</span><div class="frow">
+        <button type="button" class="chip" data-g="ins" data-v="0">Entrada libre</button>
+        <button type="button" class="chip" data-g="ins" data-v="1">Agotados</button></div></div>
+      <div class="fgrp"><label for="barrio" class="flabel">Barrio</label><select id="barrio" class="fin"></select></div>
+      <div class="fgrp" role="group" aria-labelledby="l-mas"><span class="flabel" id="l-mas">Más</span><div class="frow">
+        <button type="button" class="chip" data-g="pick" data-v="1"><span style="color:var(--grel);-webkit-text-stroke:.6px var(--grel-d)">★</span> Gaby's picks</button>
+        <button type="button" class="chip" data-g="acc" data-v="1">Accesible</button>
+        <button type="button" class="chip" data-g="fav" data-v="1">★ Mis favoritos <span class="n" id="favn">0</span></button></div></div>
+      <div class="fsum"><span class="count" id="count2"></span><button type="button" class="linkbtn" id="clear">Limpiar filtros</button></div>
+    </div>
+  </section>
+
+  <section class="panel" id="boletos" aria-labelledby="t-bol">
+    <div class="ph"><canvas id="ico-boleto" width="16" height="16" aria-hidden="true"></canvas><h2 id="t-bol">Boletos listos · curados por Gaby <a href="https://www.instagram.com/tuamigafreelo" target="_blank" rel="noopener" style="font:500 15px var(--f-num);letter-spacing:0;white-space:nowrap">(@tuamigafreelo)</a></h2>
+      <div class="tabs" role="tablist" aria-label="Día del boleto">
+        <button type="button" role="tab" class="tab" data-bd="0">Sábado 3</button>
+        <button type="button" role="tab" class="tab" data-bd="1">Domingo 4</button>
+      </div></div>
+    <p class="lead-b">¿Es tu primera vez en Open House? ¿Te abruma armar el itinerario? <em>Elegí un boleto.</em></p>
+    <p class="sub">Son recorridos que armé para hacer a pie, sin inscripción y solo con lugares que abren en Open House. Tocalo para verlo en el mapa y sumalo a tu recorrido con un toque.</p>
+    <div class="tickets" role="tablist" aria-label="Boletos" id="tickets"></div>
+    <div class="tdetail" id="tdetail" hidden></div>
+    <div class="extra">
+      <div class="seg"><b>★ Mis imperdibles sueltos</b><span>casas y edificios que no abren nunca</span></div>
+      <p class="sub" style="margin:10px 0 8px">Mi regla: priorizo las casas y los edificios institucionales difíciles de visitar. Igual, cada año cambia lo que abre, así que no hay una guía 100% definida: lo mejor es ir y mandarte a lo que te pinte, porque todo está bueno.</p>
+      <ul class="xl" id="extra"></ul>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="panel mapwin" id="mapwin" aria-labelledby="t-mapa">
+      <div class="ph"><canvas id="ico-mapa" width="16" height="16" aria-hidden="true"></canvas><h2 id="t-mapa">Mapa</h2><span class="note" id="mapn"></span></div>
+      <div class="mapframe">
+        <canvas id="map" role="img" aria-label="Mapa pixelado de Buenos Aires con los edificios"></canvas>
+        <div class="mode" id="mode" hidden><span id="modetxt"></span></div>
+        <div class="zoom"><button type="button" id="zin" aria-label="Acercar">+</button><button type="button" id="zout" aria-label="Alejar">−</button><button type="button" class="fit" id="zfit" aria-label="Encuadrar todo">TODO</button></div>
+      </div>
+      <div class="legend">
+        <span><i class="sw" style="background:#97B9D4;border-color:#5F8CAD"></i>Entrada libre</span>
+        <span><i class="sw" style="background:#FDECEA;border-color:#F26760"></i>Agotado</span>
+        <span><i class="sw" style="background:#2E0001"></i>Tu favorito</span>
+        <span><b class="star">★</b>Gaby's picks</span>
+      </div>
+      <div class="peek" id="peek" aria-live="polite"><p class="hint">Tocá un cuadradito del mapa para ver qué edificio es. Arrastrá para moverte.</p></div>
+    </section>
+
+    <section class="panel" id="listwin" aria-labelledby="t-lista">
+      <div class="ph"><canvas id="ico-libro" width="16" height="16" aria-hidden="true"></canvas><h2 id="t-lista">Catálogo</h2><button type="button" class="linkbtn" id="exitticket" hidden>Ver todo el catálogo</button></div>
+      <div class="scroller" id="scroller" tabindex="0" aria-label="Edificios">
+        <ol class="cards" id="cards"></ol>
+        <p class="empty" id="empty" hidden>Ningún edificio coincide. Probá sacando algún filtro.</p>
+      </div>
+      <p class="more" id="more">Deslizá para ver más ↓</p>
+    </section>
+  </div>
+
+  <section class="panel" id="recorrido" aria-labelledby="t-rec">
+    <div class="ph"><canvas id="ico-estrella" width="16" height="16" aria-hidden="true"></canvas><h2 id="t-rec">Armá tu recorrido</h2><span class="note" id="recn"></span></div>
+    <div class="rgrid">
+      <div>
+        <p class="saved"><b>●</b> Tu lista se guarda sola en este navegador: podés cerrar la guía y volver cuando quieras. Si la abrís desde otro celu o en modo incógnito, arranca vacía.</p>
+        <p class="sub" style="margin-top:10px">Ordenamos tus favoritos por turno y por cercanía: primero lo que solo abre a la mañana, después lo que abre todo el día y al final lo de la tarde. Calculá 30 a 45 minutos por edificio más el viaje: en un turno de 4 horas entran 4 o 5.</p>
+        <div class="tabs" role="tablist" aria-label="Día del recorrido">
+          <button type="button" role="tab" class="tab" data-d="0">Sábado 3 <b id="dn0">0</b></button>
+          <button type="button" role="tab" class="tab" data-d="1">Domingo 4 <b id="dn1">0</b></button>
+        </div>
+        <div id="routebox">
+          <p class="prog" id="progress"></p>
+          <div class="bar"><i id="barfill"></i></div>
+          <div class="tabs ltabs" role="tablist" aria-label="Filtrar paradas">
+            <button type="button" role="tab" class="tab" data-t="todo">Por visitar <b id="n-todo">0</b></button>
+            <button type="button" role="tab" class="tab" data-t="done">✓ Visitados <b id="n-done">0</b></button>
+          </div>
+          <div class="scroller" id="rscroller" tabindex="0" aria-label="Paradas del recorrido" style="max-height:66vh">
+            <ol class="stops" id="stops"></ol>
+            <p class="empty" id="rempty" hidden></p>
+          </div>
+          <div class="actions">
+            <a class="btn" id="gmaps" href="#" target="_blank" rel="noopener">Ruta en Google Maps</a>
+            <button type="button" class="btn ghost" id="clearfav">Vaciar favoritos</button>
+          </div>
+        </div>
+        <p class="empty" id="nofav">Todavía no marcaste favoritos. Sumá un boleto o tocá <b>☆ Guardar</b> en cualquier edificio del catálogo.</p>
+      </div>
+      <div>
+        <h3 class="h">Mandásela a tu grupo</h3>
+        <p class="sub">¿Van con amigas o en pareja? Copiá tu recorrido y pegalo en WhatsApp: les llega la lista en orden, con horarios y direcciones, lista para seguir. Así nadie tiene que armar nada.</p>
+        <pre class="preview" id="preview"></pre>
+        <div class="actions"><button type="button" class="btn coral" id="copy">Copiar mi recorrido</button><span class="copystat" id="copystatus" role="status"></span></div>
+        <div id="closedbox" hidden>
+          <h3 class="h" style="margin-top:20px">No abren este día</h3>
+          <ul class="closed" id="closed"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="pair">
+    <section class="panel" aria-labelledby="t-como">
+      <div class="ph"><canvas id="ico-reloj" width="16" height="16" aria-hidden="true"></canvas><h2 id="t-como">Cómo funciona</h2></div>
+      <ul class="tips">
+        <li>Es gratis. Cada edificio abre en uno o dos turnos: <b>mañana de 10 a 14</b> y <b>tarde de 15 a 19</b>. Algunos tienen horario especial: está en cada ficha.</li>
+        <li>El último ingreso es entre 30 y 40 minutos antes del cierre de cada turno. Llegar 13:15 o 18:15 es jugarse.</li>
+        <li>Algunos edificios piden <b>inscripción previa</b> en la web oficial y se agotan a los pocos minutos de abrir. En la guía figuran como <b>agotados</b>: si no sacaste entrada, este año ya fue. Anotátelos para el próximo y estate atenta cuando OHBA abra inscripciones.</li>
+        <li>Llevá DNI: la mayoría lo pide en la puerta.</li>
+      </ul>
+    </section>
+    <section class="panel" aria-labelledby="t-antes">
+      <div class="ph"><canvas id="ico-mochila" width="16" height="16" aria-hidden="true"></canvas><h2 id="t-antes">Antes de salir</h2></div>
+      <ul class="tips">
+        <li>SUBE cargada y el celu con batería (o cargador portátil).</li>
+        <li>Agua y algo para picar: varios edificios no tienen baño y los domingos el centro está medio dormido.</li>
+        <li>Zapatillas cómodas. Muchos recorridos son por escalera.</li>
+        <li>Revisá la ficha oficial la noche anterior por si hubo cambios de último momento.</li>
+      </ul>
+    </section>
+  </div>
+
+  <section class="panel gracias" aria-labelledby="t-gracias">
+    <div class="ph"><canvas id="ico-corazon" width="16" height="16" aria-hidden="true"></canvas><h2 id="t-gracias">Gracias, Open House</h2></div>
+    <p class="g1">Esta guía existe gracias a Open House Buenos Aires, que cada año abre la ciudad gratis junto a organizadores, voluntarios, arquitectos y dueños que te dejan pasar.</p>
+    <p class="g2">La armé por amor al arte, para que más gente se anime a recorrerla. Si te sirvió, apoyalos: <a href="https://openhousebsas.org/voluntariado" target="_blank" rel="noopener">sumate como voluntario/a</a>, <a href="https://openhousebuenosaires.mitiendanube.com/" target="_blank" rel="noopener">comprá su libro</a> o <a href="https://www.instagram.com/openhousebsas" target="_blank" rel="noopener">seguilos en @openhousebsas</a>.</p>
+    <p class="g3">¡Prepará tu itinerario y tus ganas de conocer la ciudad!</p>
+    <p class="sig2">Con amor, Gaby · <a href="https://www.instagram.com/tuamigafreelo" target="_blank" rel="noopener">Tu Amiga Freelo</a></p>
+  </section>
+
+  <footer class="rotulo">
+    <div><small>Proyecto</small><span class="big">Guía no oficial · Open House BA 2026</span></div>
+    <div><small>Curaduría</small><a class="sig" href="https://www.instagram.com/tuamigafreelo" target="_blank" rel="noopener">@tuamigafreelo</a></div>
+    <div><small>Fuente</small><a href="https://openhousebsas.org/catalogo/" target="_blank" rel="noopener">openhousebsas.org</a></div>
+    <div><small>Relevado</small><span class="big" style="font-family:var(--f-num);font-weight:400;font-size:15px">23 · 09 · 2026</span></div>
+    <div class="full">Sin relación con Open House Buenos Aires. Fotos de los fotógrafos acreditados en cada ficha, usadas de forma ilustrativa. Inscripciones solo en la <a href="https://openhousebsas.org/inscripciones" target="_blank" rel="noopener">web oficial</a>.</div>
+  </footer>
+</div>
+
+<script>
+const D=[{"n":"2636 Flats","s":"2636-flats","b":"Coghlan","a":"Avenida Doctor Ricardo Balbín 2636","la":-34.56158,"lo":-58.46824,"i":0,"ac":0,"h":[0,"15–19",0,0],"r":[[],[]],"au":"A3 Luppi Ugalde Winter","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Javier Agustin Rojas","im":"https://images.openhousebsas.org/buildings/2636-flats/1784558016895.webp","fp":"50% 50%"},{"n":"3 de Febrero","s":"3-de-febrero","b":"Núñez","a":"3 de Febrero 3104","la":-34.54987,"lo":-58.45968,"i":0,"ac":0,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Arq. Paola Castelnuovo - Equipo: Arq. Dolores Cremonini - Arq. Barbara Rachilevitch","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Arq. Federico Kulekdjian","im":"https://images.openhousebsas.org/buildings/3-de-febrero/1784918124505.webp","fp":"50% 45.6%"},{"n":"Aberg Cobo","s":"aberg-cobo","b":"Recoleta","a":"Av. Gral. Las Heras 1722","la":-34.59208,"lo":-58.3916,"i":0,"ac":0,"h":["10–14","15–19","10–14","15–19"],"r":[[],[]],"au":"Walter Basset Smith, Bertie H. Collcut / Lacroze Miguens Prati Arquitectos","c":"Ciudad doméstica, Ciudad histórica, Ciudad productiva","ci":"","ty":"Comercio, Vivienda Colectiva, Vivienda Unifamiliar","fc":"Gustavo Sosa","im":"https://images.openhousebsas.org/buildings/aberg-cobo/1783577697345.webp","fp":"50% 56.7%"},{"n":"AER Pasaje","s":"aer-pasaje","b":"Palermo","a":"Pje. Mason 4448","la":-34.59468,"lo":-58.42789,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Cubero Rubio","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Ramiro Sosa","im":"https://images.openhousebsas.org/buildings/aer-pasaje/008_aer-pasaje_ramiro-sosa_01.jpg","fp":"50% 50%"},{"n":"AGN - Auditoria General de la Nación","s":"agn","b":"San Nicolás","a":"Av. Rivadavia 1745","la":-34.60915,"lo":-58.39117,"i":0,"ac":1,"h":["10–14","15–19","10–14","15–19"],"r":[[],[]],"au":"Arq. Locatti (original) Arq. Martínez (puesta en valor)","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Industria, Institución, Oficinas, Vivienda Colectiva","fc":"Editarq - Pablo Corral / AGN","im":"https://images.openhousebsas.org/buildings/agn-edificio-presidente-raul-ricardo-alfonsin-auditoria-gene/010_agn-edificio-presidente-raul-ricardo-alfonsin-auditoria-gene_editarq-pablo-corral_01.jpg","fp":"48% 26.7%"},{"n":"Agote","s":"agote","b":"Belgrano","a":"Pedro Agote 1460","la":-34.54911,"lo":-58.45287,"i":0,"ac":0,"h":["10–14",0,0,0],"r":[[],[]],"au":"Grizzo Studio","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"GRIZZO STUDIO","im":"https://images.openhousebsas.org/buildings/agote/1787933762132.webp","fp":"50% 50%"},{"n":"Alley Recoleta","s":"alley-recoleta","b":"Recoleta","a":"Sánchez de Bustamante 2496","la":-34.58457,"lo":-58.40313,"i":0,"ac":0,"h":["10–14",0,"10–14",0],"r":[[],[]],"au":"Paula Lavarello / Javier Saz / Architecture Studio","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Rocio Beistain","im":"https://images.openhousebsas.org/buildings/alley/1786119935709.webp","fp":"50% 50%"},{"n":"AQ Tailored Suites","s":"aq-tailored-suites-752","b":"Recoleta","a":"Montevideo 937","la":-34.59797,"lo":-58.38967,"i":0,"ac":0,"h":[0,0,"10–14",0],"r":[[],[]],"au":"Federico Eliaschev y Asociados","c":"Ciudad productiva","ci":"","ty":"Hotel","fc":"Cristobal Palma","im":"https://images.openhousebsas.org/buildings/aq-tailored-suites-752/017_aq-tailored-suites-752_cristobal-palma_01.jpg","fp":"50% 50%"},{"n":"Araóz 2193 - Instituto Integral","s":"araoz-2193-instituto-integral","b":"Palermo","a":"Aráoz 2193","la":-34.58816,"lo":-58.41883,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Alejandro Virasoro y Ferruccio Corbellani","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Comercio, Educación, Vivienda Unifamiliar","fc":"","im":"https://images.openhousebsas.org/buildings/araoz-2193-instituto-integral/1789485058808.webp","fp":"50% 50%"},{"n":"Arthaus Central. Ex Banco de Italia y Río de la Plata","s":"arthaus-central-ex-banco-de-italia-y-rio-de-la-plata-753","b":"San Nicolás","a":"Bartolomé Mitre 434","la":-34.60693,"lo":-58.37291,"i":0,"ac":0,"h":[0,"15–19",0,"15–19"],"r":[[],[]],"au":"Cherny Berdichevsky Arquitecto","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Comercio, Cultura, Oficinas, Vivienda Colectiva","fc":"Ignacio Queraltó","im":"https://images.openhousebsas.org/buildings/arthaus-central-ex-banco-de-italia-y-rio-de-la-plata-753/022_arthaus-central-ex-banco-de-italia-y-rio-de-la-plata-753_ignacio-queralto_01.jpg","fp":"50% 50%"},{"n":"Balbin 4289 . Ricci Flats","s":"balbin-4289-ricci-flats-796","b":"Saavedra","a":"Av. Dr. Ricardo Balbín 4289","la":-34.55508,"lo":-58.49217,"i":0,"ac":1,"h":["10–14",0,0,0],"r":[[],[]],"au":"A3 Luppi Ugalde Winter","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Javier Agustin Rojas","im":"https://images.openhousebsas.org/buildings/balbin-4289-ricci-flats-796/028_balbin-4289-ricci-flats-796_javier-agustin-rojas_01.jpg","fp":"50% 26.7%"},{"n":"Banco Ciudad - Casa Matriz","s":"casa-matriz-banco-ciudad","b":"San Nicolás","a":"Florida 302","la":-34.6043,"lo":-58.3754,"i":0,"ac":0,"h":["10–14",0,0,0],"r":[[],[]],"au":"Flora Manteola, Ignacio Petchersky, Javier Sánchez Gómez, Josefina Santos, Justo Solsona y Rafael Viñoly","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Comercio, Institución, Oficinas","fc":"Alejandro Goldemberg","im":"https://images.openhousebsas.org/buildings/casa-matriz-banco-ciudad/086_casa-matriz-banco-ciudad_alejandro-goldemberg_05.jpg","fp":"50% 50%"},{"n":"Banco Ciudad - Sucursal 14","s":"banco-ciudad-sucursal-14-799","b":"La Boca","a":"Av. Regimiento de Patricios 902","la":-34.63841,"lo":-58.3694,"i":0,"ac":0,"h":["10–14",0,0,0],"r":[[],[]],"au":"","c":"Ciudad productiva","ci":"","ty":"Institución, Oficinas","fc":"Foster and Partners","im":"https://images.openhousebsas.org/buildings/banco-ciudad-sucursal-14-799/031_banco-ciudad-sucursal-14-799_foster-and-partners_01.jpg","fp":"50% 50%"},{"n":"Banco Hipotecario. Ex Banco de Londres","s":"banco-hipotecario-ex-banco-de-londres","b":"San Nicolás","a":"Reconquista 101","la":-34.60613,"lo":-58.37206,"i":1,"ac":1,"h":[0,"15:00–19:00","10:00–14:00","15:00–19:00"],"r":[["15:00","16:00","17:00","18:00"],["10:00","11:00","12:00","13:00","15:00","16:00","17:00","18:00"]],"au":"Clorindo Testa, Santiago Sánchez Elia, Federico Peralta Ramos, Alfredo Agostini","c":"Ciudad productiva, Ciudad icónica, Ciudad histórica","ci":"","ty":"Institución, Oficinas","fc":"Editarq - Arquitecto Pablo Corral","im":"https://images.openhousebsas.org/buildings/banco-hipotecario-ex-banco-de-londres/033_banco-hipotecario-ex-banco-de-londres_editarq-arquitecto-pablo-corral_01.jpg","fp":"50% 50%"},{"n":"Banco Provincia - Casa Central","s":"banco-provincia-casa-central","b":"San Nicolás","a":"Bartolomé Mitre 430","la":-34.60689,"lo":-58.37273,"i":1,"ac":1,"h":["10:00–14:00","15:00–19:00","10:00–14:00","15:00–19:00"],"r":[["10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30"],["10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00"]],"au":"Estudio Sánchez, Lagos y de la Torre","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Institución, Oficinas","fc":"Sergio Di Vanni","im":"https://images.openhousebsas.org/buildings/banco-provincia-casa-central/1788538677044.webp","fp":"50% 50%"},{"n":"Barrio 20 - Papa Francisco","s":"barrio-20","b":"Villa Lugano","a":"Av. Gral. Francisco Fernández de la Cruz 4700","la":-34.67444,"lo":-58.46032,"i":0,"ac":1,"h":["10:00–14:00",0,0,0],"r":[["10:00","12:00"],[]],"au":"Instituto de Vivienda de la Ciudad GCBA y MGP del Barrio","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Vivienda Colectiva, Comercio, Educación, Salud","fc":"Federico Cairoli Fotografía","im":"https://images.openhousebsas.org/buildings/barrio-20/035_barrio-20_federico-cairoli-fotografia_01.jpg","fp":"50% 50%"},{"n":"Barrio Parque Los Andes","s":"barrio-parque-los-andes","b":"Chacarita","a":"Leiva 4275","la":-34.59322,"lo":-58.45092,"i":1,"ac":1,"h":["10:00–14:00","15:00–19:00",0,0],"r":[["10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30"],[]],"au":"Fermín Hilario Bereterbide","c":"Ciudad doméstica, Ciudad histórica, Ciudad productiva","ci":"","ty":"Cultura, Vivienda Colectiva","fc":"Editarq - Arquitecto Pablo Corral","im":"https://images.openhousebsas.org/buildings/barrio-parque-los-andes/040_barrio-parque-los-andes_editarq-arquitecto-pablo-corral_04.jpg","fp":"50.2% 34.3%"},{"n":"Barrio Playón Chacarita","s":"barrio-playon-chacarita-740","b":"Chacarita","a":"Teodoro García 3970","la":-34.58521,"lo":-58.45495,"i":0,"ac":1,"h":["10:00–14:00",0,0,0],"r":[["10:00","12:00"],[]],"au":"Instituto de Vivienda de la Ciudad de Buenos Aires","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Espacio Público, Infraestructura, Vivienda Colectiva","fc":"IVC","im":"https://images.openhousebsas.org/buildings/barrio-playon-chacarita-740/041_barrio-playon-chacarita-740_ivc_04.jpg","fp":"50% 50%"},{"n":"Barrio Rodrigo Bueno","s":"barrio-rodrigo-bueno-743","b":"Puerto Madero","a":"Av. Dr. Tristán Achával Rodríguez 1401","la":-34.61692,"lo":-58.35676,"i":0,"ac":1,"h":["10:00–14:00",0,0,0],"r":[["10:00","12:00"],[]],"au":"Instituto de Vivienda de la Ciudad de Buenos Aires","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Comercio, Educación, Salud, Vivienda Colectiva","fc":"IVC","im":"https://images.openhousebsas.org/buildings/barrio-rodrigo-bueno-743/1789667832004.webp","fp":"50% 50%"},{"n":"Biblioteca Nacional","s":"biblioteca-nacional","b":"Recoleta","a":"Agüero 2502","la":-34.5844,"lo":-58.398,"i":0,"ac":1,"h":[0,"15:00–19:00",0,0],"r":[["15:00","17:00"],[]],"au":"Francisco Bullrich, Alicia Cazzaniga y Clorindo Testa","c":"Ciudad productiva, Ciudad icónica","ci":"","ty":"Cultura, Espacio Público, Institución","fc":"Editarq - Arquitecto Pablo Corral","im":"https://images.openhousebsas.org/buildings/biblioteca-nacional/045_biblioteca-nacional_editarq-arquitecto-pablo-corral_03.jpg","fp":"49.8% 58%"},{"n":"Bold","s":"bold-1788811227795","b":"Belgrano","a":"Av. del Libertador 5610","la":-34.56045,"lo":-58.44472,"i":0,"ac":1,"h":["10–14",0,0,0],"r":[[],[]],"au":"Estudio Abramzon + ZZ Arquitectos","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Gaston Zilberman","im":"https://images.openhousebsas.org/buildings/bold-1788811227795/1788811232340.webp","fp":"50% 50%"},{"n":"Bubble Studios","s":"bubble-studios-432","b":"Villa Crespo","a":"Cucha Cucha 1661","la":-34.60381,"lo":-58.45468,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Ramiro Zubeldía","c":"Ciudad productiva","ci":"","ty":"Comercio, Cultura, Oficinas","fc":"Gaby Herbstein y Ramiro Zubeldía","im":"https://images.openhousebsas.org/buildings/bubble-studios-432/049_bubble-studios-432_gaby-herbstein-y-ramiro-zubeldia_01.jpg","fp":"50% 50%"},{"n":"Bureau, en Ateliers para Artistas Tres Sargentos","s":"ateliers-de-artistas","b":"Retiro","a":"Tres Sargentos 442","la":-34.59805,"lo":-58.37338,"i":0,"ac":0,"h":["10–14",0,"10–14",0],"r":[[],[]],"au":"Sanchez, Lagos, de la Torre","c":"Ciudad productiva, Ciudad histórica","ci":"Mes del Diseño y la Arquitectura (GCBA)","ty":"Cultura, Oficinas","fc":"Javier Agustín Rojas","im":"https://images.openhousebsas.org/buildings/ateliers-de-artistas/1786491618175.webp","fp":"50% 50%"},{"n":"Caldas 287","s":"caldas-287-775","b":"Chacarita","a":"Caldas 287","la":-34.59421,"lo":-58.4548,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Juan Liniado","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Industria, Vivienda Unifamiliar","fc":"Javier Agustín Rojas","im":"https://images.openhousebsas.org/buildings/caldas-287-775/050_caldas-287-775_javier-agustin-rojas_01.jpg","fp":"50% 50%"},{"n":"Campus Di Tella","s":"campus-di-tella","b":"Belgrano","a":"Av. Pres. Figueroa Alcorta 7350","la":-34.54801,"lo":-58.44694,"i":0,"ac":1,"h":["10–14","15–19","10–14","15–19"],"r":[[],[]],"au":"Adamo Faiden | Josep Ferrando Architecture | RDR Arquitectos","c":"Ciudad productiva","ci":"","ty":"Educación","fc":"Javier Agustín Rojas (1, 5, 6, 8, 9, 12, 16, 17) - Cortesía UTDT (todo el resto)","im":"https://images.openhousebsas.org/buildings/campus-di-tella/1788280080397.webp","fp":"50% 50%"},{"n":"Casa Aer","s":"casa-aer","b":"Palermo","a":"Avenida Honduras 4674","la":-34.59113,"lo":-58.4269,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Cubero Rubio","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"","im":"https://images.openhousebsas.org/buildings/casa-aer/1787087256222.webp","fp":"50% 50%"},{"n":"Casa Bolívar o Casa de los Dragones","s":"casa-bolivar","b":"Monserrat","a":"Bolívar 663","la":-34.61558,"lo":-58.37323,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Estudio Geya / Mariano Berlot","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Cultura, Vivienda Unifamiliar","fc":"Inés Viqueira","im":"https://images.openhousebsas.org/buildings/casa-bolivar/059_casa-bolivar_federico-kulekjdian_04.jpg","fp":"50% 50%"},{"n":"Casa Calise 2","s":"casa-calise-2-736","b":"Balvanera","a":"Hipólito Yrigoyen 2568","la":-34.61112,"lo":-58.40272,"i":0,"ac":0,"h":["10–14","15–19","10–14","15–19"],"r":[[],[]],"au":"Virginio Colombo","c":"Ciudad doméstica, Ciudad histórica","ci":"","ty":"Vivienda Colectiva","fc":"Ignacio Queraltó","im":"https://images.openhousebsas.org/buildings/casa-calise-2-736/061_casa-calise-2-736_ignacio-queralto_01.jpg","fp":"50% 50%"},{"n":"Casa Cubo","s":"casa-cubo-754","b":"Parque Chacabuco","a":"Parque Chacabuco, Curapaligüe 1350","la":-34.63975,"lo":-58.44469,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Michatek Skarstad Arquitectos","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Javier Agustín Rojas","im":"https://images.openhousebsas.org/buildings/casa-cubo-754/066_casa-cubo-754_javier-agustin-rojas_01.jpg","fp":"50% 50%"},{"n":"Casa de la Ciudad. Ex Sede Corporativa del Banco Ciudad","s":"casa-de-la-ciudad-ex-sede-corporativa-del-banco-ciudad","b":"Parque Patricios","a":"Uspallata 3150","la":-34.64033,"lo":-58.40702,"i":1,"ac":1,"h":["10:00–14:00",0,"10:00–14:00",0],"r":[["10:00","11:00","12:00","13:00"],["10:00","11:00","12:00","13:00"]],"au":"Foster + Partners/BBRCH/Edgardo Minond","c":"Ciudad productiva","ci":"","ty":"Institución, Oficinas","fc":"Intendencia","im":"https://images.openhousebsas.org/buildings/casa-de-la-ciudad-ex-sede-corporativa-del-banco-ciudad/067_casa-de-la-ciudad-ex-sede-corporativa-del-banco-ciudad_foster-and-partners_01.jpg","fp":"50% 50%"},{"n":"Casa Elena","s":"casa-elena-756","b":"Barracas","a":"Wenceslao Villafañe 1319","la":-34.63468,"lo":-58.37143,"i":0,"ac":1,"h":[0,0,0,"15–19"],"r":[[],[]],"au":"LBS La Base Studio + Place","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Cristobal Palma","im":"https://images.openhousebsas.org/buildings/casa-elena-756/073_casa-elena-756_cristobal-palma_01.jpg","fp":"50% 50%"},{"n":"Casa en Saavedra","s":"casa-en-saavedra-266","b":"Saavedra","a":"Av. García del Río 3789","la":-34.55302,"lo":-58.48247,"i":0,"ac":0,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Colle Croce","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Sebastián Colle","im":"https://images.openhousebsas.org/buildings/casa-en-saavedra-266/075_casa-en-saavedra-266_sebastian-colle_03.jpg","fp":"54% 52.5%"},{"n":"Casa Fernández Blanco","s":"casa-fernadez-blanco-745","b":"Monserrat","a":"Av. Hipólito Yrigoyen 1420","la":-34.60995,"lo":-58.3862,"i":0,"ac":0,"h":[0,"15–19",0,"15–19"],"r":[[],[]],"au":"Alejandro Christophersen","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Cultura, Vivienda Unifamiliar","fc":"Prensa MIFB","im":"https://images.openhousebsas.org/buildings/casa-fernadez-blanco-745/1785805684955.webp","fp":"50% 50%"},{"n":"Casa Garu","s":"casa-garu-757","b":"Caballito","a":"Arengreen 936","la":-34.61207,"lo":-58.44578,"i":0,"ac":0,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Estudio Tecla","c":"Ciudad doméstica, Ciudad histórica","ci":"","ty":"Vivienda Unifamiliar","fc":"Malena Fradkin","im":"https://images.openhousebsas.org/buildings/casa-garu-757/079_casa-garu-757_malena-fradkin_01.jpg","fp":"50% 50%"},{"n":"Casa Mendoza","s":"casa-mendoza","b":"Belgrano","a":"Mendoza 3385","la":-34.5668,"lo":-58.46725,"i":0,"ac":0,"h":["10–14",0,0,0],"r":[[],[]],"au":"LBS la base studio - Teresa Sarmiento y Nicolás Tovo","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Cristobal Palma","im":"https://images.openhousebsas.org/buildings/casa-mendoza/1786640111900.webp","fp":"50% 50%"},{"n":"Casa Pirán","s":"casa-piran","b":"Villa Urquiza","a":"Pirán 5619","la":-34.56686,"lo":-58.49782,"i":0,"ac":0,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"Territorio Mutante. Arq. Julia Lazarte y Di Roman Kruk","c":"Ciudad doméstica, Ciudad histórica","ci":"","ty":"Vivienda Unifamiliar","fc":"Territorio Mutante","im":"https://images.openhousebsas.org/buildings/casa-piran/1783534578847.webp","fp":"50% 50%"},{"n":"Casa República - Ex Residencia Peña","s":"casa-republica-ex-residencia-pena","b":"San Nicolás","a":"Florida 460","la":-34.60268,"lo":-58.37532,"i":1,"ac":0,"h":[0,0,"10:00–11:30","16:00–17:30"],"r":[[],["10:00","10:30","11:00","16:00","16:30","17:00"]],"au":"Arq. Jules Dormal (1902) / Arq. Diego Bella (2026)","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Comercio, Cultura, Institución, Vivienda Unifamiliar","fc":"fotos de Verbo- Pablo Fernandez","im":"https://images.openhousebsas.org/buildings/casa-republica-ex-residencia-pena/1789480186308.webp","fp":"50% 50%"},{"n":"Casa Rivera Paradise","s":"rivera-paradise","b":"Coghlan","a":"Doctor Pedro Ignacio Rivera 3789","la":-34.56444,"lo":-58.475,"i":0,"ac":0,"h":[0,0,"10–14",0],"r":[[],[]],"au":"AtelierM","c":"","ci":"","ty":"Vivienda Unifamiliar","fc":"AtelierM","im":"https://images.openhousebsas.org/buildings/rivera-paradise/1790010669442.webp","fp":"51.3% 50%"},{"n":"Casa Taller Forner-Bigatti","s":"casa-taller-forner-bigatti-147","b":"San Telmo","a":"Bethlem 443","la":-34.62023,"lo":-58.37197,"i":0,"ac":0,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Alejo Martínez - Fundación Forner-Bigatti","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Cultura, Vivienda Unifamiliar","fc":"Editarq - Arquitecto Pablo Corral","im":"https://images.openhousebsas.org/buildings/casa-taller-forner-bigatti-147/097_casa-taller-forner-bigatti-147_editarq-arquitecto-pablo-corral_02.jpg","fp":"50% 46.6%"},{"n":"Casa Villa Urquiza 3","s":"casa-villa-urquiza-3","b":"Villa Urquiza","a":"Pje. Talavera 5882","la":-34.5751,"lo":-58.49893,"i":0,"ac":0,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"Nicolás Waldman y Agustina Andreani Ghiglione","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Nicolás Waldman y Agustina Andreani Ghiglione","im":"https://images.openhousebsas.org/buildings/casa-villa-urquiza-3/1787086596151.webp","fp":"50% 50%"},{"n":"Casal de Catalunya","s":"casal-de-catalunya-204","b":"San Telmo","a":"Chacabuco 863","la":-34.61811,"lo":-58.37593,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Eugenio Campllonch i Parés y Julián García Nuñez","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Cultura, Institución","fc":"Editarq - Arquitecto Pablo Corral","im":"https://images.openhousebsas.org/buildings/casal-de-catalunya-204/106_casal-de-catalunya-204_editarq-arquitecto-pablo-corral_01.jpg","fp":"50% 50%"},{"n":"Cementerio de la Chacarita","s":"cementerio-de-la-chacarita","b":"Chacarita","a":"Av. Guzmán 680","la":-34.58714,"lo":-58.45571,"i":0,"ac":1,"h":["10–14",0,"10–14",0],"r":[[],[]],"au":"Juan Antonio Buschiazzo","c":"Ciudad operativa, Ciudad histórica","ci":"","ty":"Cementerio, Espacio Público, Infraestructura","fc":"Natalia Krzisnik","im":"https://images.openhousebsas.org/buildings/cementerio-de-la-chacarita-sexto-panteon/115_cementerio-de-la-chacarita-sexto-panteon_natalia-krzisnik_01.jpg","fp":"50% 50%"},{"n":"Centro Cultural Borges","s":"centro-cultural-borges","b":"San Nicolás","a":"Viamonte 525","la":-34.59965,"lo":-58.37431,"i":0,"ac":1,"h":[0,"15–19",0,"15–19"],"r":[[],[]],"au":"José Aslan y Héctor Ezcurra","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Comercio, Cultura","fc":"Centro Cultural Borges","im":"https://images.openhousebsas.org/buildings/centro-cultural-borges/1787193655327.webp","fp":"50% 50%"},{"n":"Centro Cultural Polo Bandoneón","s":"centro-cultural-polo-bandoneon","b":"Nueva Pompeya","a":"Avenida Sáenz 1480","la":-34.65869,"lo":-58.41674,"i":0,"ac":0,"h":[0,0,"10–14",0],"r":[[],[]],"au":"","c":"Ciudad productiva","ci":"","ty":"Cultura","fc":"Alejandro Raineri, Alejandro Ibañez, Marta Elisetch, Nestor rodriguez correa.","im":"https://images.openhousebsas.org/buildings/centro-cultural-polo-bandoneon/1789136559375.webp","fp":"50% 50%"},{"n":"Cine Teatro Gran Rex","s":"cine-teatro-gran-rex","b":"San Nicolás","a":"Av. Corrientes 857","la":-34.6034,"lo":-58.3788,"i":0,"ac":0,"h":["10–14",0,0,0],"r":[[],[]],"au":"Alberto Prebisch y Adolfo T. Moret","c":"Ciudad productiva, Ciudad icónica, Ciudad histórica","ci":"","ty":"Cultura","fc":"Editarq - Arquitecto Pablo Corral","im":"https://images.openhousebsas.org/buildings/cine-teatro-gran-rex/122_cine-teatro-gran-rex_editarq-arquitecto-pablo-corral_01.jpg","fp":"50% 50%"},{"n":"Club de Oficios","s":"club-de-oficios","b":"Villa Crespo","a":"Darwin 582","la":-34.5942,"lo":-58.44554,"i":0,"ac":0,"h":[0,"15–19",0,"15–19"],"r":[[],[]],"au":"","c":"Ciudad productiva","ci":"Abre Villa Crespo","ty":"Cultura","fc":"Sofía Nesis","im":"https://images.openhousebsas.org/buildings/club-de-oficios/1789740504117.webp","fp":"50% 50%"},{"n":"Club Ferro Carril Oeste - Estadio Arq. Ricardo Etcheverri","s":"estadio-arq-ricardo-etcheverri","b":"Caballito","a":"Av. Avellaneda 1240","la":-34.61877,"lo":-58.44784,"i":0,"ac":0,"h":["10–14",0,0,0],"r":[[],[]],"au":"Ricardo Etcheverry, Juan Carlos Piller","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Deporte, Institución","fc":"Nicolás Kazanietz","im":"https://images.openhousebsas.org/buildings/estadio-arq-ricardo-etcheverri/124_estadio-arq-ricardo-etcheverri_nicolas-kazanietz_01.jpg","fp":"50% 50%"},{"n":"Cooperativa La Fábrica","s":"cooperativa-la-fabrica-747","b":"Barracas","a":"Pje. Icalma 2001","la":-34.64069,"lo":-58.38008,"i":0,"ac":0,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Cooperativa de vivienda la Fábrica y Movimiento de Ocupantes e Inquilinos","c":"Ciudad doméstica, Ciudad histórica","ci":"","ty":"Industria, Vivienda Colectiva","fc":"Alejandro Arcuri","im":"https://images.openhousebsas.org/buildings/cooperativa-la-fabrica-747/138_cooperativa-la-fabrica-747_alejandro-arcuri_01.jpg","fp":"50% 50%"},{"n":"Céspedes","s":"cespedes","b":"Colegiales","a":"Céspedes 3389","la":-34.57786,"lo":-58.45417,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"CHTY + estudio FUTURO","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Renders por VABA","im":"https://images.openhousebsas.org/buildings/cespedes/1790009387082.webp","fp":"50% 50%"},{"n":"Cúpula del Sanatorio Anchorena del Callao","s":"cupula-del-sanatorio-anchorena-del-callao","b":"San Nicolás","a":"Avenida Callao 499","la":-34.60329,"lo":-58.39221,"i":1,"ac":0,"h":["10:00–14:00",0,0,0],"r":[["10:00","11:00","12:00","13:00"],[]],"au":"Oscar Schoo Lastra / Edmundo Parodi / Angelo Figini Reforma: Marcela Gómez / Gerardo Pellegrino","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Salud","fc":"Fundación Anchorena del Callao","im":"https://images.openhousebsas.org/buildings/cupula-del-sanatorio-anchorena-del-callao/1788811240412.webp","fp":"50% 50%"},{"n":"Cúpula Edificio La Inmobiliaria","s":"cupula-edificio-la-inmobiliaria-772","b":"Monserrat","a":"Av. de Mayo 1420","la":-34.60956,"lo":-58.38647,"i":1,"ac":0,"h":["10:00–14:00",0,0,0],"r":[["10:00","11:00","12:00","13:00"],[]],"au":"Schulz + Schulz Arquitectos","c":"Ciudad doméstica, Ciudad histórica","ci":"","ty":"Vivienda Unifamiliar","fc":"Nicolás Kazanietz","im":"https://images.openhousebsas.org/buildings/cupula-edificio-la-inmobiliaria-772/141_cupula-edificio-la-inmobiliaria-772_nicolas-kazanietz_07.jpg","fp":"50% 62.8%"},{"n":"Divino Taller","s":"divino-taller","b":"Villa Crespo","a":"Av. Córdoba 5782","la":-34.58637,"lo":-58.44224,"i":0,"ac":0,"h":[0,0,0,"15–19"],"r":[[],[]],"au":"","c":"Ciudad productiva","ci":"Abre Villa Crespo","ty":"Cultura","fc":"","im":"https://images.openhousebsas.org/buildings/divino-taller/1789750492506.webp","fp":"50% 50%"},{"n":"Dome Business Plaza","s":"dome-business-plaza","b":"Belgrano","a":"Av. Olazábal 1483","la":-34.55453,"lo":-58.44901,"i":0,"ac":0,"h":["10–14","15–19","10–14","15–19"],"r":[[],[]],"au":"ADN Developers","c":"Ciudad productiva","ci":"","ty":"Oficinas","fc":"Alberto Esparragoza","im":"https://images.openhousebsas.org/buildings/dome-business-plaza/1788813048741.webp","fp":"50% 50%"},{"n":"Dos Casas en Parque Chas","s":"dos-casas-en-parque-chas","b":"Parque Chas","a":"Gamarra 1646","la":-34.5805,"lo":-58.47977,"i":0,"ac":0,"h":[0,0,"10–14",0],"r":[[],[]],"au":"Manuela Bresso / Matias Beccar Varela (MBVAA)","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Javier Agustín Rojas / Fernando Schapochnik","im":"https://images.openhousebsas.org/buildings/dos-casas-en-parque-chas/1789481605421.webp","fp":"50% 50%"},{"n":"Echeverria 4445","s":"echeverria-4445-758","b":"Villa Urquiza","a":"Echeverría 4445","la":-34.57453,"lo":-58.47574,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Esteban - Tannenbaum arquitectos - Javier Esteban, Romina Tannenbaum","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Javier Agustín Rojas","im":"https://images.openhousebsas.org/buildings/echeverria-4445-758/147_echeverria-4445-758_javier-agustin-rojas_06.jpg","fp":"50% 59.1%"},{"n":"Ecoparque - Ex Zoológico de Buenos Aires","s":"ecoparque-748","b":"Palermo","a":"Av. Sarmiento 2601","la":-34.58071,"lo":-58.42036,"i":1,"ac":1,"h":["11:30–12:00",0,"11:30–12:00",0],"r":[["11:30"],["11:30"]],"au":"","c":"Ciudad operativa, Ciudad histórica","ci":"","ty":"Cultura, Educación, Espacio Público, Parque","fc":"TOMAS FRANCISCO CUESTA","im":"https://images.openhousebsas.org/buildings/ecoparque-748/148_ecoparque-748_diego-torres-silvestre_05.jpg","fp":"50% 50%"},{"n":"Edificio 11 de Septiembre 4050","s":"edificio-11-de-septiembre-4050","b":"Núñez","a":"11 de Septiembre de 1888 4050","la":-34.54221,"lo":-58.46404,"i":0,"ac":1,"h":[0,0,0,"15–19"],"r":[[],[]],"au":"Valeria del Puerto y Horacio Sardín","c":"Ciudad productiva","ci":"","ty":"Comercio, Oficinas","fc":"Albano Garcia","im":"https://images.openhousebsas.org/buildings/edificio-11-de-septiembre-4050/1787786620820.webp","fp":"50% 50%"},{"n":"Edificio Cervantes","s":"edificio-cervantes-768","b":"Villa Devoto","a":"Cervantes 3450","la":-34.61089,"lo":-58.52343,"i":0,"ac":1,"h":[0,"15–19","10–14",0],"r":[[],[]],"au":"Grizzo Studio","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Oficinas, Salud, Vivienda Colectiva, Vivienda Unifamiliar","fc":"Federico Kulekdjian","im":"https://images.openhousebsas.org/buildings/edificio-cervantes-768/159_edificio-cervantes-768_federico-kulekjdian_03.jpg","fp":"50% 52.9%"},{"n":"Edificio Ciudad de la Paz 90","s":"edificio-ciudad-de-la-paz-90","b":"Palermo","a":"Cdad. de la Paz 90","la":-34.5754,"lo":-58.43992,"i":0,"ac":1,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Caram Aguirre Arquitectos","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Oficinas, Vivienda Colectiva","fc":"Albano García","im":"https://images.openhousebsas.org/buildings/edificio-ciudad-de-la-paz-90/1788907721246.webp","fp":"50% 50%"},{"n":"Edificio Comega","s":"edificio-comega-18","b":"San Nicolás","a":"Av. Corrientes 222","la":-34.6033,"lo":-58.3705,"i":0,"ac":0,"h":["10–14",0,"10–14",0],"r":[[],[]],"au":"Enrique Douillet, Alfredo Joselevich","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Comercio, Oficinas","fc":"Editarq - Arquitecto Pablo Corral","im":"https://images.openhousebsas.org/buildings/edificio-comega-18/164_edificio-comega-18_editarq-arquitecto-pablo-corral_03.jpg","fp":"51.1% 31.7%"},{"n":"Edificio Corporativo Banco Macro","s":"edificio-corporativo-banco-macro","b":"Retiro","a":"Av. Eduardo Madero 1180","la":-34.5941,"lo":-58.37175,"i":1,"ac":1,"h":["10:00–14:00","14:00–19:00","10:00–14:00",0],"r":[["11:00","12:00","13:00","15:00","16:00","17:00","18:00","10:00"],["10:00","11:00","12:00","13:00"]],"au":"Pelli Clarke & Partners","c":"Ciudad productiva","ci":"Mes del Diseño y la Arquitectura (GCBA)","ty":"Oficinas","fc":"Alejandro Goldemberg - Banco Macro","im":"https://images.openhousebsas.org/buildings/edificio-corporativo-banco-macro/166_edificio-corporativo-banco-macro_alejandro-goldemberg-banco-macro_01.jpg","fp":"50% 50%"},{"n":"Edificio de los Eucaliptus - Virrey del Pino","s":"edificio-de-los-eucaliptus-virrey-del-pino","b":"Belgrano","a":"Virrey del Pino 2446","la":-34.56659,"lo":-58.45303,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Juan Kurchan y Jorge Ferrari Hardoy","c":"Ciudad doméstica, Ciudad histórica","ci":"","ty":"Vivienda Colectiva","fc":"Albano García / ARQUIS - Universidad de Palermo","im":"https://images.openhousebsas.org/buildings/edificio-de-los-eucaliptus-virrey-del-pino/171_edificio-de-los-eucaliptus-virrey-del-pino_foto-albano-garcia-tomada-de-arquis-docu_01.jpg","fp":"50% 50%"},{"n":"Edificio de posgrados UM","s":"edificio-de-posgrados-um-738","b":"Monserrat","a":"Lima 221","la":-34.6111,"lo":-58.38183,"i":0,"ac":0,"h":["10–14",0,0,0],"r":[[],[]],"au":"Estudio Borrachia","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Educación","fc":"Estudio Borrachia","im":"https://images.openhousebsas.org/buildings/edificio-de-posgrados-um-738/173_edificio-de-posgrados-um-738_estudio-borrachia_01.jpg","fp":"50% 50%"},{"n":"Edificio de Renta Bencich","s":"edificio-de-renta-bencich-107","b":"San Nicolás","a":"Av. Pres. Roque Sáenz Peña 615","la":-34.6068,"lo":-58.3755,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Eduardo Le Monnier","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Oficinas","fc":"Editarq - Arquitecto Pablo Corral","im":"https://images.openhousebsas.org/buildings/edificio-de-renta-bencich-107/174_edificio-de-renta-bencich-107_editarq-arquitecto-pablo-corral_01.jpg","fp":"50% 50%"},{"n":"Edificio Donado 2469","s":"edificio-donado-2469","b":"Villa Urquiza","a":"Donado 2469","la":-34.56971,"lo":-58.4778,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Alonso & Crippa","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Federico cairoli","im":"https://images.openhousebsas.org/buildings/edificio-donado-2469/1785274543304.webp","fp":"50% 65.6%"},{"n":"Edificio Editorial Perfil","s":"edificio-editorial-perfil-733","b":"Barracas","a":"California 2731","la":-34.6494,"lo":-58.38496,"i":0,"ac":1,"h":["10–14","15–19","10–14","15–19"],"r":[[],[]],"au":"Arquitectos Plaghos y Asoc.","c":"Ciudad productiva","ci":"","ty":"Industria, Oficinas","fc":"Fotos Propias","im":"https://images.openhousebsas.org/buildings/edificio-editorial-perfil-733/179_edificio-editorial-perfil-733_ricardo-pomphile_01.jpg","fp":"50% 50%"},{"n":"Edificio Garay - Sede Corporativa Santander Argentina","s":"nuevo-edificio-corporativo-santander","b":"San Telmo","a":"Av. Paseo Colón 1380","la":-34.62373,"lo":-58.36798,"i":0,"ac":1,"h":["10–14","15–19","10–14","15–19"],"r":[[],[]],"au":"Estudio Urgell Penedo Urgell y Asociados. Construcción: Constructora Sudamericana S.A","c":"Ciudad productiva","ci":"","ty":"Comercio, Educación, Oficinas","fc":"","im":"https://images.openhousebsas.org/buildings/nuevo-edificio-corporativo-santander/329_nuevo-edificio-corporativo-santander_santiago-chiban-ignacio-queralto_01.jpg","fp":"50% 50%"},{"n":"Edificio Husares","s":"edificio-husares-790","b":"Belgrano","a":"Húsares 1841","la":-34.55581,"lo":-58.44003,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Estudio Grinberg - Dwek - Iglesias","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"","im":"https://images.openhousebsas.org/buildings/edificio-husares-790/185_edificio-husares-790_03.jpg","fp":"50% 50%"},{"n":"Edificio IBM","s":"edificio-ibm-381","b":"Retiro","a":"Ing. Enrique Butty 275","la":-34.59631,"lo":-58.37158,"i":0,"ac":1,"h":["10–14","15–19","10–14","15–19"],"r":[[],[]],"au":"Mario Roberto Alvarez y Asociados","c":"Ciudad productiva","ci":"Mes del Diseño y la Arquitectura (GCBA)","ty":"Oficinas","fc":"Editarq - Pablo Corral y Lucio Grinspan","im":"https://images.openhousebsas.org/buildings/edificio-ibm-381/186_edificio-ibm-381_editarq-pablo-corral-y-lucio-grinspan_07.jpg","fp":"50% 50%"},{"n":"Edificio Jaramillo","s":"edificio-jaramillo","b":"Saavedra","a":"Jaramillo 3785","la":-34.55444,"lo":-58.48124,"i":0,"ac":1,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"Oficina Correa, equipo Ariel Correa, Albana Mazza, Juan Centurion, Paula Mazzucchelli, Dalia Stein, Camila Mina","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Javier Agustín Rojas, salvo los archivos DJI_0461 y DJI_0444 que pertenecen a Oficina Correa","im":"https://images.openhousebsas.org/buildings/edificio-jaramillo/1784750362197.webp","fp":"50% 49.4%"},{"n":"Edificio Kavanagh","s":"kavanagh","b":"Retiro","a":"Florida 1065","la":-34.59559,"lo":-58.37509,"i":1,"ac":0,"h":[0,"15:00–17:00",0,"15:00–17:00"],"r":[["15:00","16:00","17:00"],["15:00","16:00","17:00"]],"au":"Gregorio Luis Sánchez, Ernesto Lagos, Luis María de La Torre","c":"Ciudad doméstica, Ciudad histórica, Ciudad icónica","ci":"Mes del Diseño y la Arquitectura (GCBA)","ty":"Vivienda Colectiva","fc":"Nicolás Kazanietz","im":"https://images.openhousebsas.org/buildings/kavanagh/187_kavanagh_nicolas-kazanietz_02.jpg","fp":"50% 50%"},{"n":"Edificio Olazábal 1961","s":"edificio-olazabal-1961","b":"Belgrano","a":"Av. Olazábal 1961","la":-34.55775,"lo":-58.45432,"i":0,"ac":0,"h":[0,0,0,"15–19"],"r":[[],[]],"au":"Jorge Ferrari Hardoy","c":"Ciudad doméstica, Ciudad histórica","ci":"","ty":"Vivienda Colectiva","fc":"Albano García","im":"https://images.openhousebsas.org/buildings/edificio-olazabal-1961/195_edificio-olazabal-1961_albano-garcia_01.jpg","fp":"50% 50%"},{"n":"Edificio Prometeo","s":"edificio-prometeo","b":"Coghlan","a":"Prometeo 3031","la":-34.55858,"lo":-58.47216,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Marco Caviglia","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Marco Caviglia / Javier Agustín Rojas","im":"https://images.openhousebsas.org/buildings/edificio-prometeo/1786550767686.webp","fp":"50% 50%"},{"n":"Edificio RH+","s":"edificio-rh","b":"Saavedra","a":"Av. Ruiz Huidobro 3457","la":-34.54886,"lo":-58.48269,"i":0,"ac":1,"h":[0,0,"10–14",0],"r":[[],[]],"au":"RBK arquitectura","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Luis Barandiarán","im":"https://images.openhousebsas.org/buildings/edificio-rh/200_edificio-rh_luis-barandiaran_01.jpg","fp":"50% 50%"},{"n":"Edificio Yatahi - Sindicatura General de la Nación","s":"edificio-yatahi-sindicatura-general-de-la-nacion","b":"San Nicolás","a":"Av. Corrientes 389","la":-34.60305,"lo":-58.37223,"i":0,"ac":1,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Sindico General de la Nación, Alejandro Díaz, y curadora del espacio Multiarte, Luz Etcheves","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Institución, Oficinas","fc":"Rodofo Seide","im":"https://images.openhousebsas.org/buildings/edificio-yatahi-sindicatura-general-de-la-nacion/1788200382109.webp","fp":"50% 50%"},{"n":"El Hogar Obrero Villa Ortúzar","s":"el-hogar-obrero-villa-ortuzar","b":"Villa Ortúzar","a":"Av. Álvarez Thomas 1326","la":-34.5815,"lo":-58.46,"i":0,"ac":0,"h":[0,0,0,"15–19"],"r":[[],[]],"au":"Ingenieros Andrés Justo, Carlos J. Frazetti y el arquitecto Mario Molina y Vedia hijo.","c":"Ciudad doméstica, Ciudad histórica","ci":"","ty":"Vivienda Colectiva","fc":"\"Un siglo de Vivienda Cooperativa\" René Dunowicz y Fernando Villaveirán  / fotos color: Rocío Torres Astigueta","im":"https://images.openhousebsas.org/buildings/el-hogar-obrero-villa-ortuzar/1787589575503.webp","fp":"50% 55.6%"},{"n":"El Salvador 5651","s":"el-salvador-5651","b":"Palermo","a":"El Salvador 5651","la":-34.58291,"lo":-58.43587,"i":0,"ac":1,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"Estudio Gramo y Ariel Kitay","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Ariel Kitay y Nicolas Kitay","im":"https://images.openhousebsas.org/buildings/el-salvador-5651/1789666973385.webp","fp":"68.6% 52%"},{"n":"El Templete","s":"el-templete","b":"Parque Patricios","a":"Av. Caseros 3250","la":-34.63867,"lo":-58.41087,"i":0,"ac":1,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"Clemente Onelli","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Espacio Público, Institución, Monumento, Parque","fc":"propios","im":"https://images.openhousebsas.org/buildings/el-templete/429_el-templete_02.jpg","fp":"47.6% 36.5%"},{"n":"El Zanjón de Granados","s":"zanjon-de-granados","b":"San Telmo","a":"Defensa 755","la":-34.61666,"lo":-58.3718,"i":1,"ac":0,"h":["11:30–12:30",0,0,0],"r":[["11:30"],[]],"au":"Alejandro Vaca Bononato, arq. (Etapa Inicial ), M. Estela Alvarenga, arq. / Daniel Schavelzon, arq. (Arquelogía) / Gerardo Urdampilleta, ing. (Estructura) / Jorge Eckstein","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Comercio, Cultura, Vivienda Colectiva, Vivienda Unifamiliar","fc":"Gonzalo Viramonte","im":"https://images.openhousebsas.org/buildings/zanjon-de-granados/1784749496881.webp","fp":"50% 50%"},{"n":"Enófilo - Enoteca","s":"enoteca-enofilo-en-la-avenida-juramento","b":"Belgrano","a":"Avenida Juramento 1289","la":-34.55516,"lo":-58.44545,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Juan Campanini - Josefina Sposito","c":"Ciudad productiva","ci":"","ty":"Comercio","fc":"Javier Agustín Rojas","im":"https://images.openhousebsas.org/buildings/enoteca-enofilo-en-la-avenida-juramento/1783960431137.webp","fp":"50% 50%"},{"n":"Escuela del Jacarandá","s":"jardin-de-infantes-jacaranda","b":"Núñez","a":"Grecia 3273","la":-34.54929,"lo":-58.46176,"i":0,"ac":1,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Irene Joselevich y Ana Rascovsky","c":"Ciudad productiva","ci":"","ty":"Educación","fc":"Pablo Gerson / Gustavo Sosa Pinilla","im":"https://images.openhousebsas.org/buildings/jardin-de-infantes-jacaranda/1788551402288.webp","fp":"50% 50%"},{"n":"Escuela Ecos","s":"escuela-ecos","b":"Villa Crespo","a":"Serrano 930","la":-34.59319,"lo":-58.4375,"i":0,"ac":1,"h":["10–14",0,0,0],"r":[[],[]],"au":"Teresa Chiurazzi, Luis Días, Alida Díaz","c":"Ciudad productiva","ci":"","ty":"Educación","fc":"","im":"https://images.openhousebsas.org/buildings/escuela-ecos/214_escuela-ecos_01.jpg","fp":"50% 50%"},{"n":"Espacio Galixia","s":"espacio-galixia","b":"Villa Crespo","a":"Galicia 526","la":-34.60427,"lo":-58.44893,"i":0,"ac":1,"h":[0,"15–19",0,"15–19"],"r":[[],[]],"au":"Florencia Elisa Sciutto, Rosendo Gagliano, arqs.","c":"Ciudad productiva","ci":"Abre Villa Crespo","ty":"Cultura, Educación, Institución","fc":"Guido Perić","im":"https://images.openhousebsas.org/buildings/espacio-galixia/1789667926950.webp","fp":"50% 50%"},{"n":"Espacio Norah","s":"espacio-norah","b":"San Nicolás","a":"Viamonte 524","la":-34.59989,"lo":-58.37435,"i":0,"ac":0,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Arq. Eduardo Sauze, autor del edificio. Arq. Lucas Terra, autor del proyecto espacio norah.","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Cultura, Vivienda Unifamiliar","fc":"Lucas Terra Brandes","im":"https://images.openhousebsas.org/buildings/espacio-norah/1787933805394.webp","fp":"50% 50%"},{"n":"Espinosa Estudios","s":"espinosa-estudios","b":"Paternal","a":"Espinosa 2565","la":-34.60089,"lo":-58.468,"i":0,"ac":0,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Julio Sanchez Arimayn","c":"Ciudad productiva","ci":"","ty":"Industria, Oficinas","fc":"Fernando Schapochnik","im":"https://images.openhousebsas.org/buildings/espinosa-estudios/219_espinosa-estudios_fernando-schapochnik_01.jpg","fp":"50% 50%"},{"n":"Estación Retiro","s":"estacion-retiro","b":"Retiro","a":"Avenida Doctor José María Ramos Mejía 1430","la":-34.59022,"lo":-58.37383,"i":0,"ac":1,"h":[0,"15–19",0,"15–19"],"r":[[],[]],"au":"Eustace L. Conder, Roger Conder y Sydney G. Follett","c":"Ciudad operativa, Ciudad histórica, Ciudad icónica","ci":"Mes del Diseño y la Arquitectura (GCBA)","ty":"Comercio, Infraestructura","fc":"CRIBA","im":"https://images.openhousebsas.org/buildings/estacion-retiro/1789494560708.webp","fp":"50% 50%"},{"n":"Estadio José Amalfitani","s":"estadio-jose-amalfitani","b":"Liniers","a":"Av. Juan Bautista Justo 9200","la":-34.63454,"lo":-58.52118,"i":1,"ac":1,"h":["10:00–14:00",0,0,0],"r":[["10:00","10:20","10:40","11:00","11:20","11:40","12:00","12:20","12:40","13:00","13:20"],[]],"au":"José Amalfitani / Luis Dibarboure, Miguel Polakov / Frazzi Arquitectos (Arq. Matías Frazzi - Plan Director V2045)","c":"Equipamientos","ci":"","ty":"Deporte","fc":"","im":"https://images.openhousebsas.org/buildings/estadio-jose-amalfitani/1789997128192.webp","fp":"50% 50%"},{"n":"Estadio Mary Terán de Weiss","s":"estadio-mary-teran-de-weiss","b":"Villa Soldati","a":"Av. Coronel Roca 3490","la":-34.6772,"lo":-58.44616,"i":0,"ac":1,"h":[0,0,"10–14",0],"r":[[],[]],"au":"GGMPU Arquitectos (Gramática, Morini, Pisani, Urtubey) / Ministerio de Desarrollo Urbano, Gobierno de la Ciudad de Buenos Aires / Dal Construcciones SA y Teximco SA (UTE)","c":"Ciudad productiva","ci":"","ty":"Deporte, Espacio Público","fc":"Lucas Daponte","im":"https://images.openhousebsas.org/buildings/estadio-mary-teran-de-weiss/220_estadio-mary-teran-de-weiss_gcba_01.jpg","fp":"50% 50%"},{"n":"Estadio Nueva Chicago","s":"estadio-nueva-chicago","b":"Mataderos","a":"Justo Antonio Suárez 6913","la":-34.66765,"lo":-58.50068,"i":0,"ac":1,"h":[0,0,0,"15–19"],"r":[[],[]],"au":"Guillermo Lopez (presidente del Club 1940)","c":"Ciudad productiva, Ciudad icónica, Ciudad histórica","ci":"","ty":"Deporte, Institución","fc":"Museo Nueva Chicago y Departamento de Cultura","im":"https://images.openhousebsas.org/buildings/estadio-nueva-chicago/1786055589281.webp","fp":"50% 50%"},{"n":"Estudio 2EC Arquitectos","s":"estudio-2ec","b":"La Boca","a":"Hernandarias 623","la":-34.63471,"lo":-58.36856,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"2EC Arquitectos","c":"Ciudad productiva","ci":"","ty":"Oficinas","fc":"Gala Cabrera","im":"https://images.openhousebsas.org/buildings/estudio-2ec/223_estudio-2ec_gala-cabrera_01.jpg","fp":"50% 50%"},{"n":"Estudio RDR Arquitectos","s":"estudio-rdr-arquitectos","b":"Belgrano","a":"Ramsay 2430","la":-34.54881,"lo":-58.44273,"i":0,"ac":0,"h":[0,0,"10–14",0],"r":[[],[]],"au":"RDR Arquitectos","c":"Ciudad productiva","ci":"","ty":"Oficinas, Vivienda Colectiva","fc":"Javier Agustín Rojas","im":"https://images.openhousebsas.org/buildings/estudio-rdr-arquitectos/227_estudio-rdr-arquitectos_javier-agustin-rojas_01.jpg","fp":"50% 50%"},{"n":"Estudios para artistas y locales comerciales - Ateliers","s":"estudios-para-artistas-y-locales-comerciales-ateliers","b":"Retiro","a":"Paraguay 894","la":-34.59775,"lo":-58.37973,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Antonio Bonet, Ricardo Vera Barros, Abel López Chas (integrantes Grupo Austral)","c":"Ciudad productiva, Ciudad histórica","ci":"Mes del Diseño y la Arquitectura (GCBA)","ty":"Comercio, Cultura, Oficinas","fc":"Editarq - Arquitecto Pablo Corral","im":"https://images.openhousebsas.org/buildings/estudios-para-artistas-y-locales-comerciales/229_estudios-para-artistas-y-locales-comerciales_editarq-arquitecto-pablo-corral_02.jpg","fp":"50% 50%"},{"n":"Estudios para artistas y locales comerciales - Bisman Ediciones","s":"estudios-para-artistas-y-locales-comerciales-bisman-ediciones","b":"Retiro","a":"Paraguay 894","la":-34.59775,"lo":-58.37973,"i":0,"ac":0,"h":["10–14","15–19","10–14","15–19"],"r":[[],[]],"au":"Antonio Bonet, Ricardo Vera Barros, Abel López Chas (integrantes Grupo Austral)","c":"Ciudad productiva, Ciudad histórica","ci":"Mes del Diseño y la Arquitectura (GCBA)","ty":"Comercio, Cultura, Oficinas","fc":"Editarq - Arquitecto Pablo Corral","im":"https://images.openhousebsas.org/buildings/estudios-para-artistas-y-locales-comerciales-bisman-ediciones/568_estudios-para-artistas-y-locales-comerciales-bisman-ediciones_editarq-arquitecto-pablo-corral_05.jpg","fp":"50% 50%"},{"n":"Facultad de Arquitectura, Diseño y Urbanismo, Universidad de Buenos Aires","s":"facultad-de-arquitectura-diseno-y-urbanismo-universidad-de-b","b":"Belgrano","a":"Pabellón 3, Av. Int. Güiraldes 2160","la":-34.5425,"lo":-58.4424,"i":0,"ac":1,"h":["10–14",0,0,0],"r":[[],[]],"au":"Eduardo Catalano, Horacio Caminos, Eduardo Sacriste y Carlos Picarel","c":"Ciudad productiva","ci":"","ty":"Educación","fc":"Alejandro Goldemberg para Moderna Buenos Aires","im":"https://images.openhousebsas.org/buildings/facultad-de-arquitectura-diseno-y-urbanismo-universidad-de-b/234_facultad-de-arquitectura-diseno-y-urbanismo-universidad-de-b_alejandro-goldemberg-para-moderna-buenos_01.jpg","fp":"50% 50%"},{"n":"Facultad de Derecho UBA","s":"facultad-de-derecho-uba-821","b":"Recoleta","a":"Av. Pres. Figueroa Alcorta 2263","la":-34.5826,"lo":-58.39153,"i":0,"ac":1,"h":[0,0,"10–14",0],"r":[[],[]],"au":"Arturo Ochoa, Ismael Chiappori y Pedro Vinent","c":"Ciudad productiva, Ciudad icónica, Ciudad histórica","ci":"","ty":"Educación","fc":"","im":"https://images.openhousebsas.org/buildings/facultad-de-derecho-uba-821/235_facultad-de-derecho-uba-821_01.jpg","fp":"50% 50%"},{"n":"Fundación Andreani","s":"fundacion-andreani","b":"La Boca","a":"Av. Don Pedro de Mendoza 1987","la":-34.64015,"lo":-58.36189,"i":0,"ac":1,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Estudio Clorindo Testa","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Comercio, Cultura, Industria, Vivienda Colectiva","fc":"Daniela Mac Adden","im":"https://images.openhousebsas.org/buildings/fundacion-andreani/1788549528542.webp","fp":"50% 50%"},{"n":"Fundación Cassará","s":"fundacion-cassara","b":"San Nicolás","a":"Av. de Mayo 1194ABO","la":-34.60926,"lo":-58.38329,"i":0,"ac":0,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"Ana María Carrio (refuncionalización)","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Cultura, Hotel, Oficinas, Vivienda Colectiva","fc":"ANA MARIA CARRIO","im":"https://images.openhousebsas.org/buildings/fundacion-cassara/244_fundacion-cassara_gustavo-sosa-pinilla_02.jpg","fp":"50% 50%"},{"n":"Fundación Clorindo Testa","s":"fundacion-clorindo-testa","b":"Recoleta","a":"Avenida Santa Fe 1821","la":-34.59571,"lo":-58.39363,"i":1,"ac":0,"h":[0,"15:00–19:00","10:00–14:00",0],"r":[["15:00","15:45","16:30","17:15","18:00"],["10:00","10:45","11:30","12:15","13:00"]],"au":"Fundación Clorindo Testa","c":"","ci":"","ty":"Cultura, Educación, Institución","fc":"Natalia Krzisnik, Daniela MacAdden, Fundación Clorindo Testa","im":"https://images.openhousebsas.org/buildings/fundacion-clorindo-testa/1788902711565.webp","fp":"50% 50%"},{"n":"Fundación Larivière","s":"fundacion-la-riviere","b":"La Boca","a":"Caboto 564","la":-34.62898,"lo":-58.35888,"i":0,"ac":1,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Machado Silvetti + Clusellas Ades","c":"Equipamientos","ci":"","ty":"Cultura","fc":"Javier Agustín Rojas","im":"https://images.openhousebsas.org/buildings/fundacion-la-riviere/246_fundacion-la-riviere_javier-agustin-rojas_02.jpg","fp":"50% 50%"},{"n":"Fundación Proa","s":"fundacion-proa","b":"La Boca","a":"Av. Don Pedro de Mendoza 1929","la":-34.6399,"lo":-58.3621,"i":0,"ac":1,"h":[0,0,0,"15–19"],"r":[[],[]],"au":"Estudio Caruso e Torricella Architetti","c":"Ciudad productiva","ci":"","ty":"Cultura","fc":"Editarq Pablo Corral","im":"https://images.openhousebsas.org/buildings/fundacion-proa/247_fundacion-proa_editarq-pablo-corral_01.jpg","fp":"50% 50%"},{"n":"Galería y Mirador Güemes","s":"galeria-y-mirador-guemes","b":"San Nicolás","a":"Florida 165","la":-34.60612,"lo":-58.37503,"i":1,"ac":0,"h":["10:00–14:00","15:00–19:00",0,0],"r":[["10:00","11:00","12:00","13:00","15:00","16:00","17:00","18:00"],[]],"au":"Francesco Terenzio Gianotti","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Comercio, Cultura, Oficinas, Vivienda Colectiva","fc":"","im":"https://images.openhousebsas.org/buildings/galeria-y-mirador-guemes/254_galeria-y-mirador-guemes_01.jpg","fp":"50% 50%"},{"n":"Giribone 1550","s":"giribone-1550","b":"Villa Ortúzar","a":"Giribone 1550","la":-34.57963,"lo":-58.46405,"i":0,"ac":1,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"Supercielo","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Comercio, Oficinas, Vivienda Colectiva","fc":"Federico Kulekdjian","im":"https://images.openhousebsas.org/buildings/giribone-1550/1784679393355.webp","fp":"50% 50%"},{"n":"Hotel Patios de San Telmo","s":"patios-de-san-telmo","b":"San Telmo","a":"Chacabuco 752","la":-34.61683,"lo":-58.37584,"i":0,"ac":0,"h":[0,"15–19",0,"15–19"],"r":[[],[]],"au":"Neumann Kohn","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Hotel, Vivienda Colectiva","fc":"Pablo Padula","im":"https://images.openhousebsas.org/buildings/hotel-patios-de-san-telmo/1783313032298.webp","fp":"50% 50%"},{"n":"INDIGO - Almafuerte 47","s":"almafuerte-47","b":"Parque Patricios","a":"Almafuerte 47, Av. Caseros 3402","la":-34.63902,"lo":-58.41178,"i":0,"ac":1,"h":["10–14",0,0,0],"r":[[],[]],"au":"Grupo Tueroc","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Comercio, Vivienda Colectiva","fc":"Tueroc","im":"https://images.openhousebsas.org/buildings/almafuerte-47-785/011_almafuerte-47-785_tueroc_01.jpg","fp":"50% 50%"},{"n":"Intervista","s":"intervista","b":"San Telmo","a":"Cochabamba 570","la":-34.62328,"lo":-58.37365,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Morello / Savoia","c":"Ciudad productiva","ci":"","ty":"Comercio","fc":"Maia Croizet - Juan Carlos Casas","im":"https://images.openhousebsas.org/buildings/intervista/1787086525526.webp","fp":"50% 50%"},{"n":"Jardín Botánico Carlos Thays","s":"jardin-botanico","b":"Palermo","a":"Av. Sta. Fe 3957","la":-34.58356,"lo":-58.41813,"i":0,"ac":1,"h":[0,0,"10:00–11:00",0],"r":[[],["10:00"]],"au":"","c":"Ciudad operativa, Ciudad histórica","ci":"","ty":"Espacio Público, Parque","fc":"Jardín Botánico Carlos Thays","im":"https://images.openhousebsas.org/buildings/jardin-botanico/1787695174356.webp","fp":"50% 50%"},{"n":"La Casa Biferdil","s":"la-casa-biferdil","b":"Retiro","a":"San Martín 1137","la":-34.59455,"lo":-58.37418,"i":0,"ac":0,"h":["10–14","15–19","10–14",0],"r":[[],[]],"au":"Jules Dormal (Ingeniero y arquitecto)","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"Mes del Diseño y la Arquitectura (GCBA)","ty":"Comercio, Cultura, Oficinas, Vivienda Unifamiliar","fc":"Cristian Gabriel Sebille","im":"https://images.openhousebsas.org/buildings/la-casa-biferdil/1789154464330.webp","fp":"50% 50%"},{"n":"La Maquinita Godoy Cruz","s":"la-maquinita-godoy-cruz","b":"Palermo","a":"Godoy Cruz 1550","la":-34.58841,"lo":-58.43584,"i":0,"ac":1,"h":["10–14",0,0,0],"r":[[],[]],"au":"Juan Manuel Otero y Francisco Ledesma","c":"Ciudad productiva","ci":"","ty":"Industria, Oficinas","fc":"Sebastian Angel, Sofía Martín y Estudio Montevideo","im":"https://images.openhousebsas.org/buildings/la-maquinita-godoy-cruz/1785600765108.webp","fp":"50% 50%"},{"n":"La Maquinita Niceto Vega","s":"la-maquinita-niceto-vega","b":"Palermo","a":"Coronel Niceto Vega 4736","la":-34.59281,"lo":-58.43078,"i":0,"ac":0,"h":["10–14",0,0,0],"r":[[],[]],"au":"Juan Manuel Otero y Francisco Ledesma","c":"Ciudad productiva","ci":"","ty":"Industria, Oficinas","fc":"Sebastian Angel","im":"https://images.openhousebsas.org/buildings/la-maquinita-niceto-vega/1785600681300.webp","fp":"50% 50%"},{"n":"La Nube","s":"la-nube","b":"Belgrano","a":"Av. Int. Güiraldes 2851","la":-34.54339,"lo":-58.43771,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Estudio Ferro (Anteproyecto) - A1 Estudio (Proyecto) - Marle (Constructora)","c":"Ciudad productiva","ci":"","ty":"Comercio, Cultura","fc":"Manuel Ciarlotti - Candela Etcheverry - Joakin Fargas","im":"https://images.openhousebsas.org/buildings/la-nube-espacio/1785699504527.webp","fp":"50% 50%"},{"n":"Linda Linda Librería","s":"linda-linda-libreria","b":"Villa Crespo","a":"Av. Raúl Scalabrini Ortiz 532","la":-34.59806,"lo":-58.43617,"i":0,"ac":0,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Linda Linda Librería","c":"","ci":"Abre Villa Crespo","ty":"Cultura, Comercio","fc":"Federico Paladino","im":"https://images.openhousebsas.org/buildings/linda-linda-libreria/1789667902040.webp","fp":"50% 50%"},{"n":"LMC346 / Luis María Campos 346","s":"lmc346-luis-maria-campos-346","b":"Palermo","a":"Av. Luis María Campos 346","la":-34.57342,"lo":-58.43294,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"arq. Serenella Perreca (RSK)  + Estudio Martín Ibarlucía","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Arq. Ignacio Mazzaroni // Arq. Pedro Ignacio Yañez // Iván Altalef (dron) - ver nombres de archivo en cada caso.","im":"https://images.openhousebsas.org/buildings/lmc346-luis-maria-campos-346/1787177054468.webp","fp":"50% 50%"},{"n":"LOOP - Caseros 3402","s":"caseros-3402-750","b":"Nueva Pompeya","a":"Av. Caseros 3402","la":-34.63855,"lo":-58.41331,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Concept design: Studio AI + Ricardo Pomphile, Arq. Desarrollo Grupo Tueroc","c":"Ciudad productiva","ci":"","ty":"Comercio, Oficinas","fc":"Grupo Tueroc","im":"https://images.openhousebsas.org/buildings/caseros-3402-750/111_caseros-3402-750_grupo-tueroc_01.jpg","fp":"50% 50%"},{"n":"Luis Viale 345","s":"luis-viale-345","b":"Villa Crespo","a":"Luis Viale 345","la":-34.6038,"lo":-58.44652,"i":0,"ac":1,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"Bou Arquitectura","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"BOU Arquitectura","im":"https://images.openhousebsas.org/buildings/luis-viale-345/1787176975311.webp","fp":"50% 50%"},{"n":"M5605 + M5615","s":"m5605-469","b":"Villa Urquiza","a":"Monroe 5605","la":-34.57756,"lo":-58.49229,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"ARQTIPO - Diego Aceto, Darío Litivinoff, Alejandro Camp.","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"federico kulekdjian + israel caire","im":"https://images.openhousebsas.org/buildings/m5605-m515/1783311986617.webp","fp":"50% 41.6%"},{"n":"MACBA - Museo de Arte Contemporáneo de Buenos Aires","s":"museo-de-arte-contemporaneo-de-buenos-aires-macba-735","b":"San Telmo","a":"Av. San Juan 328","la":-34.62201,"lo":-58.37019,"i":0,"ac":1,"h":[0,0,0,"15–19"],"r":[[],[]],"au":"Vila Sebastián Arquitectos","c":"Ciudad productiva","ci":"","ty":"Cultura, Educación","fc":"Editarq, Federico Cairoli, Bruto Studio, Natalia Krzinik","im":"https://images.openhousebsas.org/buildings/museo-de-arte-contemporaneo-de-buenos-aires-macba-735/313_museo-de-arte-contemporaneo-de-buenos-aires-macba-735_editarq-federico-cairoli-bruto-studio-y-_01.jpg","fp":"50% 50%"},{"n":"Madero Walk","s":"madero-walk","b":"Puerto Madero","a":"Pierina Dealessi 1855","la":-34.62088,"lo":-58.36259,"i":0,"ac":0,"h":[0,0,"10–14",0],"r":[[],[]],"au":"BMA","c":"Ciudad productiva","ci":"","ty":"Comercio, Hotel","fc":"Alejandro Wirth","im":"https://images.openhousebsas.org/buildings/madero-walk/293_madero-walk_alejandro-wirth_01.jpg","fp":"50% 50%"},{"n":"Malabia 1117","s":"malabia-1117","b":"Villa Crespo","a":"Malabia 1117","la":-34.59401,"lo":-58.43186,"i":0,"ac":1,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"BAAG","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Comercio, Oficinas, Vivienda Colectiva","fc":"Natalia Krzisnik","im":"https://images.openhousebsas.org/buildings/malabia-1117/294_malabia-1117_natalia-krzisnik_01.jpg","fp":"50% 50%"},{"n":"Malabia 933","s":"malabia-933-444","b":"Villa Crespo","a":"Malabia 933","la":-34.59525,"lo":-58.4339,"i":0,"ac":1,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"Studio AI","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Natalia Krzisnik","im":"https://images.openhousebsas.org/buildings/malabia-933-444/295_malabia-933-444_natalia-krzisnik_01.jpg","fp":"50% 50%"},{"n":"MARQ. Museo de Arquitectura","s":"marq-museo-de-arquitectura-426","b":"Recoleta","a":"Av. del Libertador 999","la":-34.58642,"lo":-58.38515,"i":0,"ac":0,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Scott y Hume / Rolando Schere, Jorge Moscato / Marcos Polchowski","c":"Ciudad operativa, Ciudad histórica","ci":"Mes del Diseño y la Arquitectura (GCBA)","ty":"Cultura, Infraestructura","fc":"Editarq - Arquitecto Pablo Corral","im":"https://images.openhousebsas.org/buildings/marq-museo-de-arquitectura-426/296_marq-museo-de-arquitectura-426_editarq-arquitecto-pablo-corral_02.jpg","fp":"50% 50%"},{"n":"Mercedes 3880","s":"mercedes-3880","b":"Villa Devoto","a":"Mercedes 3880","la":-34.60151,"lo":-58.51173,"i":0,"ac":1,"h":["10–14",0,0,0],"r":[[],[]],"au":"MMCV","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Comercio, Oficinas, Vivienda Colectiva","fc":"Daniela Macadden","im":"https://images.openhousebsas.org/buildings/mercedes-3880/299_mercedes-3880_editarq-pablo-corral_02.jpg","fp":"50% 52.4%"},{"n":"Mirabilia 851","s":"851-mirabilia-783","b":"Chacarita","a":"Fitz Roy 851","la":-34.59097,"lo":-58.44424,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Mirabilia","c":"Ciudad productiva","ci":"","ty":"Comercio, Espacio Público","fc":"Javier Agustin Rojas","im":"https://images.openhousebsas.org/buildings/851-mirabilia-783/305_851-mirabilia-783_mirabilia-javier-agustin-rojas_01.jpg","fp":"50% 50%"},{"n":"Mirabilia Soler","s":"mirabilia-soler","b":"Palermo","a":"Soler 5665","la":-34.58031,"lo":-58.43316,"i":0,"ac":1,"h":["10–14",0,0,0],"r":[[],[]],"au":"Mirabilia","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Comercio, Vivienda Colectiva","fc":"Javier Agustin Rojas","im":"https://images.openhousebsas.org/buildings/mirabilia-soler/1785872720813.webp","fp":"50% 50%"},{"n":"Museo Benito Quinquela Martín","s":"museo-benito-quinquela-martin","b":"La Boca","a":"Av. Pedro de Mendoza 1835","la":-34.63908,"lo":-58.36094,"i":0,"ac":1,"h":[0,"15:00–18:00",0,0],"r":[[],[]],"au":"Alejandro Virasoro y Alberto Gelly Cantilo","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Cultura, Vivienda Unifamiliar","fc":"GCBA","im":"https://images.openhousebsas.org/buildings/museo-benito-quinquela-martin/312_museo-benito-quinquela-martin_gcba_01.jpg","fp":"50% 50%"},{"n":"Museo de arte español Enrique Larreta","s":"museo-de-arte-espanol-enrique-larreta","b":"Belgrano","a":"Av. Juramento 2291","la":-34.56113,"lo":-58.45526,"i":0,"ac":1,"h":["11:00–14:00",0,0,0],"r":[[],[]],"au":"Ernesto Bunge (c. 1886) Christian Schindler (reforma 1916) Christian Schindler (reforma 1916)/","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Cultura, Vivienda Unifamiliar","fc":"Archivo Museo Larreta","im":"https://images.openhousebsas.org/buildings/museo-de-arte-espanol-enrique-larreta/1789569743951.webp","fp":"50% 50%"},{"n":"Museo de Arte Moderno de Buenos Aires (MAMBA)","s":"museo-de-arte-moderno-de-buenos-aires-mamba-347","b":"San Telmo","a":"Av. San Juan 350","la":-34.62207,"lo":-58.37074,"i":0,"ac":1,"h":[0,"15–19",0,"15–19"],"r":[[],[]],"au":"Emilio Ambasz (Refuncionalización)","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Cultura, Industria","fc":"Guido Limardo y Josefina Tommasi","im":"https://images.openhousebsas.org/buildings/museo-de-arte-moderno-de-buenos-aires-mamba-347/1788280024020.webp","fp":"50% 50%"},{"n":"Museo Evita","s":"museo-evita-307","b":"Palermo","a":"Lafinur 2988","la":-34.58065,"lo":-58.4147,"i":0,"ac":1,"h":["10:30–14:30","17:30–19:30","10:30–14:30","17:30–19:30"],"r":[[],[]],"au":"Estanislao Pirovano y familia Carabassa","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Cultura, Institución, Vivienda Unifamiliar","fc":"Museo Evita","im":"https://images.openhousebsas.org/buildings/museo-evita-307/318_museo-evita-307_museo-evita_01.jpg","fp":"50% 50%"},{"n":"Museo Fernández Blanco - Sede Palacio Noel","s":"museo-fernandez-blanco-sede-palacio-noel-739","b":"Retiro","a":"Suipacha 1422","la":-34.5909,"lo":-58.37993,"i":0,"ac":0,"h":[0,"15–19",0,"15–19"],"r":[[],[]],"au":"Martin Noel","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"Mes del Diseño y la Arquitectura (GCBA)","ty":"Cultura, Vivienda Unifamiliar","fc":"Prensa MIFB / MuseosBA","im":"https://images.openhousebsas.org/buildings/museo-fernandez-blanco-sede-palacio-noel-739/1785805581562.webp","fp":"50% 50%"},{"n":"Museo Xul Solar","s":"museo-xul-solar-377","b":"Recoleta","a":"Laprida 1212","la":-34.59471,"lo":-58.40781,"i":0,"ac":0,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Pablo Tomás Beitia","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Cultura, Vivienda Colectiva","fc":"Pablo Corral, Natalia Krzisnik.","im":"https://images.openhousebsas.org/buildings/museo-xul-solar-377/322_museo-xul-solar-377_pablo-corral-natalia-krzisnik_04.jpg","fp":"50% 50%"},{"n":"Nantes - Tienda de arte + Enmarcado artesanal","s":"nantes-tienda-de-arte-enmarcado-artesanal","b":"Villa Crespo","a":"Loyola 648","la":-34.59492,"lo":-58.43687,"i":0,"ac":0,"h":[0,"16:00–20:00",0,"16:00–20:00"],"r":[[],[]],"au":"Agustín Malagamba, Victoria Dursi, Gonzalo Gómez Salinas","c":"Ciudad productiva","ci":"Abre Villa Crespo","ty":"Cultura","fc":"Victoria Dursi","im":"https://images.openhousebsas.org/buildings/nantes-tienda-de-arte-enmarcado-artesanal/1789750435351.webp","fp":"50% 50%"},{"n":"Ola Palermo","s":"ola-palermo","b":"Palermo","a":"C. Dorrego 3350","la":-34.57171,"lo":-58.42573,"i":0,"ac":1,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"ODA Architecture","c":"Ciudad operativa","ci":"","ty":"Comercio, Espacio Público, Infraestructura, Oficinas","fc":"Herald Jeffry Paredes Chura / Ola Palermo","im":"https://images.openhousebsas.org/buildings/ola-palermo/1789494834347.webp","fp":"50% 50%"},{"n":"Olaya 1371","s":"olaya-1371","b":"Villa Crespo","a":"Olaya 1371","la":-34.60424,"lo":-58.44482,"i":0,"ac":1,"h":[0,"15–19",0,0],"r":[[],[]],"au":"AFRa Arquitectos","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"AFRa","im":"https://images.openhousebsas.org/buildings/olaya-1371/1789740417849.webp","fp":"40.1% 56.5%"},{"n":"OLGA","s":"olga","b":"Palermo","a":"Humboldt 1509","la":-34.58652,"lo":-58.43729,"i":0,"ac":0,"h":[0,0,0,"15–19"],"r":[[],[]],"au":"","c":"Ciudad productiva","ci":"","ty":"Cultura, Oficinas","fc":"","im":"https://images.openhousebsas.org/buildings/olga/337_olga_01.jpg","fp":"50% 50%"},{"n":"Osa PH","s":"osa-ph","b":"Villa Pueyrredón","a":"Obispo San Alberto 2815","la":-34.58159,"lo":-58.50498,"i":0,"ac":0,"h":[0,0,"10–14",0],"r":[[],[]],"au":"FREU - Francisco Cabrini, M. Eugenia Casas","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Oficinas, Vivienda Unifamiliar","fc":"Francisco Cabrini","im":"https://images.openhousebsas.org/buildings/osa-ph/1787378921938.webp","fp":"50% 50%"},{"n":"Pacto Estudio","s":"pacto-estudio","b":"Palermo","a":"Guatemala 4260","la":-34.58913,"lo":-58.41996,"i":0,"ac":0,"h":["10–14",0,0,0],"r":[[],[]],"au":"Ing. Fernández Poblet y Alejandro Ortuzar / ESTUDIO: Pacto estudio","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Oficinas, Vivienda Unifamiliar","fc":"Ana Grucki","im":"https://images.openhousebsas.org/buildings/pacto-estudio/343_pacto-estudio_ana-grucki_01.jpg","fp":"50% 50%"},{"n":"Palacio Barolo","s":"palacio-barolo","b":"Monserrat","a":"Av. de Mayo 1370","la":-34.60966,"lo":-58.38573,"i":1,"ac":1,"h":["10:00–14:00","15:00–19:00",0,0],"r":[["10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30"],[]],"au":"Mario Palanti","c":"Ciudad histórica, Ciudad icónica, Ciudad productiva","ci":"","ty":"Comercio, Oficinas, Vivienda Colectiva","fc":"Pablo G. Fernandez, Mariana Quiroga, Matias Jovet","im":"https://images.openhousebsas.org/buildings/palacio-barolo/345_palacio-barolo_editarq-pablo-corral_01.jpg","fp":"50% 50%"},{"n":"Palacio Ceci","s":"palacio-ceci","b":"Villa Devoto","a":"Av. Lincoln 4300","la":-34.59907,"lo":-58.51518,"i":1,"ac":1,"h":[0,0,"10:00–14:00",0],"r":[[],["10:00","10:40","11:20","12:00","12:40","13:20"]],"au":"Constructora Ceci y Hnos. (1918) / Gobierno de la Ciudad de Buenos Aires / HIT Construcciones (Restauración)","c":"Ciudad histórica, Ciudad icónica, Ciudad doméstica","ci":"","ty":"Cultura, Educación, Vivienda Unifamiliar","fc":"Rodolfo Seide","im":"https://images.openhousebsas.org/buildings/palacio-ceci/1789155793696.webp","fp":"50% 50%"},{"n":"Pasaje Calas","s":"pasaje-calas","b":"Recoleta","a":"Agüero 1468","la":-34.59265,"lo":-58.40818,"i":0,"ac":1,"h":["10–14","15–19","10–14","15–19"],"r":[[],[]],"au":"Lacroze Miguens Prati","c":"Ciudad histórica, Ciudad productiva, Ciudad doméstica","ci":"","ty":"Comercio, Cultura, Espacio Público, Vivienda Colectiva","fc":"Fotografo Gustavo Sosa - Arqta. Evelyn Paludi","im":"https://images.openhousebsas.org/buildings/pasaje-calas/1786483683059.webp","fp":"50% 50%"},{"n":"Pasaje Olleros 3951","s":"pasaje-olleros-3951","b":"Chacarita","a":"Olleros 3951","la":-34.58532,"lo":-58.45275,"i":0,"ac":0,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"Julia Yako + Helena Sofia Kleinman","c":"Ciudad doméstica, Ciudad histórica","ci":"","ty":"Vivienda Unifamiliar","fc":"Iván Breyter","im":"https://images.openhousebsas.org/buildings/pasaje-olleros-3951/1787154383497.webp","fp":"50% 50%"},{"n":"Peaches Besares","s":"peaches-besares","b":"Saavedra","a":"Washington 4186","la":-34.55098,"lo":-58.48433,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"IR Arquitectura","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Claudio Troncoso Rojas","im":"https://images.openhousebsas.org/buildings/peaches-besares/368_peaches-besares_claudio-troncoso-rojas_01.jpg","fp":"50% 50%"},{"n":"PH Aizpurúa","s":"ph-aizpurua","b":"Villa Urquiza","a":"Aizpurua 3257","la":-34.57065,"lo":-58.50131,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Estudio VAMO / Federico Valverdi, Nicole Mosquera","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Federico Kulekdjian","im":"https://images.openhousebsas.org/buildings/ph-aizpurua/1787933726875.webp","fp":"50% 36.3%"},{"n":"PH Arévalo","s":"ph-arevalo","b":"Palermo","a":"Arévalo 1417","la":-34.58354,"lo":-58.4433,"i":0,"ac":0,"h":[0,0,"10–14",0],"r":[[],[]],"au":"Arq. Cecilia Villanueva y Arq. Brian Oliver","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Luis Barandiarán","im":"https://images.openhousebsas.org/buildings/ph-arevalo/371_ph-arevalo_oliver-villanueva_01.jpg","fp":"50% 50%"},{"n":"PH Helguera","s":"ph-helguera","b":"Villa del Parque","a":"Helguera 2348","la":-34.60789,"lo":-58.48813,"i":0,"ac":0,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"OADD Arquitectos","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Industria, Vivienda Unifamiliar","fc":"Bruto Studio","im":"https://images.openhousebsas.org/buildings/ph-helguera/374_ph-helguera_bruto-studio_01.jpg","fp":"50% 50%"},{"n":"PH Juana","s":"ph-juana-1785264767233","b":"Coghlan","a":"Juana Azurduy 3253","la":-34.55494,"lo":-58.47419,"i":0,"ac":1,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Estudio NU (Arq. Carla Scuticchio)","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Luis Barandiaran","im":"https://images.openhousebsas.org/buildings/ph-juana-1785264767233/1785264770233.webp","fp":"50% 50%"},{"n":"PH Juana Azurduy 3011","s":"ph-juana-azurduy","b":"Núñez","a":"Juana Azurduy 3011","la":-34.5539,"lo":-58.4723,"i":0,"ac":0,"h":["10–14",0,0,0],"r":[[],[]],"au":"Estudio Arq.u y Estudio Ebra","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"adela dama https://www.instagram.com/adelaldama?igsi=MWpoaHZpbWlwanRoeg==","im":"https://images.openhousebsas.org/buildings/ph-juana-azurduy/1787695366022.webp","fp":"50% 42.4%"},{"n":"PH Loreto","s":"ph-loreto","b":"Colegiales","a":"Virrey Loreto 3452","la":-34.57668,"lo":-58.45704,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"OADD arquitectos","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Bruto Studio","im":"https://images.openhousebsas.org/buildings/ph-loreto/1783534673312.webp","fp":"50% 50%"},{"n":"PH Núñez UNO","s":"ph-nunez-uno","b":"Núñez","a":"Ruiz Huidobro 2005","la":-34.54252,"lo":-58.4677,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"Nicolás Waldman y Agustina Andreani Ghiglione","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Oficinas, Vivienda Unifamiliar","fc":"Javier Agustín Rojas","im":"https://images.openhousebsas.org/buildings/ph-nunez-uno/1776821365035.webp","fp":"41.7% 54.5%"},{"n":"PH Valle","s":"ph-valle","b":"Caballito","a":"Valle 50","la":-34.62376,"lo":-58.42817,"i":0,"ac":0,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Pat Arquitectura","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Ignacio Steinsleger","im":"https://images.openhousebsas.org/buildings/ph-valle/1783306271041.webp","fp":"50% 50%"},{"n":"PH Velasco","s":"ph-velazco","b":"Chacarita","a":"Juan Ramírez de Velasco 1449","la":-34.58993,"lo":-58.44441,"i":0,"ac":0,"h":["10–14",0,0,0],"r":[[],[]],"au":"MoGS - Sofia Elizalde - Joaquin Venditti","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Bruto Studio","im":"https://images.openhousebsas.org/buildings/ph-velazco/1786733790117.webp","fp":"52.4% 43.9%"},{"n":"Plan H","s":"plan-h","b":"Palermo","a":"Soler 5646","la":-34.58067,"lo":-58.43323,"i":0,"ac":1,"h":["10–14",0,0,0],"r":[[],[]],"au":"Estudio Abramzon + ZZ Arquitectos","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Oficinas, Vivienda Colectiva","fc":"Albano Garcia","im":"https://images.openhousebsas.org/buildings/plan-h/389_plan-h_albano-garcia_01.jpg","fp":"50% 50%"},{"n":"Planetario Galileo Galilei","s":"planetario-galileo-galilei","b":"Palermo","a":"Av. Sarmiento 3715","la":-34.57082,"lo":-58.41119,"i":1,"ac":1,"h":["10:00–13:00",0,"10:00–13:00",0],"r":[["10:00","11:00","12:00"],["10:00","11:00","12:00"]],"au":"Enrique Jan y Carlos Lauger","c":"Ciudad productiva, Ciudad icónica","ci":"","ty":"Cultura, Educación","fc":"Bruto Studio","im":"https://images.openhousebsas.org/buildings/planetario-galileo-galilei/1786675058519.webp","fp":"66.7% 48%"},{"n":"Planta Potabilizadora General San Martín - AYSA","s":"planta-potabilizadora-general-san-martin","b":"Palermo","a":"CHRF+P93","la":-34.55859,"lo":-58.42616,"i":1,"ac":1,"h":["10:00–14:00",0,0,0],"r":[["10:00","11:00","12:00","13:00"],[]],"au":"Agustín González","c":"","ci":"","ty":"Infraestructura","fc":"AYSA","im":"https://images.openhousebsas.org/buildings/planta-potabilizadora-general-san-martin/1790088058607.webp","fp":"50% 50%"},{"n":"Proa 21-Mansión Cichero","s":"proa-21-mansion-cichero","b":"La Boca","a":"Av. Don Pedro de Mendoza 2051","la":-34.64063,"lo":-58.36146,"i":0,"ac":0,"h":[0,"15–19",0,"15–19"],"r":[[],[]],"au":"","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Cultura, Vivienda Unifamiliar","fc":"Editarq Pablo Corral","im":"https://images.openhousebsas.org/buildings/proa-21-mansion-cichero/395_proa-21-mansion-cichero_editarq-pablo-corral_03.jpg","fp":"50% 50%"},{"n":"Quartier Retiro","s":"quartier-retiro","b":"Retiro","a":"Comodoro Pedro Zanni 351","la":-34.58373,"lo":-58.37078,"i":1,"ac":0,"h":[0,0,0,"15:00–19:00"],"r":[[],["15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30"]],"au":"Camps Tiscornia Arquitectos / BMA / Argencons","c":"Ciudad doméstica","ci":"Mes del Diseño y la Arquitectura (GCBA)","ty":"Vivienda Colectiva, Comercio, Oficinas, Gastronomía","fc":"CRIBA","im":"https://images.openhousebsas.org/buildings/quartier-retiro/1790085731883.webp","fp":"43.6% 50%"},{"n":"Reforma Kennedy","s":"reforma-en-la-calle-kennedy","b":"Palermo","a":"John Fitzgerald Kennedy 2880","la":-34.57573,"lo":-58.4197,"i":0,"ac":1,"h":["10:00–14:00","15:00–18:00",0,0],"r":[[],[]],"au":"Juan Bechini","c":"Ciudad doméstica","ci":"","ty":"Vivienda Unifamiliar","fc":"Agustin Calvetti","im":"https://images.openhousebsas.org/buildings/reforma-en-la-calle-kennedy/1784049632305.webp","fp":"50% 50%"},{"n":"Reforma Tacuarí","s":"reforma-tacuari","b":"Constitución","a":"Tacuari 1515","la":-34.62595,"lo":-58.37788,"i":0,"ac":0,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Estudio Mater - Gabriel Huarte y Leticia Virguez Lalli","c":"Ciudad doméstica, Ciudad histórica","ci":"","ty":"Vivienda Unifamiliar","fc":"Javier Agustín Rojas","im":"https://images.openhousebsas.org/buildings/reforma-tacuari/404_reforma-tacuari_javier-agustin-rojas-mater_07.jpg","fp":"50% 39.7%"},{"n":"Reserva Ecológica Costanera Sur","s":"reserva-ecologica-costanera-sur","b":"Puerto Madero","a":"Av. Dr. Tristán Achával Rodríguez 1550","la":-34.61692,"lo":-58.35676,"i":0,"ac":1,"h":["10:00–12:00",0,0,0],"r":[["10:00"],[]],"au":"","c":"Ciudad operativa","ci":"","ty":"Espacio Público, Reserva Natural","fc":"Reserva Ecológica Costanera Sur","im":"https://images.openhousebsas.org/buildings/reserva-ecologica-costanera-sur/1787694859895.webp","fp":"50% 50%"},{"n":"Reserva Ecológica Lago Lugano","s":"reserva-lago-lugano","b":"Villa Soldati","a":"Av. Escalada 4951","la":-34.68028,"lo":-58.45007,"i":0,"ac":0,"h":["10:00–12:00",0,0,0],"r":[["10:00"],[]],"au":"GCBA","c":"Ciudad operativa","ci":"","ty":"Espacio Público, Infraestructura, Reserva Natural","fc":"Reserva Ecológica Lago Lugano","im":"https://images.openhousebsas.org/buildings/reserva-lago-lugano/405_reserva-lago-lugano_gcba_01.jpg","fp":"50% 50%"},{"n":"Rivera 5470","s":"rivera-5470","b":"Villa Urquiza","a":"Rivera 5470","la":-34.57438,"lo":-58.49241,"i":0,"ac":0,"h":["10–14","15–19",0,0],"r":[[],[]],"au":"BAAG","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Comercio, Oficinas, Vivienda Colectiva","fc":"Javier Agustin Rojas","im":"https://images.openhousebsas.org/buildings/rivera-5470/1788817878762.webp","fp":"50% 50%"},{"n":"Roseti 88","s":"roseti-88","b":"Chacarita","a":"Roseti 88","la":-34.5863,"lo":-58.44631,"i":0,"ac":1,"h":[0,"15–19",0,0],"r":[[],[]],"au":"Colle Croce","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Paco Gutierrez Roura","im":"https://images.openhousebsas.org/buildings/roseti-88/407_roseti-88_roldofo-croce_01.jpg","fp":"50% 50%"},{"n":"SCA - Sociedad Central de Arquitectos","s":"sociedad-central-de-arquitectos","b":"Recoleta","a":"Montevideo 938","la":-34.598,"lo":-58.38986,"i":0,"ac":1,"h":["10–14","15–19",0,"15–19"],"r":[[],[]],"au":"","c":"Ciudad productiva, Ciudad histórica, Ciudad doméstica","ci":"","ty":"Cultura, Institución, Vivienda Unifamiliar","fc":"Sociedad Central de Arquitectos","im":"https://images.openhousebsas.org/buildings/sociedad-central-de-arquitectos/1787863200520.webp","fp":"50% 50%"},{"n":"Sede Social Ferro Carril Oeste","s":"sede-social-ferro-carril-oeste","b":"Caballito","a":"Federico García Lorca 350","la":-34.61792,"lo":-58.44558,"i":0,"ac":0,"h":["10–14",0,0,0],"r":[[],[]],"au":"Malvicino & Maisonnave / Velasco & Justo","c":"Ciudad productiva, Ciudad histórica","ci":"","ty":"Cultura, Deporte, Institución","fc":"","im":"https://images.openhousebsas.org/buildings/sede-social-ferro-carril-oeste/410_sede-social-ferro-carril-oeste_01.jpg","fp":"50% 50%"},{"n":"Superi - SP 4C","s":"superi","b":"Saavedra","a":"Superí 4235","la":-34.54913,"lo":-58.48175,"i":0,"ac":1,"h":[0,0,"10–14",0],"r":[[],[]],"au":"Mutar Estudio","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Fernando Schapochnik","im":"https://images.openhousebsas.org/buildings/superi/1789589386957.webp","fp":"50% 50%"},{"n":"Taller Castillo","s":"taller-castillo","b":"Villa Crespo","a":"Castillo 544","la":-34.59511,"lo":-58.4347,"i":0,"ac":1,"h":[0,"15–19",0,"15–19"],"r":[[],[]],"au":"","c":"Ciudad productiva","ci":"Abre Villa Crespo","ty":"","fc":"Pedro Perelman","im":"https://images.openhousebsas.org/buildings/taller-castillo/1789740574473.webp","fp":"50% 50%"},{"n":"Taller de Carlos Herzberg","s":"taller-de-carlos-herzberg","b":"Villa Crespo","a":"Castillo 480","la":-34.59574,"lo":-58.43409,"i":0,"ac":0,"h":[0,"15–19",0,"15–19"],"r":[[],[]],"au":"Carlos Herzberg","c":"Ciudad productiva","ci":"Abre Villa Crespo","ty":"","fc":"Carlos Herzberg","im":"https://images.openhousebsas.org/buildings/taller-de-carlos-herzberg/1789740426006.webp","fp":"50% 50%"},{"n":"Teatro Avenida","s":"teatro-avenida","b":"Monserrat","a":"Av. de Mayo 1222","la":-34.60921,"lo":-58.38374,"i":0,"ac":0,"h":["10–14",0,0,0],"r":[[],[]],"au":"C. Férnandez Poblet y Alejandro Ortúzar","c":"Ciudad histórica, Ciudad productiva","ci":"","ty":"Cultura","fc":"Fiorella Romay","im":"https://images.openhousebsas.org/buildings/teatro-avenida/425_teatro-avenida_fiorella-romay_01.jpg","fp":"50% 50%"},{"n":"Teatro Colón Fábrica","s":"teatro-colon-fabrica","b":"La Boca","a":"Av. Don Pedro de Mendoza 2147","la":-34.64116,"lo":-58.36087,"i":1,"ac":1,"h":["10:30–14:00",0,0,0],"r":[["10:30","11:15"],[]],"au":"Teatro Colón","c":"Ciudad productiva","ci":"","ty":"Cultura, Industria","fc":"","im":"https://images.openhousebsas.org/buildings/teatro-colon-fabrica/427_teatro-colon-fabrica_01.jpg","fp":"50% 50%"},{"n":"Torre Huergo 475","s":"torre-huergo-475","b":"Puerto Madero","a":"Av. Ing. Huergo 475","la":-34.6128,"lo":-58.36776,"i":1,"ac":1,"h":["10:00–14:00",0,"10:00–14:00",0],"r":[["10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30"],["10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30"]],"au":"Adamo-Faiden arquitectos","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Consultatio","im":"https://images.openhousebsas.org/buildings/torre-huergo-475/432_torre-huergo-475_consultatio_01.jpg","fp":"50% 50%"},{"n":"Torre Mirafiori","s":"torre-mirafiori","b":"San Nicolás","a":"Cerrito 740","la":-34.6,"lo":-58.38262,"i":1,"ac":0,"h":["10:00–14:00",0,0,0],"r":[["10:00","10:30","11:30","12:00","12:30","13:00","13:30"],[]],"au":"Rafael Amaya, Miguel Devoto, Alberto Lanusse, Eduardo Martín y Augusto Pieres","c":"Ciudad productiva","ci":"Mes del Diseño y la Arquitectura (GCBA)","ty":"Oficinas","fc":"CRIBA / (Torre mirafiori; Santiago Chiban","im":"https://images.openhousebsas.org/buildings/torre-mirafiori/1788407365925.webp","fp":"50% 34.6%"},{"n":"Torre Monumental","s":"torre-monumental","b":"Retiro","a":"San Martín 1225","la":-34.59288,"lo":-58.37329,"i":1,"ac":0,"h":[0,0,"10:00–14:00",0],"r":[[],["10:00","11:00","12:00","13:00"]],"au":"Sir Ambrose Macdonald Poynter","c":"Ciudad icónica, Ciudad histórica","ci":"Mes del Diseño y la Arquitectura (GCBA)","ty":"Monumento","fc":"Gobierno de la Ciudad de Buenos Aires","im":"https://images.openhousebsas.org/buildings/torre-monumental/1789759919861.webp","fp":"41.9% 50%"},{"n":"Tres Casas Superí","s":"tres-casas-superi","b":"Belgrano","a":"C. La Pampa 3402","la":-34.57092,"lo":-58.46414,"i":0,"ac":1,"h":[0,"15–19",0,0],"r":[[],[]],"au":"UNOENCINCO Arquitectura (Laura Abate, Alejo López, Noelia Maldonado Duboski, Máximo Triolo, Miguel Urruty)","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Lucia Triolo, Luz Stella","im":"https://images.openhousebsas.org/buildings/tres-casas-superi/1787694919819.webp","fp":"50% 50%"},{"n":"Virrey del Pino 1552","s":"virrey-del-pino-1552","b":"Belgrano","a":"Virrey del Pino 1552","la":-34.56114,"lo":-58.44306,"i":0,"ac":1,"h":[0,"15–19",0,0],"r":[[],[]],"au":"LBS La Base Studio + Place","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"LBS","im":"https://images.openhousebsas.org/buildings/virrey-del-pino-1552/1784730632754.webp","fp":"50% 48.6%"},{"n":"Zabala 3009","s":"zabala-3009","b":"Colegiales","a":"Zabala 3009","la":-34.57357,"lo":-58.45354,"i":0,"ac":1,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"Estudio Dumont","c":"Ciudad doméstica","ci":"","ty":"Vivienda Colectiva","fc":"Albano García","im":"https://images.openhousebsas.org/buildings/zabala-3009/460_zabala-3009_claudio-troncoso-rojas-para-ohba_01.jpg","fp":"50% 43.6%"},{"n":"Zonderflag Casa de Artistas","s":"zonderflag-casa-de-artistas","b":"Palermo","a":"Nicaragua 4880","la":-34.5862,"lo":-58.4278,"i":0,"ac":1,"h":[0,0,"10–14","15–19"],"r":[[],[]],"au":"2EC Arquitectos","c":"Ciudad doméstica, Ciudad productiva","ci":"","ty":"Comercio, Cultura, Vivienda Colectiva","fc":"JAVIER AGUSTIN ROJAS","im":"https://images.openhousebsas.org/buildings/zonderflag-casa-de-artistas/1783960834203.webp","fp":"50% 43.6%"}];
+const OH="https://openhousebsas.org/catalogo/";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=s=>String(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const RM=matchMedia("(prefers-reduced-motion: reduce)");
+const smooth=()=>RM.matches?"auto":"smooth";
+const DAYS=["Sábado 3","Domingo 4"],DSHORT=["Sáb","Dom"];
+D.forEach(d=>{d.h=d.h.map(v=>v?String(v).replace(/:00/g,""):v);d.key=norm(d.n+" "+d.a+" "+d.au+" "+d.b);d.open=[!!(d.h[0]||d.h[1]),!!(d.h[2]||d.h[3])];
+  d.special=d.h.some(x=>x&&x!=="10–14"&&x!=="15–19")});
+const BY=Object.fromEntries(D.map(d=>[d.s,d]));
+$("total").textContent=D.length;$("m-total").textContent=D.length;$("m-barrios").textContent=new Set(D.map(d=>d.b)).size;
+const hrsDay=(d,day)=>[d.h[day*2],d.h[day*2+1]].filter(Boolean).join(" y ");
+const gq=d=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(d.a+", "+d.b+", Buenos Aires");
+
+/* ---------- boletos (curaduría) ---------- */
+const TICKETS=[
+  {id:"centro",serial:"0310",icon:"banco",name:"Centro de película",pitch:"Edificios que durante el año no se pueden pisar: ateliers de los años 30, el primer rascacielos racionalista y bancos y oficinas por dentro.",
+    days:[{am:["ateliers-de-artistas", "la-casa-biferdil", "edificio-comega-18", "edificio-ibm-381"],pm:["estudios-para-artistas-y-locales-comerciales-ateliers", "estudios-para-artistas-y-locales-comerciales-bisman-ediciones", "edificio-de-renta-bencich-107", "casa-bolivar"]},
+          {am:["ateliers-de-artistas", "la-casa-biferdil", "edificio-comega-18", "edificio-ibm-381"],pm:["estudios-para-artistas-y-locales-comerciales-bisman-ediciones", "fundacion-cassara", "agn"]}]},
+  {id:"vcrespo",serial:"0410",icon:"taller",name:"Villa Crespo creativo",pitch:"Talleres, estudios y casas que solo abren en Open House, todo a pocas cuadras. Para la gente que hace cosas con las manos, o quiere ver cómo se hacen.",
+    days:[{am:["aer-pasaje", "casa-aer", "bubble-studios-432"],pm:["olaya-1371", "taller-castillo", "taller-de-carlos-herzberg", "espacio-galixia", "club-de-oficios"]},
+          {am:["malabia-933-444", "malabia-1117", "luis-viale-345"],pm:["taller-castillo", "taller-de-carlos-herzberg", "espacio-galixia", "club-de-oficios"]}]},
+  {id:"casas",serial:"0510",icon:"casa",name:"Así vive la gente",pitch:"PH, casas y edificios chicos para chusmear cómo vive el otro. Seamos honestas: es a lo que vamos todos.",
+    days:[{am:["ph-nunez-uno","cespedes","ph-loreto","ph-velazco","pacto-estudio"],pm:["caldas-287-775","roseti-88","ph-valle"]},
+          {am:["ph-arevalo","zonderflag-casa-de-artistas","el-salvador-5651"],pm:["pasaje-olleros-3951","zabala-3009","giribone-1550","el-hogar-obrero-villa-ortuzar"]}]}
+];
+
+const EXTRA=[
+  ["estudios-para-artistas-y-locales-comerciales-ateliers","Ateliers para artistas · Grupo Austral"],
+  ["estudios-para-artistas-y-locales-comerciales-bisman-ediciones","Bisman Ediciones · Grupo Austral"],
+  ["casa-cubo-754","Casa Cubo","El clásico de Open House"],
+  ["casa-garu-757","Casa Garu","Un must"],
+  ["banco-hipotecario-ex-banco-de-londres","Banco Hipotecario · ex Banco de Londres"],
+  ["bubble-studios-432","Bubble Studios"],
+  ["espacio-galixia","Espacio Galixia"],
+  ["kavanagh","Edificio Kavanagh"],
+  ["banco-provincia-casa-central","Banco Provincia · Casa Central"]
+];
+/* picks sin bloque propio: PH que me encantan y mi lista de este año */
+const PICK_MORE=["ph-valle","ph-nunez-uno","ph-loreto","ph-arevalo","pacto-estudio",
+  "aberg-cobo","casa-calise-2-736","divino-taller","sociedad-central-de-arquitectos","edificio-corporativo-banco-macro"];
+const PICKS=new Set([...TICKETS.flatMap(t=>t.days.flatMap(d=>[...d.am,...d.pm])),...EXTRA.map(e=>e[0]),...PICK_MORE]);
+const isPick=s=>PICKS.has(s);
+
+/* ---------- estado por visitante ---------- */
+const KEY="ohba26-guia-v1";let st={};
+try{st=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){st={}}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+st.fav=(st.fav||[]).filter(s=>BY[s]);st.done=st.done||{};st.f=st.f||{};
+if(st.bday!==1)st.bday=0;
+const F=Object.assign({q:"",day:null,turn:null,ins:null,barrio:"",acc:false,fav:false,pick:false},st.f);
+const isFav=s=>st.fav.includes(s);
+let ticket=null;
+
+/* ---------- sprites y fuente pixel ---------- */
+const P={k:"#2E0001",d:"#5F8CAD",w:"#FFFFFF",G:"#5F8CAD",y:"#F26760",o:"#5A2325",p:"#8E6CC4",j:"#B79AE0",r:"#F26760",n:"#97B9D4",c:"#EAF1F7",m:"#5A2325"};
+const ICONS={
+  obelisco:["......kk........","......kwdk......","......kwdk......","......kwdk......","......kwdk......","......kwdk......",".....kwwddk.....",".....kwwddk.....",".....kwwddk.....",".....kwwddk.....",".....kwwddk.....",".....kwwddk.....","....kwwwdddk....","...kkkkkkkkkk...","..kGGGGGGGGGGk..","..kkkkkkkkkkkk.."],
+  banco:["................",".......kk.......",".....kknnkk.....","...kknnnnnnkk...",".kknnnnnnnnnnkk.",".kkkkkkkkkkkkkk.",".kwwwwwwwwwwwwk.",".kkkkkkkkkkkkkk.","..kwk.kwk.kwk...","..kwk.kwk.kwk...","..kwk.kwk.kwk...","..kwk.kwk.kwk...","..kwk.kwk.kwk...",".kkkkkkkkkkkkkk.","kwwwwwwwwwwwwwwk","kkkkkkkkkkkkkkkk"],
+  taller:["................","....kkkkkk......","..kkwwwwwwkk....",".kwwrrwwwwwwk...",".kwwrrwwnnwwwk..","kwwwwwwwnnwwwk..","kwppwwwwwwwwwk..","kwppwwwwkkwwk...","kwwwwwwk..kk....","kwddwwwwk.......",".kwdwwwwwk....kk",".kwwwwwwwwk..kok","..kkwwwwwwwkkok.","....kkkkkkk.kok.","...........kk...","................"],
+  casa:["................",".......kk.......","......krrk......",".....krrrrk.kk..","....krrrrrrkok..","...krrrrrrrrkk..","..krrrrrrrrrrk..",".kkkkkkkkkkkkkk.","..kwwwwwwwwwwk..","..kwkkwwwwkkwk..","..kwknwwwwknwk..","..kwkkwkkwkkwk..","..kwwwwkokwwwk..","..kwwwwkokwwwk..","..kkkkkkkkkkkk..","................"],
+  edificio:["................","....kkkkkkkk....","....knnnnnnk....","....kwkwwkwk....","....kwkwwkwk....","....knnnnnnk....","....kwkwwkwk....","..kkkwkwwkwkkk..","..knknnnnnnknk..","..kwkwkwwkwkwk..","..kwkwkwwkwkwk..","..knknnnnnnknk..","..kwkwkkkkwkwk..","..kwkwkwwkwkwk..","kkkkkkkkkkkkkkkk","................"],
+  jaca:["..kkkkk..",".kjpjjpk.","kjjjpjjjk","kpjjjjpjk","kjjpjjjjk",".kjjjpjk.","..kkokk..","....o....","...kok..."],
+  lupa:["................","....kkkkk.......","...kcccccck.....","..kccwwccccK....","..kcwwcccccck...","..kcwccccccck...","..kccccccccck...","..kcccccccccK...","...kcccccccK....","....kkkkkkkrk...","...........krk..","............krk.",".............krk","..............kk","................","................"],
+  boleto:["................","................","kkkkkkkkkkkkkkkk","knnnknwwwwwwwwwk","knnnkwwkkkkkkwwk","knnnkwwwwwwwwwwk","knnnkwwkkkkwwwwk","knnnkwwwwwwwwwwk","knnnkwwkkkkkkwwk","knnnkwwwwwwwwwwk","knnnkwwwwwrrrwwk","knnnkwwwwwwwwwwk","kkkkkkkkkkkkkkkk","................","................","................"],
+  mapa:["................","..kkkk....kkkk..",".knnnnkkkkwwwwk.",".knnnnkwwkwwwwk.",".knnnrkwwkwwwwk.",".knnrrrwwkwwwwk.",".knnnrkwwkwrwwk.",".knnnnkwwkrrrwk.",".knnnnkwwkwrwwk.",".knnnnkwwkwwwwk.",".knnnnkwwkwwwwk.",".knnnnkwwkwwwwk.",".kkkkkkkkkkkkkk.","................","................","................"],
+  libro:["................","................",".kkkkkkk.kkkkkkk",".kwwwwwwkkwwwwww",".kwkkkkwkkwkkkkw",".kwwwwwwkkwwwwww",".kwkkkwwkkwkkkww",".kwwwwwwkkwwwwww",".kwkkkkwkkwkkkkw",".kwwwwwwkkwwwwww",".kkkkkkkkkkkkkkk","..nnnnnnkknnnnnn","................","................","................","................"],
+  estrella:["................",".......kk.......","......knnk......","......knnk......",".....knnnnk.....","kkkkkknnnnkkkkkk",".knnnnnnnnnnnnk.","..knnnnnnnnnnk..","...knnnnnnnnk...","...knnnnnnnnk...","..knnnnkknnnnk..","..knnnk..knnnk..",".knnk......knnk.",".kkk........kkk.","................","................"],
+  reloj:["................",".....kkkkkk.....","...kkwwwwwwkk...","..kwwwwkwwwwwk..",".kwwwwwkwwwwwwk.",".kwwwwwkwwwwwwk.","kwwwwwwkwwwwwwwk","kwwwwwwkkkkrwwwk","kwwwwwwwwwwwwwwk","kwwwwwwwwwwwwwwk",".kwwwwwwwwwwwwk.",".kwwwwwwwwwwwwk.","..kwwwwwwwwwwk..","...kkwwwwwwkk...",".....kkkkkk.....","................"],
+  corazon:["................","................","..kkk....kkk....",".kyyyk..kyyyk...","kyywyykkyyyyyk..","kywwyyyyyyyyyk..","kyyyyyyyyyyyyk..","kyyyyyyyyyyyyk..",".kyyyyyyyyyyk...","..kyyyyyyyyk....","...kyyyyyyk.....","....kyyyyk......",".....kyyk.......","......kk........","................","................"],
+  mochila:["................","......kkkk......",".....k....k.....","...kkkkkkkkkk...","..knnnnnnnnnnk..","..knnnnnnnnnnk..","..knnkkkkkknnk..","..knnkrrrrknnk..","..knnkrrrrknnk..","..knnkkkkkknnk..","..knnnnnnnnnnk..","..knnnnnnnnnnk..","..knnnnnnnnnnk..","..kkkkkkkkkkkk..","................","................"]
+};
+function drawIcon(c,name,ox,oy){ICONS[name].forEach((row,y)=>[...row].forEach((ch,x)=>{const col=P[ch]||P[ch.toLowerCase()];if(ch!=="."&&col){c.fillStyle=col;c.fillRect(ox+x,oy+y,1,1)}}))}
+function iconCanvas(cv,name){if(cv)drawIcon(cv.getContext("2d"),name,0,0)}
+["obelisco","lupa","boleto","mapa","libro","estrella","reloj","mochila","corazon"].forEach(n=>iconCanvas($("ico-"+n),n));
+const GL={A:"010101111101101",B:"110101110101110",C:"011100100100011",D:"110101101101110",E:"111100110100111",F:"111100110100100",G:"011100101101011",H:"101101111101101",I:"111010010010111",J:"001001001101010",K:"101101110101101",L:"100100100100111",M:"101111111101101",N:"110101101101101",O:"010101101101010",P:"110101110100100",Q:"010101101110011",R:"110101110101101",S:"011100010001110",T:"111010010010010",U:"101101101101111",V:"101101101101010",W:"101101111111101",X:"101101010101101",Y:"101101010010010",Z:"111001010100111","0":"111101101101111","1":"010110010010111","2":"110001010100111","3":"110001010001110","4":"101101111001001","5":"111100110001110","6":"011100111101111","7":"111001010010010","8":"111101111101111","9":"111101111001110"," ":"000000000000000"};
+function ptext(c,str,x,y,col){c.fillStyle=col;let cx=x;for(const ch of norm(str).toUpperCase()){const g=GL[ch]||GL[" "];for(let i=0;i<15;i++)if(g[i]==="1")c.fillRect(cx+i%3,y+(i/3|0),1,1);cx+=4}}
+const tw=s=>s.length*4-1;
+
+/* ---------- foto enmarcada ---------- */
+/* primero la copia propia (fotos/), si no está usa la foto publicada en la web de OHBA */
+function imgFail(el){const a=el.getAttribute("data-alt");if(a){el.removeAttribute("data-alt");el.style.objectPosition=el.style.objectPosition||"50% 50%";el.src=a}else el.remove()}
+function frame(d,big){
+  const cred=d.fc?`Foto: ${esc(d.fc)}`:"Foto: Open House BA";
+  return`<figure class="frame"><div class="ph-img"><div><img src="fotos/${d.s}.jpg" data-alt="${esc(d.im||"")}" style="object-position:${d.fp||"50% 50%"}" alt="${esc(d.n)}" loading="lazy" decoding="async" onerror="imgFail(this)"><canvas width="16" height="16" aria-hidden="true" data-ph="1"></canvas></div></div>${big!==false?`<figcaption>${cred}</figcaption>`:""}</figure>`;
+}
+function paintPlaceholders(root){root.querySelectorAll("canvas[data-ph]").forEach(c=>{if(!c.dataset.done){iconCanvas(c,"edificio");c.dataset.done=1}})}
+
+/* ---------- proyección ---------- */
+const K=Math.cos(34.6*Math.PI/180)*111320,KY=110574;
+const wx=lng=>(lng+58.45)*K, wy=lat=>(-lat-34.6)*KY;
+D.forEach(d=>{d.x=wx(d.lo);d.y=wy(d.la)});
+const LL=a=>a.map(([lo,la])=>[wx(lo),wy(la)]);
+const COAST=LL([[-58.4643,-34.5362],[-58.43,-34.556],[-58.40,-34.572],[-58.378,-34.585],[-58.366,-34.595],[-58.362,-34.604],[-58.338,-34.607],[-58.332,-34.62],[-58.345,-34.632],[-58.354,-34.637]]);
+const RIACH=LL([[-58.354,-34.637],[-58.37,-34.643],[-58.385,-34.652],[-58.40,-34.648],[-58.415,-34.656],[-58.43,-34.663],[-58.46,-34.68],[-58.48,-34.693],[-58.531,-34.705]]);
+const GPAZ=LL([[-58.531,-34.705],[-58.53,-34.65],[-58.529,-34.62],[-58.51,-34.60],[-58.50,-34.58],[-58.49,-34.555],[-58.4643,-34.5362]]);
+const CABA=[...COAST,...RIACH.slice(1),...GPAZ.slice(1)];
+const RIVER=[...COAST,...LL([[-58.2,-34.637],[-58.2,-34.4],[-58.52,-34.4]])];
+const AVES=[LL([[-58.3805,-34.589],[-58.3816,-34.6037],[-58.3812,-34.627]]),
+  LL([[-58.3705,-34.6035],[-58.3816,-34.6037],[-58.411,-34.6045],[-58.44,-34.600],[-58.455,-34.587]]),
+  LL([[-58.3725,-34.6083],[-58.40,-34.6095],[-58.43,-34.615],[-58.445,-34.6195],[-58.465,-34.629],[-58.52,-34.6385]])];
+const PARKS=[[-58.415,-34.572,800],[-58.436,-34.6065,230],[-58.441,-34.635,280],[-58.3695,-34.628,150],[-58.375,-34.5955,160],[-58.477,-34.646,280],[-58.345,-34.612,700],[-58.487,-34.553,220],[-58.4015,-34.583,200],[-58.3725,-34.6083,70]].map(([lo,la,r])=>({x:wx(lo),y:wy(la),r}));
+const OBEL={x:wx(-58.3816),y:wy(-34.6037)};
+
+/* ---------- mapa ---------- */
+const cv=$("map"),ctx=cv.getContext("2d");
+let W=240,H=240,view={cx:0,cy:0,s:1},vis=[],selected=null,hits=[];
+function sizeCanvas(){const r=cv.getBoundingClientRect();W=Math.max(160,Math.round(r.width/2));H=Math.max(160,Math.round(r.height/2));cv.width=W;cv.height=H;ctx.imageSmoothingEnabled=false}
+const sx=x=>Math.round((x-view.cx)*view.s+W/2), sy=y=>Math.round((y-view.cy)*view.s+H/2);
+function fit(list){
+  if(LM){fitL(list);return}
+  const L=list.length?list:D;let x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;
+  L.forEach(d=>{x0=Math.min(x0,d.x);x1=Math.max(x1,d.x);y0=Math.min(y0,d.y);y1=Math.max(y1,d.y)});
+  const pad=20;view.cx=(x0+x1)/2;view.cy=(y0+y1)/2;view.s=Math.min((W-pad*2)/Math.max(x1-x0,1400),(H-pad*2)/Math.max(y1-y0,1400));
+}
+function hash(a,b){return(((a*73856093)^(b*19349663))>>>0)%37}
+function path(pts){ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(sx(x),sy(y)):ctx.moveTo(sx(x),sy(y)))}
+function thick(pts,col,w){ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineJoin="miter";path(pts);ctx.stroke()}
+function base(){
+  ctx.fillStyle="#E2D9D6";ctx.fillRect(0,0,W,H);
+  const cell=Math.max(5,Math.min(9,Math.round(120*view.s)))||6;
+  const ox=((-view.cx*view.s+W/2)%cell+cell)%cell, oy=((-view.cy*view.s+H/2)%cell+cell)%cell;
+  const gi0=Math.floor((view.cx*view.s-W/2)/cell), gj0=Math.floor((view.cy*view.s-H/2)/cell);
+  for(let i=-1,x=ox-cell;x<W;x+=cell,i++)for(let j=-1,y=oy-cell;y<H;y+=cell,j++){
+    const n=hash(gi0+i,gj0+j);ctx.fillStyle=n<2?"#F6D3CF":(n<6?"#F3EEEC":"#FDFBFA");ctx.fillRect(x+1,y+1,cell-1,cell-1)}
+  ctx.save();ctx.beginPath();ctx.rect(0,0,W,H);path(CABA);ctx.closePath();ctx.fillStyle="rgba(242,246,249,.82)";ctx.fill("evenodd");ctx.restore();
+  PARKS.forEach(p=>{const r=Math.max(2,Math.round(p.r*view.s)),x=sx(p.x),y=sy(p.y);ctx.fillStyle="#C4DCBC";ctx.fillRect(x-r,y-r,r*2,r*2);ctx.fillStyle="#B0CFA7";for(let yy=y-r;yy<y+r;yy+=2)for(let xx=x-r+((yy>>1)&1);xx<x+r;xx+=4)ctx.fillRect(xx,yy,1,1);
+    if(r>=5)drawIcon(ctx,"jaca",x-4,y-4)});
+  path(RIVER);ctx.closePath();ctx.fillStyle="#A9C6DC";ctx.fill();
+  ctx.save();path(RIVER);ctx.closePath();ctx.clip();ctx.fillStyle="#97B9D4";for(let y=0;y<H;y++)for(let x=(y&1);x<W;x+=2)ctx.fillRect(x,y,1,1);
+  ctx.fillStyle="#EAF1F7";for(let y=4;y<H;y+=13)for(let x=(y*7)%17;x<W;x+=23)ctx.fillRect(x,y,4,1);ctx.restore();
+  thick(COAST,"#5F8CAD",1);thick(RIACH,"#5F8CAD",2);
+  AVES.forEach((a,i)=>{thick(a,"#CFC3C0",i?3:5);thick(a,"#FFFFFF",1)});
+  if(view.s>0.02){const x=sx(OBEL.x),y=sy(OBEL.y);drawIcon(ctx,"obelisco",x-8,y-14)}
+  const placed=[];
+  BARRIOS.forEach(b=>{const t=b.name.toUpperCase(),w=tw(t)+6,x=sx(b.x)-(w>>1),y=sy(b.y)+8;
+    if(x<2||y<2||x+w>W-26||y+9>H-18)return;
+    if(placed.some(p=>x<p[0]+p[2]+3&&x+w+3>p[0]&&y<p[1]+12&&y+12>p[1]))return;
+    if(view.s<0.03&&b.n<6)return;
+    placed.push([x,y,w]);ctx.fillStyle="rgba(255,255,255,.9)";ctx.fillRect(x-1,y-1,w+2,11);ptext(ctx,t,x+3,y+2,"#5F8CAD")});
+  chrome();
+}
+/* norte y escala gráfica, como en un plano */
+function chrome(){
+  const x=8,y=H-16;ctx.fillStyle="rgba(255,255,255,.92)";
+  const mpp=1/view.s,steps=[100,200,500,1000,2000,5000];let m=steps[0];for(const s of steps)if(s/mpp<=70)m=s;
+  const len=Math.round(m/mpp),lab=m>=1000?(m/1000)+" KM":m+" M";
+  ctx.fillRect(x-4,y-11,len+tw(lab)+16,22);
+  ctx.fillStyle=P.k;ctx.fillRect(x,y,len,1);ctx.fillRect(x,y-3,1,4);ctx.fillRect(x+len-1,y-3,1,4);ctx.fillRect(x+(len>>1),y-2,1,3);
+  ctx.fillRect(x,y+1,len>>1,2);ptext(ctx,lab,x+len+5,y-2,P.k);
+  const nx=W-18,ny=H-24;ctx.fillStyle="rgba(255,255,255,.92)";ctx.fillRect(nx-6,ny-4,13,22);
+  ctx.fillStyle=P.k;for(let i=0;i<5;i++)ctx.fillRect(nx-i,ny+i,i*2+1,1);ctx.fillStyle=P.r;ctx.fillRect(nx,ny+1,1,4);ptext(ctx,"N",nx-1,ny+8,P.k);
+}
+function star(x,y){const S=["..g..","..g..","ggggg",".ggg.",".g.g."];
+  ctx.fillStyle="#2E0001";ctx.fillRect(x-3,y-3,7,7);S.forEach((r,j)=>[...r].forEach((c,i)=>{if(c==="g"){ctx.fillStyle="#3DE0D0";ctx.fillRect(x-2+i,y-2+j,1,1)}}))}
+function pin(x,y,s,fill,label,fg,edge){const h=s>>1;
+  ctx.fillStyle=edge||P.k;ctx.fillRect(x-h-1,y-h-1,s+2,s+2);ctx.fillStyle=fill;ctx.fillRect(x-h,y-h,s,s);
+  if(label)ptext(ctx,label,x-(tw(label)>>1),y-2,fg)}
+function drawMap(){
+  if(LM){drawLeaflet();return}
+  base();hits=[];
+  if(ticket){
+    const list=ticket.days[st.bday].all.map(s=>BY[s]);
+    ctx.strokeStyle=P.k;ctx.lineWidth=1;ctx.setLineDash([2,2]);ctx.beginPath();list.forEach((d,i)=>i?ctx.lineTo(sx(d.x)+.5,sy(d.y)+.5):ctx.moveTo(sx(d.x)+.5,sy(d.y)+.5));ctx.stroke();ctx.setLineDash([]);
+    list.forEach((d,i)=>{const x=sx(d.x),y=sy(d.y),lab=String(i+1);const s=Math.max(9,tw(lab)+4)|1;pin(x,y,s,"#3DE0D0",lab,P.k,P.k);hits.push({d,x,y})});
+  }else{
+    const favIdx=Object.fromEntries(st.fav.map((s,i)=>[s,i+1]));
+    [...vis].sort((a,b)=>(isFav(a.s)-isFav(b.s))||(a.y-b.y)).forEach(d=>{const x=sx(d.x),y=sy(d.y);if(x<-10||y<-10||x>W+10||y>H+10)return;
+      const f=isFav(d.s);
+      if(f)pin(x,y,7,P.k,favIdx[d.s]<10?String(favIdx[d.s]):"","#fff","#fff");
+      else if(isPick(d.s))star(x,y);
+      else pin(x,y,5,d.i?"#FDECEA":"#97B9D4","","",d.i?"#F26760":"#5F8CAD");
+      hits.push({d,x,y})});
+  }
+  if(selected&&hits.some(h=>h.d===selected)){const x=sx(selected.x),y=sy(selected.y)-(ticket?7:5);
+    ctx.fillStyle=P.k;ctx.fillRect(x-5,y-9,11,2);ctx.fillRect(x-4,y-7,9,2);ctx.fillRect(x-2,y-5,5,2);ctx.fillRect(x-1,y-3,3,2);
+    ctx.fillStyle=P.r;ctx.fillRect(x-3,y-8,7,1);ctx.fillRect(x-2,y-7,5,1);ctx.fillRect(x-1,y-5,3,1);ctx.fillRect(x,y-4,1,1)}
+}
+const BARRIOS=Object.values(D.reduce((m,d)=>{(m[d.b]=m[d.b]||{name:d.b,x:0,y:0,n:0});m[d.b].x+=d.x;m[d.b].y+=d.y;m[d.b].n++;return m},{}))
+  .map(b=>({...b,x:b.x/b.n,y:b.y/b.n})).sort((a,b)=>b.n-a.n);
+
+let drag=null;
+function pt(ev){const r=cv.getBoundingClientRect();return[(ev.clientX-r.left)*W/r.width,(ev.clientY-r.top)*H/r.height]}
+cv.addEventListener("pointerdown",ev=>{drag={x:ev.clientX,y:ev.clientY,cx:view.cx,cy:view.cy,moved:false};cv.setPointerCapture(ev.pointerId)});
+cv.addEventListener("pointermove",ev=>{if(!drag)return;const r=cv.getBoundingClientRect(),k=W/r.width;
+  const dx=ev.clientX-drag.x,dy=ev.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>6)drag.moved=true;
+  if(drag.moved){view.cx=drag.cx-dx*k/view.s;view.cy=drag.cy-dy*k/view.s;cv.style.cursor="grabbing";drawMap()}});
+cv.addEventListener("pointerup",ev=>{const was=drag;drag=null;cv.style.cursor="grab";if(was&&!was.moved){
+  const[x,y]=pt(ev);let best=null,bd=100;hits.forEach(h=>{const dd=(h.x-x)**2+(h.y-y)**2;if(dd<bd){bd=dd;best=h.d}});
+  if(best)select(best,true)}});
+cv.addEventListener("pointercancel",()=>{drag=null});
+cv.addEventListener("wheel",ev=>{ev.preventDefault();const[x,y]=pt(ev);zoomAt(ev.deltaY<0?1.25:0.8,x,y)},{passive:false});
+function zoomAt(f,x=W/2,y=H/2){const wxp=(x-W/2)/view.s+view.cx,wyp=(y-H/2)/view.s+view.cy;
+  view.s=Math.min(0.6,Math.max(0.008,view.s*f));view.cx=wxp-(x-W/2)/view.s;view.cy=wyp-(y-H/2)/view.s;drawMap()}
+$("zin").onclick=()=>zoomAt(1.5);$("zout").onclick=()=>zoomAt(1/1.5);$("zfit").onclick=()=>{fit(vis);drawMap()};
+
+/* ---------- mapa real: Leaflet + CARTO Voyager, solo si el sitio puede cargar mapas ---------- */
+const TILE="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
+let LM=null,LG=null;
+function mkIcon(cls,label,size){return L.divIcon({className:"lm",html:`<span class="mk ${cls}">${label}</span>`,iconSize:[size,size],iconAnchor:[size/2,size/2]})}
+function addM(d,cls,label,size,z){const m=L.marker([d.la,d.lo],{icon:mkIcon(cls+(selected===d?" sel":""),label,size),zIndexOffset:z,title:d.n,keyboard:true,riseOnHover:true});m.on("click",()=>select(d,true));m.addTo(LG)}
+function drawLeaflet(){LG.clearLayers();
+  if(ticket){const list=ticket.days[st.bday].all.map(s=>BY[s]);
+    L.polyline(list.map(d=>[d.la,d.lo]),{color:"#2E0001",weight:2,dashArray:"5 6",opacity:.8,interactive:false}).addTo(LG);
+    list.forEach((d,i)=>addM(d,"tk",String(i+1),26,1000+i));return}
+  const favIdx=Object.fromEntries(st.fav.map((s,i)=>[s,i+1]));
+  vis.forEach(d=>{if(isFav(d.s))addM(d,"fav",String(favIdx[d.s]),24,900);else if(isPick(d.s))addM(d,"pick","★",22,500);else addM(d,d.i?"ago":"lib","",14,0)})}
+function fitL(list){const A=list.length?list:D;if(A.length===1){LM.setView([A[0].la,A[0].lo],16);return}
+  LM.fitBounds(A.map(d=>[d.la,d.lo]),{padding:[28,28],maxZoom:16})}
+function initLeaflet(){if(LM)return;try{
+  const fr=document.querySelector(".mapframe"),div=document.createElement("div");div.id="lmap";fr.appendChild(div);fr.classList.add("real");
+  LM=L.map(div,{zoomControl:false,attributionControl:true,scrollWheelZoom:true,zoomSnap:.5});
+  L.control.zoom({position:"topright",zoomInTitle:"Acercar",zoomOutTitle:"Alejar"}).addTo(LM);
+  L.tileLayer(TILE,{subdomains:"abcd",maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}).addTo(LM);
+  LG=L.layerGroup().addTo(LM);LM.attributionControl.setPrefix(false);
+  fitL(vis);drawLeaflet();
+  $("peek").querySelector(".hint")&&($("peek").querySelector(".hint").textContent="Tocá un punto del mapa para ver qué edificio es. Arrastrá o pellizcá para moverte.");
+}catch(e){LM=null;const f=document.querySelector(".mapframe");f.classList.remove("real");const x=$("lmap");if(x)x.remove()}}
+function tryLeaflet(){
+  const probe=new Image();let done=false;const fin=ok=>{if(done)return;done=true;if(!ok)return;
+    const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";s.onload=()=>{if(window.L)initLeaflet()};document.head.appendChild(s)};
+  probe.onload=()=>fin(true);probe.onerror=()=>fin(false);setTimeout(()=>fin(false),5000);
+  probe.src="https://a.basemaps.cartocdn.com/rastertiles/voyager/12/1383/2468.png";
+}
+
+/* ---------- filtros ---------- */
+const barrios=[...new Set(D.map(d=>d.b))].sort((a,b)=>a.localeCompare(b,"es"));
+$("barrio").innerHTML=`<option value="">Todos los barrios</option>`+barrios.map(b=>`<option value="${esc(b)}">${esc(b)} (${D.filter(d=>d.b===b).length})</option>`).join("");
+$("barrio").value=F.barrio;$("q").value=F.q;
+function syncChips(){document.querySelectorAll(".chip").forEach(c=>{const g=c.dataset.g,v=+c.dataset.v;
+  c.setAttribute("aria-pressed",(g==="acc"||g==="fav"||g==="pick")?!!F[g]:F[g]===v)});$("favn").textContent=st.fav.length}
+function leaveTicket(){if(ticket){ticket=null;renderTickets()}}
+document.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{const g=c.dataset.g,v=+c.dataset.v;
+  if(g==="acc"||g==="fav"||g==="pick")F[g]=!F[g];else F[g]=F[g]===v?null:v;leaveTicket();apply(true)}));
+$("barrio").addEventListener("change",e=>{F.barrio=e.target.value;leaveTicket();apply(true)});
+let qt;$("q").addEventListener("input",e=>{clearTimeout(qt);qt=setTimeout(()=>{F.q=e.target.value;leaveTicket();apply(true)},180)});
+$("clear").addEventListener("click",()=>{Object.assign(F,{q:"",day:null,turn:null,ins:null,barrio:"",acc:false,fav:false,pick:false});$("q").value="";$("barrio").value="";leaveTicket();apply(true)});
+$("exitticket").addEventListener("click",()=>{leaveTicket();apply(true)});
+function match(d){
+  if(F.q&&!norm(F.q).split(/\s+/).every(w=>d.key.includes(w)))return false;
+  if(F.barrio&&d.b!==F.barrio)return false;
+  if(F.ins!==null&&d.i!==F.ins)return false;
+  if(F.acc&&!d.ac)return false;
+  if(F.fav&&!isFav(d.s))return false;
+  if(F.pick&&!PICKS.has(d.s))return false;
+  const days=F.day===null?[0,1]:[F.day],turns=F.turn===null?[0,1]:[F.turn];
+  return days.some(dy=>turns.some(t=>d.h[dy*2+t]));
+}
+function apply(refit){
+  st.f=F;save();syncChips();
+  vis=ticket?ticket.days[st.bday].all.map(s=>BY[s]):D.filter(match);
+  const c=ticket?`Boleto ${ticket.name}`:(vis.length===D.length?`${D.length} edificios`:`${vis.length} de ${D.length}`);
+  $("count").textContent=c;$("count2").textContent=ticket?`Viendo el boleto ${ticket.name}`:(vis.length===D.length?`${D.length} edificios`:`${vis.length} de ${D.length} edificios`);
+  $("mapn").textContent=vis.length+" en el mapa";
+  $("mode").hidden=!ticket;if(ticket)$("modetxt").textContent=`Boleto: ${ticket.name} · ${DAYS[st.bday]}`;
+  $("exitticket").hidden=!ticket;$("t-lista").textContent=ticket?`Catálogo · ${ticket.name}`:"Catálogo";
+  renderCards();
+  if(refit)fit(vis);drawMap();
+}
+
+/* ---------- tarjetas ---------- */
+function schedHTML(d){
+  const cell=v=>v?`<div class="on">${v}</div>`:`<div class="off">—</div>`;
+  return`<div class="sched" role="table" aria-label="Horarios"><div class="hd"></div><div class="hd">Mañana</div><div class="hd">Tarde</div>
+    <div class="dl">Sáb 3</div>${cell(d.h[0])}${cell(d.h[1])}<div class="dl">Dom 4</div>${cell(d.h[2])}${cell(d.h[3])}</div>`;
+}
+function recHTML(d){
+  const r=d.r.map((a,i)=>a.length?`<b>${DSHORT[i]}</b> ${a.join(" · ")}`:"").filter(Boolean);
+  return r.length&&!d.i?`<p class="rec">${"Visitas guiadas"}: ${r.join(" &nbsp;/&nbsp; ")}</p>`:"";
+}
+const favBtn=d=>`<button type="button" class="fav" data-fav="${d.s}" aria-pressed="${isFav(d.s)}"><span class="st">${isFav(d.s)?"★":"☆"}</span>${isFav(d.s)?"Guardado":"Guardar"}</button>`;
+function renderCards(){
+  $("cards").innerHTML=vis.map(d=>`<li class="card${selected===d?" is-active":""}" id="c-${d.s}">
+    ${frame(d)}<div>
+    <div class="ch"><div><div class="cb">${esc(d.b)}</div><h3 class="cn">${esc(d.n)}</h3></div>${favBtn(d)}</div>
+    <div class="addr">${esc(d.a)}</div>${d.au?`<p class="au">${esc(d.au)}</p>`:""}
+    <div class="tags">${isPick(d.s)?'<span class="tag t-pick">★ Gaby\'s pick</span>':""}${d.i?'<span class="tag t-ins">Agotado · era con inscripción</span>':""}${d.ac?'<span class="tag t-acc">Accesible</span>':""}${d.special?'<span class="tag t-esp">Horario especial</span>':""}${d.ci?`<span class="tag t-circ">${esc(d.ci)}</span>`:""}</div>
+    ${schedHTML(d)}${recHTML(d)}
+    <div class="links"><a href="${OH+d.s}" target="_blank" rel="noopener">Ficha oficial</a><a href="${gq(d)}" target="_blank" rel="noopener">Cómo llegar</a><button type="button" class="linkbtn" data-see="${d.s}">Ver en el mapa</button></div>
+  </div></li>`).join("");
+  paintPlaceholders($("cards"));
+  $("empty").hidden=vis.length>0;moreHint();
+}
+document.addEventListener("click",e=>{
+  const f=e.target.closest("[data-fav]");if(f){toggleFav(f.dataset.fav);return}
+  const s=e.target.closest("[data-see]");if(s){const d=BY[s.dataset.see];select(d,false);
+    if(LM){LM.setView([d.la,d.lo],17)}else{if(view.s<0.08)view.s=0.12;view.cx=d.x;view.cy=d.y}drawMap();$("mapwin").scrollIntoView({behavior:smooth(),block:"start"})}
+});
+function refreshFavButtons(){document.querySelectorAll(".fav[data-fav]").forEach(b=>{const on=isFav(b.dataset.fav);b.setAttribute("aria-pressed",on);b.innerHTML=`<span class="st">${on?"★":"☆"}</span>${on?"Guardado":"Guardar"}`})}
+function favChanged(){save();refreshFavButtons();syncChips();if(F.fav&&!ticket)apply(false);else drawMap();renderRoute();renderTicketDetail()}
+function toggleFav(slug){const i=st.fav.indexOf(slug);if(i>=0)st.fav.splice(i,1);else st.fav.push(slug);favChanged()}
+function select(d,fromMap){
+  selected=d;document.querySelectorAll(".card.is-active").forEach(c=>c.classList.remove("is-active"));
+  const c=$("c-"+d.s);if(c)c.classList.add("is-active");
+  const days=[0,1].filter(i=>d.open[i]).map(i=>`${DSHORT[i]} ${hrsDay(d,i)}`).join(" · ");
+  $("peek").innerHTML=`${frame(d,false)}<div><div class="pn">${esc(d.n)}</div><div class="pa">${esc(d.a)} · ${esc(d.b)}</div><div class="pa" style="color:var(--cel-d)">${days}${d.i?' · <b style="color:var(--coral);font-family:var(--f-read);font-size:13px">AGOTADO</b>':""}</div>
+    <div class="acts">${favBtn(d)}<button type="button" class="btn sm ghost" id="tolist">Ver ficha</button></div></div>`;
+  paintPlaceholders($("peek"));
+  $("tolist").onclick=()=>{const c=$("c-"+d.s),sc=$("scroller");if(!c)return;sc.scrollTo({top:c.offsetTop-8,behavior:smooth()});
+    if(innerWidth<=900)$("listwin").scrollIntoView({behavior:smooth(),block:"start"})};
+  if(fromMap&&innerWidth>900&&c)$("scroller").scrollTo({top:c.offsetTop-8,behavior:smooth()});
+  drawMap();
+}
+function moreHint(){const sc=$("scroller");$("more").style.visibility=(sc.scrollHeight<=sc.clientHeight+4||sc.scrollTop+sc.clientHeight>=sc.scrollHeight-8)?"hidden":"visible"}
+$("scroller").addEventListener("scroll",moreHint);
+/* en compu, el catálogo mide lo mismo que el mapa: sin huecos */
+function syncList(){const sc=$("scroller");sc.style.maxHeight="";
+  if(innerWidth>900){const extra=$("listwin").offsetHeight-sc.offsetHeight;sc.style.maxHeight=Math.max(320,$("mapwin").offsetHeight-extra)+"px";$("listwin").style.minHeight=$("mapwin").offsetHeight+"px"}
+  else $("listwin").style.minHeight="";moreHint()}
+
+/* ---------- boletos UI ---------- */
+function renderTickets(){
+  document.querySelectorAll("[data-bd]").forEach(b=>b.setAttribute("aria-selected",+b.dataset.bd===st.bday));
+  $("tickets").innerHTML=TICKETS.map(t=>{const dd=t.days[st.bday];return`<button type="button" role="tab" class="ticket" data-ticket="${t.id}" aria-selected="${ticket===t}">
+    <span class="stub"><canvas width="16" height="16" aria-hidden="true" data-icon="${t.icon}"></canvas><span class="serial">Nº ${t.serial}</span></span>
+    <span class="body"><span class="by">Boleto · @tuamigafreelo</span><span class="tn">${t.name}</span><span class="tp">${t.pitch}</span>
+    <span class="tm">${DSHORT[st.bday]} · ${dd.all.length} paradas · ${dd.am.length} mañana + ${dd.pm.length} tarde</span></span></button>`}).join("");
+  $("tickets").querySelectorAll("canvas").forEach(c=>iconCanvas(c,c.dataset.icon));
+  renderTicketDetail();
+}
+function renderTicketDetail(){
+  const box=$("tdetail");if(!ticket){box.hidden=true;box.innerHTML="";return}
+  const dd=ticket.days[st.bday],day=st.bday;let n=0;
+  const col=(t,hint,list)=>`<div><div class="seg"><b>${t}</b><span>${hint}</span></div><ol class="tl">${list.map(s=>{const d=BY[s];n++;
+    return`<li><span class="num">${n}</span><span><button type="button" class="nm" data-pick="${s}">${esc(d.n)}</button><div class="meta2">${esc(d.a)} · <b>${hrsDay(d,day)}</b></div></span></li>`}).join("")}</ol></div>`;
+  const inAll=dd.all.every(isFav);
+  const route="https://www.google.com/maps/dir/"+dd.all.slice(0,10).map(s=>encodeURIComponent(BY[s].a+", Buenos Aires")).join("/")+"/";
+  box.hidden=false;
+  box.innerHTML=`<div class="tcols">${col("Mañana","10 a 14",dd.am)}${col("Tarde","15 a 19",dd.pm)}</div>
+    <div class="tacts"><button type="button" class="btn coral" id="addticket">${inAll?"✓ Ya está en tu recorrido":`★ Sumar a mi recorrido (${dd.all.length})`}</button>
+    <a class="btn ghost" href="${route}" target="_blank" rel="noopener">Ruta en Google Maps</a><span class="stat" id="tstat" role="status"></span></div>`;
+  $("addticket").onclick=()=>{dd.all.forEach(s=>{if(!isFav(s))st.fav.push(s)});st.day=day;favChanged();$("tstat").textContent="Listo: lo tenés abajo, en Armá tu recorrido."};
+}
+$("tickets").addEventListener("click",e=>{const b=e.target.closest("[data-ticket]");if(!b)return;const t=TICKETS.find(x=>x.id===b.dataset.ticket);
+  ticket=ticket===t?null:t;selected=null;renderTickets();apply(true);
+  if(ticket&&innerWidth<=900)$("tdetail").scrollIntoView({behavior:smooth(),block:"nearest"})});
+$("tickets").addEventListener("keydown",e=>{const btns=[...$("tickets").querySelectorAll(".ticket")],i=btns.indexOf(document.activeElement);if(i<0)return;
+  if(e.key==="ArrowRight"||e.key==="ArrowDown"){e.preventDefault();btns[(i+1)%3].focus()}if(e.key==="ArrowLeft"||e.key==="ArrowUp"){e.preventDefault();btns[(i+2)%3].focus()}});
+$("tdetail").addEventListener("click",e=>{const b=e.target.closest("[data-pick]");if(!b)return;const d=BY[b.dataset.pick];if(LM)LM.setView([d.la,d.lo],16);select(d,false);$("mapwin").scrollIntoView({behavior:smooth(),block:"start"})});
+document.querySelectorAll("[data-bd]").forEach(b=>b.addEventListener("click",()=>{st.bday=+b.dataset.bd;save();renderTickets();if(ticket)apply(true)}));
+
+function renderExtra(){
+  $("extra").innerHTML=EXTRA.map(([s,name,note])=>{const d=BY[s];
+    const days=[0,1].filter(i=>d.open[i]).map(i=>`<b>${DSHORT[i]} ${hrsDay(d,i)}</b>`).join(" · ");
+    const only=d.open[0]!==d.open[1]?` · solo ${d.open[0]?"sábado":"domingo"}`:"";
+    return`<li>${frame(d,false)}<div><button type="button" class="nm linkbtn x1" data-xpick="${s}" style="font:700 15px/1.2 var(--f-ui);text-align:left">${esc(name)}</button>
+      <div class="x2">${esc(d.b)}${note?` · ${esc(note)}`:""}<br>${days}${only}${d.i?' · <i>agotado, solo con entrada</i>':""}</div></div>${favBtn(d)}</li>`}).join("");
+  paintPlaceholders($("extra"));
+}
+$("extra").addEventListener("click",e=>{const b=e.target.closest("[data-xpick]");if(!b)return;const d=BY[b.dataset.xpick];
+  if(ticket){ticket=null;renderTickets();apply(false)}
+  if(LM)LM.setView([d.la,d.lo],16);else{if(view.s<0.08)view.s=0.12;view.cx=d.x;view.cy=d.y}
+  select(d,false);$("mapwin").scrollIntoView({behavior:smooth(),block:"start"})});
+
+/* ---------- recorrido ---------- */
+const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+function nn(list,start){const out=[],rest=[...list];let cur=start;
+  if(!cur&&rest.length){rest.sort((a,b)=>a.x-b.x);cur=rest.shift();out.push(cur)}
+  while(rest.length){let bi=0,bd=Infinity;rest.forEach((d,i)=>{const dd=dist(cur,d);if(dd<bd){bd=dd;bi=i}});cur=rest.splice(bi,1)[0];out.push(cur)}
+  return out}
+function plan(day){
+  const favs=st.fav.map(s=>BY[s]).filter(d=>d.open[day]);
+  const am=favs.filter(d=>d.h[day*2]&&!d.h[day*2+1]),both=favs.filter(d=>d.h[day*2]&&d.h[day*2+1]),pm=favs.filter(d=>!d.h[day*2]&&d.h[day*2+1]);
+  const A=nn(am),B=nn(both,A[A.length-1]),C=nn(pm,(B.length?B:A)[(B.length?B:A).length-1]);
+  return{segs:[["Solo a la mañana",A,"cierra 14 h"],["Abre todo el día",B,"mañana o tarde"],["Solo a la tarde",C,"desde las 15"]].filter(s=>s[1].length),
+    all:[...A,...B,...C],closed:st.fav.map(s=>BY[s]).filter(d=>!d.open[day])};
+}
+if(st.day!==0&&st.day!==1)st.day=null;
+function pickDay(){if(st.day!==null)return st.day;const n=[0,1].map(i=>st.fav.filter(s=>BY[s].open[i]).length);return n[1]>n[0]?1:0}
+function renderRoute(){
+  const has=st.fav.length>0;$("routebox").hidden=!has;$("nofav").hidden=has;
+  $("recn").textContent=has?`${st.fav.length} guardados`:"";
+  [0,1].forEach(i=>$("dn"+i).textContent=st.fav.filter(s=>BY[s].open[i]).length);
+  const day=pickDay();document.querySelectorAll("[data-d]").forEach(b=>b.setAttribute("aria-selected",+b.dataset.d===day));
+  const p=plan(day);let n=0;
+  $("stops").innerHTML=p.segs.map(([t,list,hint])=>`<li class="seg"><b>${t}</b><span>${hint}</span></li>`+list.map(d=>{n++;
+    const dk=day+":"+d.s,dn=!!st.done[dk],id="r-"+day+"-"+d.s;
+    const warn=d.i?`<p class="warn">Agotado: solo si ya tenés entrada de OHBA.</p>`:(d.r[day].length?`<p class="warn">Solo con visita guiada: ${d.r[day].join(", ")}.</p>`:"");
+    return`<li class="stop${d.i?" ins":""}${dn?" done":""}" data-k="${dk}"><div class="num">${n}</div><div>
+      <div class="head"><input type="checkbox" id="${id}"${dn?" checked":""}><label for="${id}">${esc(d.n)}</label></div>
+      <div class="hrs">${hrsDay(d,day)}</div><div class="addr">${esc(d.a)} · ${esc(d.b)}</div>${warn}
+      <div class="links"><a href="${gq(d)}" target="_blank" rel="noopener">Cómo llegar</a><a href="${OH+d.s}" target="_blank" rel="noopener">Ficha oficial</a><button type="button" class="linkbtn" data-fav="${d.s}">Quitar ★</button></div></div></li>`}).join("")).join("");
+  $("stops").querySelectorAll(".stop input").forEach(cb=>cb.addEventListener("change",()=>{const li=cb.closest(".stop");st.done[li.dataset.k]=cb.checked;save();
+    li.classList.add("leaving");setTimeout(()=>{li.classList.remove("leaving");li.classList.toggle("done",cb.checked);applyRouteTab(p,day)},RM.matches?0:350)}));
+  applyRouteTab(p,day);
+  const pend=p.all.filter(d=>!st.done[day+":"+d.s]).slice(0,10);
+  $("gmaps").href=pend.length?"https://www.google.com/maps/dir/"+pend.map(d=>encodeURIComponent(d.a+", Buenos Aires")).join("/")+"/":"#";
+  $("gmaps").setAttribute("aria-disabled",!pend.length);
+  $("closedbox").hidden=!p.closed.length;
+  $("closed").innerHTML=p.closed.map(d=>`<li><b>${esc(d.n)}</b> · abre el ${DAYS[1-day].toLowerCase()}</li>`).join("");
+  const txt=has?[`🏛️ Mi recorrido Open House BA · ${DAYS[day]} de octubre`,""].concat(p.segs.flatMap(([t,list])=>[`${t}:`,...list.map(d=>`${p.all.indexOf(d)+1}. ${d.n} (${hrsDay(d,day)})${d.i?" · agotado, solo con entrada":""}\n   ${d.a}, ${d.b}`),""])).concat(["Guía no oficial de @tuamigafreelo. Inscripciones: openhousebsas.org/inscripciones"]).join("\n"):"";
+  $("preview").textContent=txt||"Marcá favoritos y tu recorrido aparece acá, listo para copiar.";
+  $("copy").disabled=!txt;$("copystatus").textContent="";
+}
+function applyRouteTab(p,day){
+  const tab=st.rtab==="done"?"done":"todo";let done=0,shown=0;
+  $("stops").querySelectorAll(".stop").forEach(li=>{const d=li.classList.contains("done");if(d)done++;li.hidden=tab==="todo"?d:!d;if(!li.hidden)shown++});
+  $("stops").querySelectorAll(".seg").forEach(seg=>{let el=seg.nextElementSibling,any=false;while(el&&!el.classList.contains("seg")){if(!el.hidden)any=true;el=el.nextElementSibling}seg.hidden=!any});
+  $("n-todo").textContent=p.all.length-done;$("n-done").textContent=done;
+  document.querySelectorAll("[data-t]").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===tab));
+  const tot=p.all.length;$("progress").textContent=tot?`${done}/${tot} visitados · ${DAYS[day]}`:`Ninguno de tus favoritos abre el ${DAYS[day].toLowerCase()}`;
+  $("barfill").style.width=tot?(done/tot*100)+"%":"0";
+  const e=$("rempty");e.hidden=shown>0||!tot;e.textContent=tab==="todo"?"¡Recorrido completo! Hora de un café.":"Todavía no tachaste nada. ¡A caminar!";
+}
+document.querySelectorAll("[data-d]").forEach(b=>b.addEventListener("click",()=>{st.day=+b.dataset.d;save();$("rscroller").scrollTop=0;renderRoute()}));
+document.querySelectorAll("[data-t]").forEach(b=>b.addEventListener("click",()=>{st.rtab=b.dataset.t;save();$("rscroller").scrollTop=0;renderRoute()}));
+let armed=false;$("clearfav").addEventListener("click",()=>{const b=$("clearfav");
+  if(!armed){armed=true;b.textContent="¿Seguro? Tocá de nuevo";setTimeout(()=>{armed=false;b.textContent="Vaciar favoritos"},3500);return}
+  armed=false;b.textContent="Vaciar favoritos";st.fav=[];st.done={};favChanged()});
+$("copy").addEventListener("click",()=>{const t=$("preview").textContent;
+  const ok=()=>{$("copystatus").textContent="Copiado. Pegalo en WhatsApp."};
+  const fb=()=>{const r=document.createRange();r.selectNodeContents($("preview"));const s=getSelection();s.removeAllRanges();s.addRange(r);$("copystatus").textContent="Seleccioné el texto: copialo a mano."};
+  try{navigator.clipboard.writeText(t).then(ok,fb)}catch(e){fb()}});
+
+/* ---------- arranque ---------- */
+TICKETS.forEach(t=>t.days.forEach((dd,day)=>{const f=l=>l.map(s=>BY[s]).filter(d=>d&&d.open[day]);
+  const A=nn(f(dd.am)),B=nn(f(dd.pm),A[A.length-1]);dd.am=A.map(d=>d.s);dd.pm=B.map(d=>d.s);dd.all=[...dd.am,...dd.pm]}));
+sizeCanvas();renderTickets();renderExtra();apply(true);renderRoute();syncList();
+let rs;window.addEventListener("resize",()=>{clearTimeout(rs);rs=setTimeout(()=>{if(LM)LM.invalidateSize();const c={...view},oldW=W;sizeCanvas();view=c;view.s*=W/oldW;drawMap();syncList()},120)});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(syncList);
+tryLeaflet();
+</script>
+
+</body>
+</html>
