@@ -24,7 +24,7 @@
   --f-ui:"Archivo","Helvetica Neue",Arial,system-ui,sans-serif;
   --f-read:"Archivo","Helvetica Neue",Arial,system-ui,sans-serif;
   --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
-  --grel:#3DE0D0;--grel-d:#1E9182;
+  --grel:#3DE0D0;--grel-d:#1E9182;--libre:#3D8BDB;--agot:#E63946;--heart:#F26760;
   color-scheme:light;
 }
 *{box-sizing:border-box}
@@ -180,6 +180,7 @@ ul.xl .x2 i{font-style:normal;color:var(--coral)}
 .mode span{background:var(--ink);color:#fff;font:500 13px var(--f-ui);padding:4px 8px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin-top:10px;color:var(--ink-2)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
+.legend .lg{width:16px;height:16px;flex:none}
 .legend .star{color:var(--grel);font-size:16px;line-height:1;-webkit-text-stroke:.6px var(--grel-d)}
 .saved{font-size:13px;color:var(--mute);margin:10px 0 0;display:flex;gap:6px;align-items:baseline}
 .saved b{color:var(--grel)}
@@ -229,8 +230,8 @@ ol.cards{list-style:none;margin:0;padding:0}
 .fav{all:unset;box-sizing:border-box;cursor:pointer;flex:none;display:inline-flex;align-items:center;gap:6px;font:500 14px var(--f-ui);padding:3px 10px;min-height:34px;background:var(--paper);border:1px solid var(--ink);color:var(--ink)}
 .fav .st{font-size:16px;line-height:1;color:var(--mute)}
 .fav:hover{background:var(--cel-l)}
-.fav[aria-pressed="true"]{background:var(--cel);border-color:var(--cel)}
-.fav[aria-pressed="true"] .st{color:var(--ink)}
+.fav[aria-pressed="true"]{background:var(--coral-l);border-color:var(--heart)}
+.fav[aria-pressed="true"] .st{color:var(--heart)}
 .fav:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
 .empty{margin:18px 4px;font:500 17px var(--f-ui);color:var(--mute);text-align:center}
 .more{margin:8px 0 0;font:500 14px var(--f-ui);color:var(--mute);text-align:center}
@@ -278,7 +279,7 @@ ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:7px;heig
 .rotulo .big{font:600 18px/1.2 var(--f-ui)}
 .rotulo .sig{font:600 18px var(--f-ui);color:var(--coral);text-decoration-color:var(--coral)}
 .rotulo .full{grid-column:1/-1;border-bottom:0;color:var(--ink-2)}
-/* mapa real (Leaflet + CARTO) cuando el sitio puede cargar mapas */
+/* mapa real (Leaflet + Esri World Street Map) cuando el sitio puede cargar mapas */
 #lmap{position:absolute;inset:0;z-index:1;background:#F2F0EB;font-family:var(--f-read)}
 .leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}
 .leaflet-container{overflow:hidden;-webkit-tap-highlight-color:transparent;outline-offset:1px}
@@ -304,14 +305,14 @@ ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:7px;heig
 .leaflet-control-attribution{background:rgba(255,255,255,.85);padding:1px 6px;font-size:10px;color:var(--mute);margin:0}
 .leaflet-control-attribution a{font-weight:400;text-decoration:none;color:var(--cel-d)}
 .lm{background:none;border:0}
-.mk{display:grid;place-items:center;box-sizing:border-box;width:100%;height:100%;font:600 11px/1 var(--f-num);border:2px solid #fff;box-shadow:0 1px 4px rgba(46,0,1,.45);transition:transform .12s}
+.mk{display:grid;place-items:center;box-sizing:border-box;width:100%;height:100%;font:700 11px/1 var(--f-num);transition:transform .12s}
+.mk svg{display:block;width:100%;height:100%;overflow:visible}
 .mk:hover{transform:scale(1.2)}
-.mk.lib{background:#97B9D4;border-color:#FFFFFF;outline:1px solid #5F8CAD}
-.mk.ago{background:#FDECEA;border-color:#F26760}
-.mk.fav{background:var(--ink);color:#fff;border-color:#fff}
-.mk.pick{background:var(--ink);color:var(--grel);font-size:14px;border-radius:50%;border-color:#fff}
-.mk.tk{background:var(--grel);color:var(--ink);border-color:var(--ink);font-size:12px;font-weight:700}
-.mk.sel{outline:3px solid var(--coral);outline-offset:2px;transform:scale(1.25)}
+.mk.lib{background:var(--libre);border:2px solid #fff;border-radius:50%;box-shadow:0 1px 4px rgba(20,60,110,.45)}
+.mk.tk{background:var(--grel);border:2px solid #fff;border-radius:50%;color:#0B3B36;font-size:12px;box-shadow:0 1px 5px rgba(14,77,70,.5)}
+.mk.fav,.mk.pick,.mk.ago{position:relative;filter:drop-shadow(0 1px 2px rgba(46,0,1,.35))}
+.mk.fav b{position:absolute;inset:0;display:grid;place-items:center;padding-bottom:3px;color:#fff;font:700 11px/1 var(--f-num)}
+.mk.sel{transform:scale(1.35);filter:drop-shadow(0 0 3px var(--coral)) drop-shadow(0 0 6px var(--coral))}
 .mapframe.real .zoom{display:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -356,7 +357,7 @@ ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:7px;heig
       <div class="fgrp" role="group" aria-labelledby="l-mas"><span class="flabel" id="l-mas">Más</span><div class="frow">
         <button type="button" class="chip" data-g="pick" data-v="1"><span style="color:var(--grel);-webkit-text-stroke:.6px var(--grel-d)">★</span> Gaby's picks</button>
         <button type="button" class="chip" data-g="acc" data-v="1">Accesible</button>
-        <button type="button" class="chip" data-g="fav" data-v="1">★ Mis favoritos <span class="n" id="favn">0</span></button></div></div>
+        <button type="button" class="chip" data-g="fav" data-v="1"><span style="color:var(--heart)">♥</span> Mis favoritos <span class="n" id="favn">0</span></button></div></div>
       <div class="fsum"><span class="count" id="count2"></span><button type="button" class="linkbtn" id="clear">Limpiar filtros</button></div>
     </div>
   </section>
@@ -387,12 +388,12 @@ ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:7px;heig
         <div class="zoom"><button type="button" id="zin" aria-label="Acercar">+</button><button type="button" id="zout" aria-label="Alejar">−</button><button type="button" class="fit" id="zfit" aria-label="Encuadrar todo">TODO</button></div>
       </div>
       <div class="legend">
-        <span><i class="sw" style="background:#97B9D4;border-color:#5F8CAD"></i>Entrada libre</span>
-        <span><i class="sw" style="background:#FDECEA;border-color:#F26760"></i>Agotado</span>
-        <span><i class="sw" style="background:#2E0001"></i>Tu favorito</span>
-        <span><b class="star">★</b>Gaby's picks</span>
+        <span><svg class="lg" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6" fill="#3D8BDB" stroke="#fff" stroke-width="2"/></svg>Entrada libre</span>
+        <span><svg class="lg" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="#E63946" stroke-width="3" stroke-linecap="round"/></svg>Agotado</span>
+        <span><svg class="lg" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 21s-8.6-5.3-10.7-10A5.7 5.7 0 0 1 12 4.7 5.7 5.7 0 0 1 22.7 11C20.6 15.7 12 21 12 21z" fill="#F26760"/></svg>Tu favorito</span>
+        <span><svg class="lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8l3 6.8 7.4.7-5.6 4.9 1.7 7.3L12 17.7l-6.5 3.8 1.7-7.3L1.6 9.3 9 8.6z" fill="#3DE0D0" stroke="#1E9182" stroke-width="1"/></svg>Gaby's picks</span>
       </div>
-      <div class="peek" id="peek" aria-live="polite"><p class="hint">Tocá un cuadradito del mapa para ver qué edificio es. Arrastrá para moverte.</p></div>
+      <div class="peek" id="peek" aria-live="polite"><p class="hint">Tocá un punto del mapa para ver qué edificio es. Arrastrá para moverte.</p></div>
     </section>
 
     <section class="panel" id="listwin" aria-labelledby="t-lista">
@@ -431,11 +432,11 @@ ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:7px;heig
             <button type="button" class="btn ghost" id="clearfav">Vaciar favoritos</button>
           </div>
         </div>
-        <p class="empty" id="nofav">Todavía no marcaste favoritos. Sumá un boleto o tocá <b>☆ Guardar</b> en cualquier edificio del catálogo.</p>
+        <p class="empty" id="nofav">Todavía no marcaste favoritos. Sumá un boleto o tocá <b>♡ Guardar</b> en cualquier edificio del catálogo.</p>
       </div>
       <div>
         <h3 class="h">Mandásela a tu grupo</h3>
-        <p class="sub">¿Van con amigas o en pareja? Copiá tu recorrido y pegalo en WhatsApp: les llega la lista en orden, con horarios y direcciones, lista para seguir. Así nadie tiene que armar nada.</p>
+        <p class="sub">¿Vas con amistades, en pareja, en familia o por tu cuenta? Copiá tu recorrido y pegalo en WhatsApp: llega la lista en orden, con horarios y direcciones, para seguir sin pensar. Si vas por tu cuenta, mandátelo a tu propio chat y lo tenés a mano.</p>
         <pre class="preview" id="preview"></pre>
         <div class="actions"><button type="button" class="btn coral" id="copy">Copiar mi recorrido</button><span class="copystat" id="copystatus" role="status"></span></div>
         <div id="closedbox" hidden>
@@ -452,7 +453,7 @@ ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:7px;heig
       <ul class="tips">
         <li>Es gratis. Cada edificio abre en uno o dos turnos: <b>mañana de 10 a 14</b> y <b>tarde de 15 a 19</b>. Algunos tienen horario especial: está en cada ficha.</li>
         <li>El último ingreso es entre 30 y 40 minutos antes del cierre de cada turno. Llegar 13:15 o 18:15 es jugarse.</li>
-        <li>Algunos edificios piden <b>inscripción previa</b> en la web oficial y se agotan a los pocos minutos de abrir. En la guía figuran como <b>agotados</b>: si no sacaste entrada, este año ya fue. Anotátelos para el próximo y estate atenta cuando OHBA abra inscripciones.</li>
+        <li>Algunos edificios piden <b>inscripción previa</b> en la web oficial y se agotan a los pocos minutos de abrir. En la guía figuran como <b>agotados</b>: si no sacaste entrada, este año ya fue. Anotátelos para el próximo y no te pierdas el día que OHBA abra inscripciones.</li>
         <li>Llevá DNI: la mayoría lo pide en la puerta.</li>
       </ul>
     </section>
@@ -469,8 +470,8 @@ ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:7px;heig
 
   <section class="panel gracias" aria-labelledby="t-gracias">
     <div class="ph"><canvas id="ico-corazon" width="16" height="16" aria-hidden="true"></canvas><h2 id="t-gracias">Gracias, Open House</h2></div>
-    <p class="g1">Esta guía existe gracias a Open House Buenos Aires, que cada año abre la ciudad gratis junto a organizadores, voluntarios, arquitectos y dueños que te dejan pasar.</p>
-    <p class="g2">La armé por amor al arte, para que más gente se anime a recorrerla. Si te sirvió, apoyalos: <a href="https://openhousebsas.org/voluntariado" target="_blank" rel="noopener">sumate como voluntario/a</a>, <a href="https://openhousebuenosaires.mitiendanube.com/" target="_blank" rel="noopener">comprá su libro</a> o <a href="https://www.instagram.com/openhousebsas" target="_blank" rel="noopener">seguilos en @openhousebsas</a>.</p>
+    <p class="g1">Esta guía existe gracias a Open House Buenos Aires, que cada año abre la ciudad gratis junto al equipo de organización, el voluntariado, los estudios de arquitectura y quienes abren las puertas de sus casas y edificios.</p>
+    <p class="g2">La armé por amor al arte, para que más gente se anime a recorrerla. Si te sirvió, apoyalos: <a href="https://openhousebsas.org/voluntariado" target="_blank" rel="noopener">sumate al voluntariado</a>, <a href="https://openhousebuenosaires.mitiendanube.com/" target="_blank" rel="noopener">comprá su libro</a> o <a href="https://www.instagram.com/openhousebsas" target="_blank" rel="noopener">seguilos en @openhousebsas</a>.</p>
     <p class="g3">¡Prepará tu itinerario y tus ganas de conocer la ciudad!</p>
     <p class="sig2">Con amor, Gaby · <a href="https://www.instagram.com/tuamigafreelo" target="_blank" rel="noopener">Tu Amiga Freelo</a></p>
   </section>
@@ -508,7 +509,7 @@ const TICKETS=[
   {id:"vcrespo",serial:"0410",icon:"taller",name:"Villa Crespo creativo",pitch:"Talleres, estudios y casas que solo abren en Open House, todo a pocas cuadras. Para la gente que hace cosas con las manos, o quiere ver cómo se hacen.",
     days:[{am:["aer-pasaje", "casa-aer", "bubble-studios-432"],pm:["olaya-1371", "taller-castillo", "taller-de-carlos-herzberg", "espacio-galixia", "club-de-oficios"]},
           {am:["malabia-933-444", "malabia-1117", "luis-viale-345"],pm:["taller-castillo", "taller-de-carlos-herzberg", "espacio-galixia", "club-de-oficios"]}]},
-  {id:"casas",serial:"0510",icon:"casa",name:"Así vive la gente",pitch:"PH, casas y edificios chicos para chusmear cómo vive el otro. Seamos honestas: es a lo que vamos todos.",
+  {id:"casas",serial:"0510",icon:"casa",name:"Así vive la gente",pitch:"PH, casas y edificios chicos para chusmear cómo vive otra gente. Admitámoslo: es a lo que vamos.",
     days:[{am:["ph-nunez-uno","cespedes","ph-loreto","ph-velazco","pacto-estudio"],pm:["caldas-287-775","roseti-88","ph-valle"]},
           {am:["ph-arevalo","zonderflag-casa-de-artistas","el-salvador-5651"],pm:["pasaje-olleros-3951","zabala-3009","giribone-1550","el-hogar-obrero-villa-ortuzar"]}]}
 ];
@@ -639,8 +640,11 @@ function chrome(){
   const nx=W-18,ny=H-24;ctx.fillStyle="rgba(255,255,255,.92)";ctx.fillRect(nx-6,ny-4,13,22);
   ctx.fillStyle=P.k;for(let i=0;i<5;i++)ctx.fillRect(nx-i,ny+i,i*2+1,1);ctx.fillStyle=P.r;ctx.fillRect(nx,ny+1,1,4);ptext(ctx,"N",nx-1,ny+8,P.k);
 }
-function star(x,y){const S=["..g..","..g..","ggggg",".ggg.",".g.g."];
+function sprite(x,y,rows,cols){rows.forEach((r,j)=>[...r].forEach((c,i)=>{if(cols[c]){ctx.fillStyle=cols[c];ctx.fillRect(x+i,y+j,1,1)}}))}
+function star(x,y){sprite(x-3,y-3,["...w...","..wgw..","wwwgwww","wgggggw",".wgggw.",".wgwgw.","ww.w.ww"],{w:"#FFFFFF",g:"#3DE0D0"})}
+function starOld(x,y){const S=["..g..","..g..","ggggg",".ggg.",".g.g."];
   ctx.fillStyle="#2E0001";ctx.fillRect(x-3,y-3,7,7);S.forEach((r,j)=>[...r].forEach((c,i)=>{if(c==="g"){ctx.fillStyle="#3DE0D0";ctx.fillRect(x-2+i,y-2+j,1,1)}}))}
+function circ(cx,cy,r,fill,edge){for(let y=-r-1;y<=r+1;y++)for(let x=-r-1;x<=r+1;x++){const d=x*x+y*y;if(d<=(r+1)*(r+1)){ctx.fillStyle=d<=r*r?fill:edge;ctx.fillRect(cx+x,cy+y,1,1)}}}
 function pin(x,y,s,fill,label,fg,edge){const h=s>>1;
   ctx.fillStyle=edge||P.k;ctx.fillRect(x-h-1,y-h-1,s+2,s+2);ctx.fillStyle=fill;ctx.fillRect(x-h,y-h,s,s);
   if(label)ptext(ctx,label,x-(tw(label)>>1),y-2,fg)}
@@ -649,15 +653,16 @@ function drawMap(){
   base();hits=[];
   if(ticket){
     const list=ticket.days[st.bday].all.map(s=>BY[s]);
-    ctx.strokeStyle=P.k;ctx.lineWidth=1;ctx.setLineDash([2,2]);ctx.beginPath();list.forEach((d,i)=>i?ctx.lineTo(sx(d.x)+.5,sy(d.y)+.5):ctx.moveTo(sx(d.x)+.5,sy(d.y)+.5));ctx.stroke();ctx.setLineDash([]);
-    list.forEach((d,i)=>{const x=sx(d.x),y=sy(d.y),lab=String(i+1);const s=Math.max(9,tw(lab)+4)|1;pin(x,y,s,"#3DE0D0",lab,P.k,P.k);hits.push({d,x,y})});
+    ctx.strokeStyle="#1E9182";ctx.lineWidth=1;ctx.setLineDash([2,2]);ctx.beginPath();list.forEach((d,i)=>i?ctx.lineTo(sx(d.x)+.5,sy(d.y)+.5):ctx.moveTo(sx(d.x)+.5,sy(d.y)+.5));ctx.stroke();ctx.setLineDash([]);
+    list.forEach((d,i)=>{const x=sx(d.x),y=sy(d.y),lab=String(i+1);const s=Math.max(9,tw(lab)+4)|1;circ(x,y,Math.max(5,(tw(lab)>>1)+3),"#3DE0D0","#FFFFFF");ptext(ctx,lab,x-(tw(lab)>>1),y-2,"#0B3B36");hits.push({d,x,y})});
   }else{
     const favIdx=Object.fromEntries(st.fav.map((s,i)=>[s,i+1]));
     [...vis].sort((a,b)=>(isFav(a.s)-isFav(b.s))||(a.y-b.y)).forEach(d=>{const x=sx(d.x),y=sy(d.y);if(x<-10||y<-10||x>W+10||y>H+10)return;
       const f=isFav(d.s);
-      if(f)pin(x,y,7,P.k,favIdx[d.s]<10?String(favIdx[d.s]):"","#fff","#fff");
+      if(f)sprite(x-4,y-3,[".ww.ww.",".wcwcw.","wcccccw","wcccccw",".wcccw.","..wcw..","...w..."].map(r=>" "+r),{w:"#FFFFFF",c:"#F26760"});
       else if(isPick(d.s))star(x,y);
-      else pin(x,y,5,d.i?"#FDECEA":"#97B9D4","","",d.i?"#F26760":"#5F8CAD");
+      else if(d.i)sprite(x-3,y-3,["ww...ww","wrw.wrw",".wrwrw.","..wrw..",".wrwrw.","wrw.wrw","ww...ww"],{w:"#FFFFFF",r:"#E63946"});
+      else sprite(x-3,y-3,["..www..",".wbbbw.","wbbbbbw","wbbbbbw","wbbbbbw",".wbbbw.","..www.."],{w:"#FFFFFF",b:"#3D8BDB"});
       hits.push({d,x,y})});
   }
   if(selected&&hits.some(h=>h.d===selected)){const x=sx(selected.x),y=sy(selected.y)-(ticket?7:5);
@@ -682,24 +687,29 @@ function zoomAt(f,x=W/2,y=H/2){const wxp=(x-W/2)/view.s+view.cx,wyp=(y-H/2)/view
   view.s=Math.min(0.6,Math.max(0.008,view.s*f));view.cx=wxp-(x-W/2)/view.s;view.cy=wyp-(y-H/2)/view.s;drawMap()}
 $("zin").onclick=()=>zoomAt(1.5);$("zout").onclick=()=>zoomAt(1/1.5);$("zfit").onclick=()=>{fit(vis);drawMap()};
 
-/* ---------- mapa real: Leaflet + CARTO Voyager, solo si el sitio puede cargar mapas ---------- */
-const TILE="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
+/* ---------- mapa real: Leaflet + Esri, solo si el sitio puede cargar mapas ---------- */
+const TILE="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}";
 let LM=null,LG=null;
-function mkIcon(cls,label,size){return L.divIcon({className:"lm",html:`<span class="mk ${cls}">${label}</span>`,iconSize:[size,size],iconAnchor:[size/2,size/2]})}
+const SVG_HEART='<svg viewBox="0 0 24 22"><path d="M12 21s-8.6-5.3-10.7-10A5.7 5.7 0 0 1 12 4.7 5.7 5.7 0 0 1 22.7 11C20.6 15.7 12 21 12 21z" fill="#F26760" stroke="#fff" stroke-width="2"/></svg>';
+const SVG_STAR='<svg viewBox="0 0 24 24"><path d="M12 1.8l3 6.8 7.4.7-5.6 4.9 1.7 7.3L12 17.7l-6.5 3.8 1.7-7.3L1.6 9.3 9 8.6z" fill="#3DE0D0" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+const SVG_X='<svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" stroke="#fff" stroke-width="5.5" stroke-linecap="round"/><path d="M4 4l8 8M12 4l-8 8" stroke="#E63946" stroke-width="3" stroke-linecap="round"/></svg>';
+function mkIcon(cls,label,size){const base=cls.split(" ")[0];
+  const inner=base==="fav"?SVG_HEART+(label?`<b>${label}</b>`:""):base==="pick"?SVG_STAR:base==="ago"?SVG_X:label;
+  return L.divIcon({className:"lm",html:`<span class="mk ${cls}">${inner}</span>`,iconSize:[size,size],iconAnchor:[size/2,size/2]})}
 function addM(d,cls,label,size,z){const m=L.marker([d.la,d.lo],{icon:mkIcon(cls+(selected===d?" sel":""),label,size),zIndexOffset:z,title:d.n,keyboard:true,riseOnHover:true});m.on("click",()=>select(d,true));m.addTo(LG)}
 function drawLeaflet(){LG.clearLayers();
   if(ticket){const list=ticket.days[st.bday].all.map(s=>BY[s]);
-    L.polyline(list.map(d=>[d.la,d.lo]),{color:"#2E0001",weight:2,dashArray:"5 6",opacity:.8,interactive:false}).addTo(LG);
+    L.polyline(list.map(d=>[d.la,d.lo]),{color:"#1E9182",weight:3,dashArray:"6 7",opacity:.9,interactive:false}).addTo(LG);
     list.forEach((d,i)=>addM(d,"tk",String(i+1),26,1000+i));return}
   const favIdx=Object.fromEntries(st.fav.map((s,i)=>[s,i+1]));
-  vis.forEach(d=>{if(isFav(d.s))addM(d,"fav",String(favIdx[d.s]),24,900);else if(isPick(d.s))addM(d,"pick","★",22,500);else addM(d,d.i?"ago":"lib","",14,0)})}
+  vis.forEach(d=>{if(isFav(d.s))addM(d,"fav",favIdx[d.s]<100?String(favIdx[d.s]):"",28,900);else if(isPick(d.s))addM(d,"pick","",24,500);else if(d.i)addM(d,"ago","",15,0);else addM(d,"lib","",14,100)})}
 function fitL(list){const A=list.length?list:D;if(A.length===1){LM.setView([A[0].la,A[0].lo],16);return}
   LM.fitBounds(A.map(d=>[d.la,d.lo]),{padding:[28,28],maxZoom:16})}
 function initLeaflet(){if(LM)return;try{
   const fr=document.querySelector(".mapframe"),div=document.createElement("div");div.id="lmap";fr.appendChild(div);fr.classList.add("real");
   LM=L.map(div,{zoomControl:false,attributionControl:true,scrollWheelZoom:true,zoomSnap:.5});
   L.control.zoom({position:"topright",zoomInTitle:"Acercar",zoomOutTitle:"Alejar"}).addTo(LM);
-  L.tileLayer(TILE,{subdomains:"abcd",maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}).addTo(LM);
+  L.tileLayer(TILE,{maxZoom:19,attribution:'Mapa © <a href="https://www.esri.com" target="_blank" rel="noopener">Esri</a> · HERE, Garmin, USGS, <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(LM);
   LG=L.layerGroup().addTo(LM);LM.attributionControl.setPrefix(false);
   fitL(vis);drawLeaflet();
   $("peek").querySelector(".hint")&&($("peek").querySelector(".hint").textContent="Tocá un punto del mapa para ver qué edificio es. Arrastrá o pellizcá para moverte.");
@@ -708,7 +718,7 @@ function tryLeaflet(){
   const probe=new Image();let done=false;const fin=ok=>{if(done)return;done=true;if(!ok)return;
     const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";s.onload=()=>{if(window.L)initLeaflet()};document.head.appendChild(s)};
   probe.onload=()=>fin(true);probe.onerror=()=>fin(false);setTimeout(()=>fin(false),5000);
-  probe.src="https://a.basemaps.cartocdn.com/rastertiles/voyager/12/1383/2468.png";
+  probe.src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/12/2468/1383";
 }
 
 /* ---------- filtros ---------- */
@@ -756,7 +766,7 @@ function recHTML(d){
   const r=d.r.map((a,i)=>a.length?`<b>${DSHORT[i]}</b> ${a.join(" · ")}`:"").filter(Boolean);
   return r.length&&!d.i?`<p class="rec">${"Visitas guiadas"}: ${r.join(" &nbsp;/&nbsp; ")}</p>`:"";
 }
-const favBtn=d=>`<button type="button" class="fav" data-fav="${d.s}" aria-pressed="${isFav(d.s)}"><span class="st">${isFav(d.s)?"★":"☆"}</span>${isFav(d.s)?"Guardado":"Guardar"}</button>`;
+const favBtn=d=>`<button type="button" class="fav" data-fav="${d.s}" aria-pressed="${isFav(d.s)}"><span class="st">${isFav(d.s)?"♥":"♡"}</span>${isFav(d.s)?"Guardado":"Guardar"}</button>`;
 function renderCards(){
   $("cards").innerHTML=vis.map(d=>`<li class="card${selected===d?" is-active":""}" id="c-${d.s}">
     ${frame(d)}<div>
@@ -774,7 +784,7 @@ document.addEventListener("click",e=>{
   const s=e.target.closest("[data-see]");if(s){const d=BY[s.dataset.see];select(d,false);
     if(LM){LM.setView([d.la,d.lo],17)}else{if(view.s<0.08)view.s=0.12;view.cx=d.x;view.cy=d.y}drawMap();$("mapwin").scrollIntoView({behavior:smooth(),block:"start"})}
 });
-function refreshFavButtons(){document.querySelectorAll(".fav[data-fav]").forEach(b=>{const on=isFav(b.dataset.fav);b.setAttribute("aria-pressed",on);b.innerHTML=`<span class="st">${on?"★":"☆"}</span>${on?"Guardado":"Guardar"}`})}
+function refreshFavButtons(){document.querySelectorAll(".fav[data-fav]").forEach(b=>{const on=isFav(b.dataset.fav);b.setAttribute("aria-pressed",on);b.innerHTML=`<span class="st">${on?"♥":"♡"}</span>${on?"Guardado":"Guardar"}`})}
 function favChanged(){save();refreshFavButtons();syncChips();if(F.fav&&!ticket)apply(false);else drawMap();renderRoute();renderTicketDetail()}
 function toggleFav(slug){const i=st.fav.indexOf(slug);if(i>=0)st.fav.splice(i,1);else st.fav.push(slug);favChanged()}
 function select(d,fromMap){
@@ -815,7 +825,7 @@ function renderTicketDetail(){
   const route="https://www.google.com/maps/dir/"+dd.all.slice(0,10).map(s=>encodeURIComponent(BY[s].a+", Buenos Aires")).join("/")+"/";
   box.hidden=false;
   box.innerHTML=`<div class="tcols">${col("Mañana","10 a 14",dd.am)}${col("Tarde","15 a 19",dd.pm)}</div>
-    <div class="tacts"><button type="button" class="btn coral" id="addticket">${inAll?"✓ Ya está en tu recorrido":`★ Sumar a mi recorrido (${dd.all.length})`}</button>
+    <div class="tacts"><button type="button" class="btn coral" id="addticket">${inAll?"✓ Ya está en tu recorrido":`♥ Sumar a mi recorrido (${dd.all.length})`}</button>
     <a class="btn ghost" href="${route}" target="_blank" rel="noopener">Ruta en Google Maps</a><span class="stat" id="tstat" role="status"></span></div>`;
   $("addticket").onclick=()=>{dd.all.forEach(s=>{if(!isFav(s))st.fav.push(s)});st.day=day;favChanged();$("tstat").textContent="Listo: lo tenés abajo, en Armá tu recorrido."};
 }
@@ -867,7 +877,7 @@ function renderRoute(){
     return`<li class="stop${d.i?" ins":""}${dn?" done":""}" data-k="${dk}"><div class="num">${n}</div><div>
       <div class="head"><input type="checkbox" id="${id}"${dn?" checked":""}><label for="${id}">${esc(d.n)}</label></div>
       <div class="hrs">${hrsDay(d,day)}</div><div class="addr">${esc(d.a)} · ${esc(d.b)}</div>${warn}
-      <div class="links"><a href="${gq(d)}" target="_blank" rel="noopener">Cómo llegar</a><a href="${OH+d.s}" target="_blank" rel="noopener">Ficha oficial</a><button type="button" class="linkbtn" data-fav="${d.s}">Quitar ★</button></div></div></li>`}).join("")).join("");
+      <div class="links"><a href="${gq(d)}" target="_blank" rel="noopener">Cómo llegar</a><a href="${OH+d.s}" target="_blank" rel="noopener">Ficha oficial</a><button type="button" class="linkbtn" data-fav="${d.s}">Quitar ♥</button></div></div></li>`}).join("")).join("");
   $("stops").querySelectorAll(".stop input").forEach(cb=>cb.addEventListener("change",()=>{const li=cb.closest(".stop");st.done[li.dataset.k]=cb.checked;save();
     li.classList.add("leaving");setTimeout(()=>{li.classList.remove("leaving");li.classList.toggle("done",cb.checked);applyRouteTab(p,day)},RM.matches?0:350)}));
   applyRouteTab(p,day);
@@ -893,7 +903,7 @@ function applyRouteTab(p,day){
 document.querySelectorAll("[data-d]").forEach(b=>b.addEventListener("click",()=>{st.day=+b.dataset.d;save();$("rscroller").scrollTop=0;renderRoute()}));
 document.querySelectorAll("[data-t]").forEach(b=>b.addEventListener("click",()=>{st.rtab=b.dataset.t;save();$("rscroller").scrollTop=0;renderRoute()}));
 let armed=false;$("clearfav").addEventListener("click",()=>{const b=$("clearfav");
-  if(!armed){armed=true;b.textContent="¿Seguro? Tocá de nuevo";setTimeout(()=>{armed=false;b.textContent="Vaciar favoritos"},3500);return}
+  if(!armed){armed=true;b.textContent="¿Confirmás? Tocá de nuevo";setTimeout(()=>{armed=false;b.textContent="Vaciar favoritos"},3500);return}
   armed=false;b.textContent="Vaciar favoritos";st.fav=[];st.done={};favChanged()});
 $("copy").addEventListener("click",()=>{const t=$("preview").textContent;
   const ok=()=>{$("copystatus").textContent="Copiado. Pegalo en WhatsApp."};

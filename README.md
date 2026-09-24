@@ -29,11 +29,11 @@ Si es tu primera vez y te abruma armar el itinerario: **elegí un boleto** y lis
 
 | | |
 |---|---|
-| 🗺️ **Mapa** | Los 174 edificios en un mapa de la ciudad, con colores según cómo se entra. |
+| 🗺️ **Mapa** | Los 174 edificios en un mapa de la ciudad: 🔵 entrada libre, ❌ agotado, ❤️ tus favoritos, ⭐ Gaby's picks. |
 | 🎟️ **Boletos listos** | Tres recorridos armados para hacer a pie, con versión sábado y domingo. |
 | ★ **Gaby's picks** | Mi curaduría: casas y edificios que solo se pueden visitar en Open House. |
 | 🔎 **Filtros** | Por día, turno (mañana o tarde), barrio, entrada libre y accesibilidad. |
-| 📋 **Tu recorrido** | Marcá favoritos y la guía los ordena por turno y cercanía. Tachá lo que ya visitaste. |
+| 📋 **Tu recorrido** | Marcá favoritos con el ♡ y la guía los ordena por turno y cercanía. Tachá lo que ya visitaste. |
 | 💬 **Mandáselo a tu grupo** | Copiás tu recorrido y lo pegás en WhatsApp, con horarios y direcciones. |
 
 ## Los boletos
@@ -42,7 +42,7 @@ Si es tu primera vez y te abruma armar el itinerario: **elegí un boleto** y lis
 |---|---|:---:|:---:|
 | **Centro de película** | Ateliers de los años 30, rascacielos y bancos por dentro | 8 paradas | 7 paradas |
 | **Villa Crespo creativo** | Talleres, estudios y casas a pocas cuadras | 8 paradas | 7 paradas |
-| **Así vive la gente** | PH, casas y edificios chicos para chusmear cómo vive el otro | 8 paradas | 7 paradas |
+| **Así vive la gente** | PH, casas y edificios chicos para chusmear cómo vive otra gente | 8 paradas | 7 paradas |
 
 > Mi regla: priorizo las casas y los edificios institucionales difíciles de visitar. Igual, cada año cambia lo que abre, así que no hay una guía 100% definida: lo mejor es ir y mandarte a lo que te pinte, porque todo está bueno.
 
@@ -61,14 +61,14 @@ Esta guía **no está hecha ni avalada por Open House Buenos Aires.** Los datos 
 
 - **Datos de los edificios:** [Open House Buenos Aires](https://openhousebsas.org/catalogo/)
 - **Fotos:** cada foto está enlazada directo desde la web de Open House BA (no hay copias en este repo) y lleva el crédito de su fotógrafo, tal como figura en la ficha oficial
-- **Mapa:** © [OpenStreetMap](https://www.openstreetmap.org/copyright) · © [CARTO](https://carto.com/attributions)
+- **Mapa:** © [Esri](https://www.esri.com) · HERE, Garmin, USGS, [OpenStreetMap](https://www.openstreetmap.org/copyright)
 - **Tipografías:** Archivo e IBM Plex Mono, de Google Fonts
 
 <sub>Hecha con un solo archivo HTML, sin build. Todo lo que marcás se guarda en tu navegador: nadie más lo ve.</sub>
 
 ## Gracias, Open House 💛
 
-Esta guía existe gracias a Open House Buenos Aires, que cada año abre la ciudad gratis junto a organizadores, voluntarios, arquitectos y dueños que te dejan pasar. Si te sirvió, apoyalos: [sumate como voluntario/a](https://openhousebsas.org/voluntariado), [comprá su libro](https://openhousebuenosaires.mitiendanube.com/) o [seguilos en @openhousebsas](https://www.instagram.com/openhousebsas).
+Esta guía existe gracias a Open House Buenos Aires, que cada año abre la ciudad gratis junto al equipo de organización, el voluntariado, los estudios de arquitectura y quienes abren las puertas de sus casas y edificios. Si te sirvió, apoyalos: [sumate al voluntariado](https://openhousebsas.org/voluntariado), [comprá su libro](https://openhousebuenosaires.mitiendanube.com/) o [seguilos en @openhousebsas](https://www.instagram.com/openhousebsas).
 
 ---
 
