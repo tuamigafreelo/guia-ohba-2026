@@ -316,6 +316,21 @@ ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:7px;heig
 .mapframe.real .zoom{display:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
+<!-- PostHog: analítica sin cookies (persistence: memory). No corre al abrir el archivo local. -->
+<script>
+if(location.protocol!=="file:"){
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session identify setPersonProperties group reset get_distinct_id get_session_id alias set_config startSessionRecording stopSessionRecording opt_in_capturing opt_out_capturing has_opted_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init("phc_BBE3VroGakJYXjkhHbHw7oi9AubyoUGqmzgsUajAFHWF",{
+  api_host:"https://us.i.posthog.com",
+  persistence:"memory",
+  person_profiles:"identified_only",
+  capture_pageview:true,
+  capture_pageleave:true,
+  autocapture:false,
+  session_recording:{maskAllInputs:true}
+});
+}
+</script>
 </head>
 <body>
 
@@ -334,7 +349,7 @@ ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:7px;heig
         <dt>Edificios</dt><dd id="m-total">174</dd>
         <dt>Barrios</dt><dd id="m-barrios">33</dd>
         <dt>Entrada</dt><dd>Gratis</dd>
-        <dt>Curaduría</dt><dd><a href="https://www.instagram.com/tuamigafreelo" target="_blank" rel="noopener">@tuamigafreelo</a></dd>
+        <dt>Curaduría</dt><dd><a href="https://www.instagram.com/tuamigafreelo" data-ig="encabezado" target="_blank" rel="noopener">@tuamigafreelo</a></dd>
       </dl>
       <p class="notice"><b>GUÍA NO OFICIAL.</b> No está hecha ni avalada por Open House Buenos Aires. Inscripciones solo en <a href="https://openhousebsas.org/inscripciones" target="_blank" rel="noopener">openhousebsas.org/inscripciones</a>. Confirmá horarios en la ficha oficial.</p>
     </div>
@@ -363,7 +378,7 @@ ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:7px;heig
   </section>
 
   <section class="panel" id="boletos" aria-labelledby="t-bol">
-    <div class="ph"><canvas id="ico-boleto" width="16" height="16" aria-hidden="true"></canvas><h2 id="t-bol">Boletos listos · curados por Gaby <a href="https://www.instagram.com/tuamigafreelo" target="_blank" rel="noopener" style="font:500 15px var(--f-num);letter-spacing:0;white-space:nowrap">(@tuamigafreelo)</a></h2>
+    <div class="ph"><canvas id="ico-boleto" width="16" height="16" aria-hidden="true"></canvas><h2 id="t-bol">Boletos listos · curados por Gaby <a href="https://www.instagram.com/tuamigafreelo" data-ig="boletos" target="_blank" rel="noopener" style="font:500 15px var(--f-num);letter-spacing:0;white-space:nowrap">(@tuamigafreelo)</a></h2>
       <div class="tabs" role="tablist" aria-label="Día del boleto">
         <button type="button" role="tab" class="tab" data-bd="0">Sábado 3</button>
         <button type="button" role="tab" class="tab" data-bd="1">Domingo 4</button>
@@ -473,12 +488,12 @@ ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:7px;heig
     <p class="g1">Esta guía existe gracias a Open House Buenos Aires, que cada año abre la ciudad gratis junto al equipo de organización, el voluntariado, los estudios de arquitectura y quienes abren las puertas de sus casas y edificios.</p>
     <p class="g2">La armé por amor al arte, para que más gente se anime a recorrerla. Si te sirvió, apoyalos: <a href="https://openhousebsas.org/voluntariado" target="_blank" rel="noopener">sumate al voluntariado</a>, <a href="https://openhousebuenosaires.mitiendanube.com/" target="_blank" rel="noopener">comprá su libro</a> o <a href="https://www.instagram.com/openhousebsas" target="_blank" rel="noopener">seguilos en @openhousebsas</a>.</p>
     <p class="g3">¡Prepará tu itinerario y tus ganas de conocer la ciudad!</p>
-    <p class="sig2">Con amor, Gaby · <a href="https://www.instagram.com/tuamigafreelo" target="_blank" rel="noopener">Tu Amiga Freelo</a></p>
+    <p class="sig2">Con amor, Gaby · <a href="https://www.instagram.com/tuamigafreelo" data-ig="cierre" target="_blank" rel="noopener">Tu Amiga Freelo</a></p>
   </section>
 
   <footer class="rotulo">
     <div><small>Proyecto</small><span class="big">Guía no oficial · Open House BA 2026</span></div>
-    <div><small>Curaduría</small><a class="sig" href="https://www.instagram.com/tuamigafreelo" target="_blank" rel="noopener">@tuamigafreelo</a></div>
+    <div><small>Curaduría</small><a class="sig" href="https://www.instagram.com/tuamigafreelo" data-ig="pie" target="_blank" rel="noopener">@tuamigafreelo</a></div>
     <div><small>Fuente</small><a href="https://openhousebsas.org/catalogo/" target="_blank" rel="noopener">openhousebsas.org</a></div>
     <div><small>Relevado</small><span class="big" style="font-family:var(--f-num);font-weight:400;font-size:15px">23 · 09 · 2026</span></div>
     <div class="full">Sin relación con Open House Buenos Aires. Fotos de la web oficial de OHBA, cada una con el crédito de su fotógrafo. Inscripciones solo en la <a href="https://openhousebsas.org/inscripciones" target="_blank" rel="noopener">web oficial</a>.</div>
@@ -919,5 +934,58 @@ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(syncList);
 tryLeaflet();
 </script>
 
+
+<script>
+/* ---------- analítica (PostHog) ---------- */
+(function(){
+const ph=(ev,props)=>{try{if(window.posthog&&posthog.capture)posthog.capture(ev,props||{})}catch(_){}};
+const info=slug=>{try{const d=BY[slug];return d?{edificio:d.n,slug:slug,barrio:d.b}:{slug:slug}}catch(_){return{slug:slug}}};
+const dia=()=>{try{return st.bday===1?"domingo":"sabado"}catch(_){return null}};
+const tname=id=>{try{const t=TICKETS.find(x=>x.id===id);return t&&(t.t||t.title||t.name)||id}catch(_){return id}};
+
+document.addEventListener("click",e=>{
+  const el=e.target;
+  const tk=el.closest("[data-ticket]");
+  if(tk){const id=tk.dataset.ticket;setTimeout(()=>{const cur=document.querySelector('[data-ticket="'+id+'"]');if(cur&&cur.getAttribute("aria-selected")==="true")ph("boleto_abierto",{boleto:id,nombre:tname(id),dia:dia()})},0);return}
+  if(el.closest("#addticket")){let id=null;try{id=ticket&&ticket.id}catch(_){}ph("boleto_sumado_al_recorrido",{boleto:id,nombre:tname(id),dia:dia()});return}
+  const bd=el.closest("[data-bd]");if(bd){ph("boleto_dia_cambiado",{dia:+bd.dataset.bd===1?"domingo":"sabado"});return}
+  const fv=el.closest("[data-fav]");
+  if(fv){const slug=fv.dataset.fav;let was=false;try{was=isFav(slug)}catch(_){}
+    ph(was?"favorito_quitado":"favorito_agregado",Object.assign(info(slug),{desde:fv.closest("#stops")?"recorrido":fv.closest("#peek")?"mapa":fv.closest("#extra")?"boleto":"catalogo"}));return}
+  const see=el.closest("[data-see]");if(see){ph("edificio_visto_en_mapa",info(see.dataset.see));return}
+  const ch=el.closest(".chip");
+  if(ch){const g=ch.dataset.g,v=ch.dataset.v;const on=ch.getAttribute("aria-pressed")!=="true";
+    const label=(ch.textContent||"").replace(/\s+/g," ").trim();
+    ph("filtro_usado",{filtro:g,valor:v,etiqueta:label,activado:on});return}
+  if(el.closest("#clear")){ph("filtros_limpiados");return}
+  if(el.closest("#copy")){let n=0;try{n=st.fav.length}catch(_){}ph("recorrido_copiado",{favoritos:n});return}
+  if(el.closest("#clearfav")){return}
+  const dd=el.closest("[data-d]");if(dd){ph("recorrido_dia_cambiado",{dia:+dd.dataset.d===1?"domingo":"sabado"});return}
+  const a=el.closest("a[href]");
+  if(a&&a.target==="_blank"){const h=a.href||"";let tipo="otro";
+    if(a.id==="gmaps")tipo="ruta_recorrido_maps";
+    else if(/google\.com\/maps\/dir/.test(h))tipo="ruta_boleto_maps";
+    else if(/google\.com\/maps\/search/.test(h))tipo="como_llegar";
+    else if(/instagram\.com/.test(h))tipo="instagram";
+    else if(/voluntariado/.test(h))tipo="voluntariado_ohba";
+    else if(/openhousebsas\.org/.test(h))tipo="ficha_ohba";
+    const stop=a.closest("[data-k]"),card=a.closest("[id^='c-']");
+    const slug=stop?String(stop.dataset.k).split(":").pop():card?card.id.slice(2):null;
+    ph("link_externo",Object.assign({tipo:tipo,url:h},a.dataset.ig?{ubicacion:a.dataset.ig}:{},slug?info(slug):{}));}
+},true);
+
+document.addEventListener("change",e=>{
+  const el=e.target;
+  if(el.id==="barrio"){ph("filtro_usado",{filtro:"barrio",valor:el.value||"todos",activado:!!el.value});return}
+  if(el.matches&&el.matches(".stop input")){const li=el.closest(".stop");const k=li&&li.dataset.k||"";
+    ph(el.checked?"visitado_marcado":"visitado_desmarcado",Object.assign(info(k.split(":").pop()),{dia:k.split(":")[0]==="1"?"domingo":"sabado"}))}
+},true);
+
+let qt;const q=document.getElementById("q");
+if(q)q.addEventListener("input",()=>{clearTimeout(qt);qt=setTimeout(()=>{const v=q.value.trim();if(v.length>=3){let n=null;try{n=vis.length}catch(_){}ph("busqueda",{texto:v.slice(0,60),resultados:n})}},1200)});
+
+window.addEventListener("pagehide",()=>{try{ph("resumen_sesion",{favoritos:st.fav.length,visitados:Object.values(st.done).filter(Boolean).length})}catch(_){}});
+})();
+</script>
 </body>
 </html>
